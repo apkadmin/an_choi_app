@@ -12,8 +12,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import com.anchoi.payload.response.MessageResponse;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -57,5 +59,26 @@ public class FilesController {
         Resource file = mediaService.load(filename);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
+    @DeleteMapping()
+    public ResponseEntity<MessageResponse> deleteFile(@RequestBody Media media) {
+        String message = "";
+        String url = media.getUrl();
+
+        try {
+            boolean existed = mediaService.deleteByUrl(url);
+
+            if (existed) {
+                message = "Delete the file successfully: " + url;
+                return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
+            }
+
+            message = "The file does not exist!";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse(message));
+        } catch (Exception e) {
+            message = "Could not delete the file: " + url + ". Error: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse(message));
+        }
     }
 }
