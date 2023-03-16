@@ -1,14 +1,16 @@
 package com.anchoi.models;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Data
 @Entity
 @EqualsAndHashCode(callSuper=false)
-@Table(name = "media", schema = "an_choi_app", catalog = "")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "media", schema = "an_choi_app")
 public class Media extends BaseEntity {
     @Basic
     @Column(name = "url")
