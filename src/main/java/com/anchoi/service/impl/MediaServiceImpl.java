@@ -98,9 +98,29 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public Stream<Path> loadAll() {
         try {
-            return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
+            return Files.walk(this.root, 1)
+                    .filter(path -> !path.equals(this.root)).map(this.root::relativize);
         } catch (IOException e) {
             throw new RuntimeException("Could not load the files!");
+        }
+    }
+
+    @Override
+    public boolean deleteByUrl(String url) {
+        try {
+            Media media = mediaRepository.findByUrl(url);
+            if (media != null)
+                mediaRepository.delete(media);
+            String[] arr = url.split(separate);
+            String fileName = arr[arr.length - 1];
+            String path = "";
+            for (int i = 0; i < arr.length - 1; i++) {
+                path += separate + arr[i];
+            }
+            Path file = Paths.get(path).resolve(fileName);
+            return Files.deleteIfExists(file);
+        } catch (IOException e) {
+            throw new RuntimeException("Error: " + e.getMessage());
         }
     }
 }

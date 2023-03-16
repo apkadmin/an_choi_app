@@ -18,6 +18,8 @@ public interface MediaService {
 
     public void deleteAll();
 
+    public boolean deleteByUrl(String filename);
+
     public Stream<Path> loadAll();
 }
 
