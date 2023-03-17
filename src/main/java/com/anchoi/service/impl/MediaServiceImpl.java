@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Base64Utils;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -75,6 +76,31 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
+    public List<Media> saveV2(MediaRequest mediaRequest, MultipartFile[] medias) {
+        List<Media> mediaList = new ArrayList<>();
+        try {
+            for (MultipartFile media:medias) {
+                byte[] encoded = Base64Utils.encode(media.getBytes());
+                String fileEncode = new String(encoded);
+                Media mediaEnt = new Media().builder()
+                        .url(fileEncode)
+                        .typeMedia(mediaRequest.getTypeMedia())
+                        .type(mediaRequest.getType())
+                        .idRefer(mediaRequest.getIdRefer())
+                        .fileName(media.getOriginalFilename())
+                        .build();
+                mediaList.add(mediaEnt);
+            }
+            return mediaRepository.saveAll(mediaList);
+        } catch (Exception e) {
+            if (e instanceof FileAlreadyExistsException) {
+                throw new RuntimeException("A file of that name already exists.");
+            }
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
     public Resource load(String filename) {
         try {
             Path file = root.resolve(filename);
@@ -105,6 +131,9 @@ public class MediaServiceImpl implements MediaService {
         }
     }
 
+    public void deleteById(String id){
+         mediaRepository.deleteById(id);
+    }
     @Override
     public boolean deleteByUrl(String url) {
         try {
@@ -123,4 +152,5 @@ public class MediaServiceImpl implements MediaService {
             throw new RuntimeException("Error: " + e.getMessage());
         }
     }
+
 }

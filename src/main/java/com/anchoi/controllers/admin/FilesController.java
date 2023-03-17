@@ -40,6 +40,32 @@ public class FilesController {
         }
     }
 
+    @PostMapping(value="/v2.0/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<List<Media>> uploadFileV2(
+            @RequestParam("medias") MultipartFile[] medias,
+            MediaRequest mediaRequest
+    ) throws BusinessException {
+        String message = "";
+        try {
+            List<Media> result = mediaService.saveV2(mediaRequest, medias);
+
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } catch (Exception e) {
+            throw new BusinessException("500", e.getMessage());
+        }
+    }
+
+    @DeleteMapping(value="/delete")
+    public ResponseEntity deleteFile( @RequestParam("fileId") String fileId) throws BusinessException {
+        String message = "";
+        try {
+            mediaService.deleteById(fileId);
+            return ResponseEntity.status(HttpStatus.OK).body("OK");
+        } catch (Exception e) {
+            throw new BusinessException("500", e.getMessage());
+        }
+    }
+
 //    @GetMapping("/files")
 //    public ResponseEntity<List<Media>> getListFiles() {
 //        List<Media> fileInfos = mediaService.loadAll().map(path -> {

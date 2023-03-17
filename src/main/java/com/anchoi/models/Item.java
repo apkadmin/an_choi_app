@@ -7,8 +7,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@EqualsAndHashCode(callSuper=false)
-@Table(name = "item", schema = "an_choi_app", catalog = "")
+@Table(name = "item", schema = "an_choi_app")
 public class Item extends BaseEntity {
     @Basic
     @Column(name = "name")
@@ -34,5 +33,13 @@ public class Item extends BaseEntity {
     @Basic
     @Column(name = "longitude")
     private String longitude;
+
+    @Basic
+    @Column(name = "lat_map")
+    private String latMap;
+    @Basic
+    @Column(name = "long_map")
+    private String longMap;
+
 
 }
