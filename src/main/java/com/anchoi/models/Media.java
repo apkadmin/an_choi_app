@@ -24,5 +24,8 @@ public class Media extends BaseEntity {
     @Basic
     @Column(name = "id_refer")
     private String idRefer;
+    @Basic
+    @Column(name = "file_name")
+    private String fileName;
 
 }

@@ -13,12 +13,15 @@ public interface MediaService {
     public void init();
 
     public List<Media> save(MediaRequest mediaRequest, MultipartFile[] medias);
+    public List<Media> saveV2(MediaRequest mediaRequest, MultipartFile[] medias);
 
     public Resource load(String filename);
 
     public void deleteAll();
 
     public boolean deleteByUrl(String filename);
+
+    public void deleteById(String fileId);
 
     public Stream<Path> loadAll();
 }
