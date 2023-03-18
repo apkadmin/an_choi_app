@@ -13,7 +13,6 @@ import com.anchoi.models.User;
 import com.anchoi.request.LoginRequest;
 import com.anchoi.request.SignupRequest;
 import com.anchoi.payload.response.MessageResponse;
-import com.anchoi.payload.response.UserInfoResponse;
 import com.anchoi.repository.RoleRepository;
 import com.anchoi.repository.UserRepository;
 import com.anchoi.response.JwtResponse;
@@ -64,7 +63,6 @@ public class AuthController {
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
     String jwt = jwtUtils.generateJwtToken(authentication);
-//    ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
 
     List<String> roles = userDetails.getAuthorities().stream()
         .map(item -> item.getAuthority())
@@ -82,10 +80,6 @@ public class AuthController {
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
       return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
     }
-
-//    if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-//      return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
-//    }
 
     // Create new user's account
     User user = new User(signUpRequest.getUsername(),
@@ -108,10 +102,16 @@ public class AuthController {
           roles.add(adminRole);
 
           break;
-        case "mod":
-          Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+        case "location":
+          Role modRole = roleRepository.findByName(ERole.ROLE_LOCATION)
               .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
           roles.add(modRole);
+
+          break;
+        case "cuisine":
+          Role cuisineRole = roleRepository.findByName(ERole.ROLE_CUISINE)
+                  .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+          roles.add(cuisineRole);
 
           break;
         default:

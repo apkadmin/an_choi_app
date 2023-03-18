@@ -20,7 +20,7 @@ public class ItemController {
     }
 
     @GetMapping(value = "/province")
-    public ResponseEntity getAllItemInProvnice(@RequestParam("id") @NotNull String provinceId){
+    public ResponseEntity getAllItemInProvince(@RequestParam("id") @NotNull String provinceId){
         return ResponseEntity.ok(itemService.getListByProvince(provinceId));
     }
 
