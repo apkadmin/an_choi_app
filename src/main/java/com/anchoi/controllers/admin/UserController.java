@@ -1,12 +1,16 @@
 package com.anchoi.controllers.admin;
 
+import com.anchoi.config.BusinessException;
 import com.anchoi.models.User;
+import com.anchoi.response.UserResponse;
 import com.anchoi.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -23,8 +27,8 @@ public class UserController {
     public ResponseEntity<?> update(@RequestBody @NotNull User request) {
         try {
             return ResponseEntity.ok(userService.update(request));
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(e.getMessage());
+        } catch (BusinessException e) {
+            return ResponseEntity.ok(e);
         }
     }
 

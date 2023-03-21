@@ -1,4 +1,4 @@
-package com.anchoi.payload.response;
+package com.anchoi.response;
 
 import java.util.List;
 
