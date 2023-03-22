@@ -1,16 +1,13 @@
 package com.anchoi.controllers.admin;
 
 import com.anchoi.config.BusinessException;
-import com.anchoi.models.User;
-import com.anchoi.response.UserResponse;
+import com.anchoi.request.UserRequest;
 import com.anchoi.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -24,7 +21,7 @@ public class UserController {
 
     @PostMapping("/update")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<?> update(@RequestBody @NotNull User request) {
+    public ResponseEntity<?> update(@RequestBody @NotNull UserRequest request) {
         try {
             return ResponseEntity.ok(userService.update(request));
         } catch (BusinessException e) {
@@ -38,8 +35,8 @@ public class UserController {
         try {
             userService.delete(id);
             return ResponseEntity.ok("Deleted");
-        } catch (Exception e) {
-            return ResponseEntity.status(502).body(e.getMessage());
+        } catch (BusinessException ex) {
+            return ResponseEntity.ok(ex);
         }
     }
 
@@ -56,8 +53,17 @@ public class UserController {
     public ResponseEntity<?> getById(@RequestParam("id") @NotNull String id) {
         try {
             return ResponseEntity.ok(userService.getById(id));
-        } catch (Exception e) {
-            return ResponseEntity.status(502).body(e.getMessage());
+        } catch (BusinessException ex) {
+            return ResponseEntity.ok(ex);
+        }
+    }
+
+    @GetMapping("/get-by-username")
+    public ResponseEntity<?> getByUsername(@RequestParam("username") @NotNull String username) {
+        try {
+            return ResponseEntity.ok(userService.getByUsername(username));
+        } catch (BusinessException ex) {
+            return ResponseEntity.ok(ex);
         }
     }
 }

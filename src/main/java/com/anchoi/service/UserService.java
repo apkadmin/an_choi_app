@@ -1,11 +1,15 @@
 package com.anchoi.service;
 
 import com.anchoi.config.BusinessException;
+import com.anchoi.models.Role;
 import com.anchoi.models.User;
+import com.anchoi.repository.RoleRepository;
 import com.anchoi.repository.UserRepository;
+import com.anchoi.request.UserRequest;
 import com.anchoi.response.UserResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,13 +18,15 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
 
-    public UserResponse update(User request) throws BusinessException {
+    public UserResponse update(UserRequest request) throws BusinessException {
         if (request.getId() == null)
             throw new BusinessException("400", "Id not null");
         // phải tồn tại record với id được truyền lên
@@ -31,19 +37,33 @@ public class UserService {
         Optional<User> userCheckOpt = userRepository.findByUsernameAndId(request.getUsername(), request.getId());
         if (!userCheckOpt.isPresent())
             throw new BusinessException("400", "Username not allow to change");
+
         User userEnt = userCheckOpt.get();
-        request.setPassword(userEnt.getPassword());
+        userEnt.setName(request.getName());
+        userEnt.setEmail(request.getEmail());
+        userEnt.setPhone(request.getPhone());
+
         // khong cho phep sua role cua user admin
-        if ("admin".equalsIgnoreCase(request.getUsername())) {
-            request.setRoles(userEnt.getRoles());
+        if (!"admin".equalsIgnoreCase(request.getUsername())) {
+            // get roles from request
+            List<Role> roles = roleRepository.findAllByNameIn(request.getRoles());
+            // .stream().map(Enum::name).collect(Collectors.toList())
+            userEnt.setRoles(new HashSet<>(roles));
         }
 
-        User user =  userRepository.save(request);
+        User user =  userRepository.save(userEnt);
 
         return convertToResponse(user);
     }
 
-    public void delete(String id) {
+    public void delete(String id) throws BusinessException {
+        // phải tồn tại record với id được truyền lên
+        Optional<User> uOpt = userRepository.findById(id);
+        if (!uOpt.isPresent())
+            throw new BusinessException("400", "User not found");
+        User user = uOpt.get();
+        if ("admin".equalsIgnoreCase(user.getUsername()))
+            throw new BusinessException("999", "User cannot delete");
         userRepository.deleteById(id);
     }
 
@@ -71,6 +91,14 @@ public class UserService {
 
     public UserResponse getById(String id) throws BusinessException {
         Optional<User> uOpt = userRepository.findById(id);
+        if (!uOpt.isPresent())
+            throw new BusinessException("400", "User not found");
+        User user = uOpt.get();
+        return convertToResponse(user);
+    }
+
+    public UserResponse getByUsername(String username) throws BusinessException {
+        Optional<User> uOpt = userRepository.findByUsername(username);
         if (!uOpt.isPresent())
             throw new BusinessException("400", "User not found");
         User user = uOpt.get();
