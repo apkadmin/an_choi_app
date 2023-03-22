@@ -1,5 +1,6 @@
 package com.anchoi.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.anchoi.models.ERole;
@@ -10,4 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, String> {
   Optional<Role> findByName(ERole name);
+
+    List<Role> findAllByNameIn(List<ERole> roles);
 }

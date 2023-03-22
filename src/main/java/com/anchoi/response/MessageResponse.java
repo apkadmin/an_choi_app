@@ -1,4 +1,4 @@
-package com.anchoi.payload.response;
+package com.anchoi.response;
 
 public class MessageResponse {
 	private String message;

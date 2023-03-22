@@ -9,9 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.anchoi.security.jwt.JwtUtils;
 import com.anchoi.security.services.UserDetailsServiceImpl;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,9 +47,23 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+      } else {
+        System.out.println("Cannot set the Security Context");
       }
-    } catch (Exception e) {
-      logger.error("Cannot set user authentication: {}", e);
+    } catch (ExpiredJwtException ex) {
+
+//      String isRefreshToken = request.getHeader("isRefreshToken");
+//      String requestURL = request.getRequestURL().toString();
+      // allow for Refresh Token creation if following conditions are true.
+//      if (isRefreshToken != null && isRefreshToken.equals("true") && requestURL.contains("refreshtoken")) {
+//        allowForRefreshToken(ex, request);
+//      } else
+        request.setAttribute("exception", ex);
+
+    } catch (BadCredentialsException ex) {
+      request.setAttribute("exception", ex);
+    } catch (Exception ex) {
+      System.out.println(ex);
     }
 
     filterChain.doFilter(request, response);

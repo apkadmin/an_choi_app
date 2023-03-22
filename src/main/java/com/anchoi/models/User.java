@@ -12,7 +12,7 @@ import java.util.Set;
 @Entity
 @EqualsAndHashCode(callSuper=false)
 @AllArgsConstructor
-@Table(name = "user", schema = "an_choi_app", catalog = "",
+@Table(name = "user", schema = "an_choi_app",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username")
         })

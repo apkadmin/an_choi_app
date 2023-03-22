@@ -24,10 +24,6 @@ public class BaseEntity implements Serializable {
     @Column(name = "id", nullable = false, length = 36)
     private String id;
 
-//    @Column(name = "status", nullable = false)
-//    @Enumerated(EnumType.STRING)
-//    private Status status;
-
     @Column(name = "created_date", nullable = false)
     private Date createdDate;
 
