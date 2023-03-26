@@ -153,4 +153,8 @@ public class MediaServiceImpl implements MediaService {
         }
     }
 
+    @Override
+    public List<Media> loadById(String idRefer) {
+        return mediaRepository.findAllByIdRefer(idRefer);
+    }
 }

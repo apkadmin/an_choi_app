@@ -24,5 +24,7 @@ public interface MediaService {
     public void deleteById(String fileId);
 
     public Stream<Path> loadAll();
+
+    List<Media> loadById(String id);
 }
 

@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotBlank;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/admin/file")
@@ -84,6 +86,13 @@ public class FilesController {
         Resource file = mediaService.load(filename);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
+    @GetMapping("/files-by-id-reference")
+    @ResponseBody
+    public ResponseEntity<?> getFileByReference(@RequestParam("id") @NotBlank String id) {
+        List<Media> media = mediaService.loadById(id);
+        return ResponseEntity.ok(media);
     }
 
     @DeleteMapping()
