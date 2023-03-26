@@ -5,8 +5,16 @@ import com.anchoi.models.Role;
 import com.anchoi.models.User;
 import com.anchoi.repository.RoleRepository;
 import com.anchoi.repository.UserRepository;
+import com.anchoi.request.ChangePasswordRequest;
 import com.anchoi.request.UserRequest;
 import com.anchoi.response.UserResponse;
+import com.anchoi.security.jwt.JwtUtils;
+import com.anchoi.security.services.UserDetailsImpl;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -19,10 +27,14 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtils jwtUtils;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtils = jwtUtils;
     }
 
 
@@ -37,6 +49,12 @@ public class UserService {
         Optional<User> userCheckOpt = userRepository.findByUsernameAndId(request.getUsername(), request.getId());
         if (!userCheckOpt.isPresent())
             throw new BusinessException("400", "Username not allow to change");
+
+        if (StringUtils.isBlank(request.getEmail()))
+            throw new BusinessException("400", "email not empty");
+        List<User> emailCheck = userRepository.findByEmailAndId(request.getEmail(), request.getId());
+        if (!emailCheck.isEmpty())
+            throw new BusinessException("400", "email existed");
 
         User userEnt = userCheckOpt.get();
         userEnt.setName(request.getName());
@@ -104,4 +122,32 @@ public class UserService {
         User user = uOpt.get();
         return convertToResponse(user);
     }
+
+    public boolean updatePassword(ChangePasswordRequest request) throws BusinessException {
+//        ResponseCookie cookie = null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Optional<User> loginUserOpt = userRepository.findById(userDetails.getId());
+        if (loginUserOpt.isPresent()) {
+            User loginUser = loginUserOpt.get();
+            if (!checkIfValidOldPassword(loginUser, request.getOldPassword())) {
+                throw new BusinessException("400", "Invalid password");
+            }
+            changeUserPassword(loginUser, request.getNewPassword());
+//            cookie = jwtUtils.getCleanJwtCookie();
+//            jwtUtils.expireToken((String) authentication.getCredentials());
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkIfValidOldPassword(final User user, final String oldPassword) {
+        return passwordEncoder.matches(oldPassword, user.getPassword());
+    }
+
+    public void changeUserPassword(final User user, final String password) {
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
+
 }

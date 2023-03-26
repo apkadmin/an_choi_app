@@ -81,12 +81,16 @@ public class AuthController {
       return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
     }
 
+    if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+      return ResponseEntity.badRequest().body(new MessageResponse("Error: email is already taken!"));
+    }
+
     // Create new user's account
     User user = new User(signUpRequest.getUsername(),
                          signUpRequest.getEmail(),
                          encoder.encode(signUpRequest.getPassword()));
 
-    Set<String> strRoles = signUpRequest.getRole();
+    Set<String> strRoles = signUpRequest.getRoles();
     Set<Role> roles = new HashSet<>();
 
     if (strRoles == null) {
@@ -96,19 +100,19 @@ public class AuthController {
     } else {
       strRoles.forEach(role -> {
         switch (role) {
-        case "admin":
+        case "ROLE_ADMIN":
           Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
               .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
           roles.add(adminRole);
 
           break;
-        case "location":
+        case "ROLE_LOCATION":
           Role modRole = roleRepository.findByName(ERole.ROLE_LOCATION)
               .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
           roles.add(modRole);
 
           break;
-        case "cuisine":
+        case "ROLE_CUISINE":
           Role cuisineRole = roleRepository.findByName(ERole.ROLE_CUISINE)
                   .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
           roles.add(cuisineRole);
