@@ -1,8 +1,12 @@
 package com.anchoi.controllers.admin;
 
 import com.anchoi.config.BusinessException;
+import com.anchoi.request.ChangePasswordRequest;
 import com.anchoi.request.UserRequest;
+import com.anchoi.response.MessageResponse;
 import com.anchoi.service.UserService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -62,6 +66,18 @@ public class UserController {
     public ResponseEntity<?> getByUsername(@RequestParam("username") @NotNull String username) {
         try {
             return ResponseEntity.ok(userService.getByUsername(username));
+        } catch (BusinessException ex) {
+            return ResponseEntity.ok(ex);
+        }
+    }
+
+    @PutMapping("/update-password")
+    public ResponseEntity<?> updatePassword(@NotNull @RequestBody ChangePasswordRequest request) {
+        try {
+            Boolean isUpdated = userService.updatePassword(request);
+            if (isUpdated)
+                return ResponseEntity.ok(new MessageResponse("Your password has changed"));
+            return ResponseEntity.ok("Password has not changed");
         } catch (BusinessException ex) {
             return ResponseEntity.ok(ex);
         }
