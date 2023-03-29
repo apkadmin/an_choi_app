@@ -1,16 +1,18 @@
 package com.anchoi.service.impl;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.Month;
-import java.time.Year;
 import java.util.*;
 import java.util.stream.Stream;
 
+import com.anchoi.config.BusinessException;
 import com.anchoi.models.Media;
 import com.anchoi.repository.MediaRepository;
 import com.anchoi.request.MediaRequest;
@@ -55,7 +57,7 @@ public class MediaServiceImpl implements MediaService {
         init();
         List<Media> mediaList = new ArrayList<>();
         try {
-            for (MultipartFile media:medias) {
+            for (MultipartFile media : medias) {
                 Path path = this.root.resolve(new Date().getTime() + "_" + media.getOriginalFilename());
                 Files.copy(media.getInputStream(), path);
                 Media mediaEnt = new Media().builder()
@@ -79,8 +81,13 @@ public class MediaServiceImpl implements MediaService {
     public List<Media> saveV2(MediaRequest mediaRequest, MultipartFile[] medias) {
         List<Media> mediaList = new ArrayList<>();
         try {
-            for (MultipartFile media:medias) {
-                byte[] encoded = Base64Utils.encode(media.getBytes());
+            for (MultipartFile media : medias) {
+                byte[] encoded;
+                try {
+                    encoded = Base64Utils.encode(toByteArr(media));
+                } catch (IOException e) {
+                    throw new BusinessException("500", "File failed to upload "+media.getOriginalFilename());
+                }
                 String fileEncode = new String(encoded);
                 Media mediaEnt = new Media().builder()
                         .url(fileEncode)
@@ -98,6 +105,23 @@ public class MediaServiceImpl implements MediaService {
             }
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    private byte[] toByteArr(MultipartFile multipartfile) throws IOException {
+        byte[] buffer = new byte[1024];
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        int count = 0;
+
+        BufferedInputStream fileInputStream = new BufferedInputStream(multipartfile.getInputStream());
+        int temp;
+        while ((temp = fileInputStream.read(buffer)) != -1) {
+            byteArrayOutputStream.write(buffer, 0, temp);
+        }
+
+        // Mow converting byte array output stream to byte
+        // array
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return byteArray;
     }
 
     @Override
@@ -131,9 +155,10 @@ public class MediaServiceImpl implements MediaService {
         }
     }
 
-    public void deleteById(String id){
-         mediaRepository.deleteById(id);
+    public void deleteById(String id) {
+        mediaRepository.deleteById(id);
     }
+
     @Override
     public boolean deleteByUrl(String url) {
         try {
