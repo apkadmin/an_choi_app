@@ -34,6 +34,9 @@ public class MediaServiceImpl implements MediaService {
     @Value("${base.uri.separate}")
     private String separate;
     private Path root;
+    @Value("${base.folder}")
+    private String baseFolder;
+    private String pathUrl;
     @Autowired
     private MediaRepository mediaRepository;
 
@@ -46,6 +49,7 @@ public class MediaServiceImpl implements MediaService {
             int day = Calendar.getInstance().get(Calendar.DATE);
             String uri = baseUri + separate + year + separate + month + separate + day;
             root = Paths.get(uri);
+            pathUrl = baseFolder + separate + year + separate + month + separate + day;
             Files.createDirectories(root);
         } catch (IOException e) {
             throw new RuntimeException("Could not initialize folder for upload!");
@@ -61,9 +65,10 @@ public class MediaServiceImpl implements MediaService {
                 Path path = this.root.resolve(new Date().getTime() + "_" + media.getOriginalFilename());
                 Files.copy(media.getInputStream(), path);
                 Media mediaEnt = new Media().builder()
-                        .url(path.toString())
+                        .url( pathUrl + separate + path.getFileName())
                         .typeMedia(mediaRequest.getTypeMedia())
                         .type(mediaRequest.getType())
+                        .fileName("" + path.getFileName())
                         .idRefer(mediaRequest.getIdRefer())
                         .build();
                 mediaList.add(mediaEnt);
