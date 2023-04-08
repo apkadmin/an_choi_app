@@ -16,5 +16,11 @@ public class Category extends BaseEntity {
     @Basic
     @Column(name = "icon")
     private String icon;
+    @Basic
+    @Column(name = "type")
+    private String type;
+    @Basic
+    @Column(name = "value")
+    private String value;
 
 }
