@@ -66,5 +66,7 @@ public class District extends BaseEntity {
     @Basic
     @Column(name = "province_id")
     private String provinceId;
-
+    @Basic
+    @Column(name = "url_audio")
+    private String urlAudio;
 }

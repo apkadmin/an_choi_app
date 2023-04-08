@@ -26,5 +26,7 @@ public interface MediaService {
     public Stream<Path> loadAll();
 
     List<Media> loadById(String id);
+
+    String uploadAudio(MultipartFile audio);
 }
 

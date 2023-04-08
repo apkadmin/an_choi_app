@@ -41,5 +41,9 @@ public class Item extends BaseEntity {
     @Column(name = "long_map")
     private String longMap;
 
+    @Basic
+    @Column(name = "url_audio")
+    private String urlAudio;
+
 
 }
