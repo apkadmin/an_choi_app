@@ -48,6 +48,6 @@ public class Province extends BaseEntity {
     @Column(name = "driver_code")
     private String driverCode;
     @Basic
-    @Column(name = "urlAudio")
-    private String url_audio;
+    @Column(name = "url_audio")
+    private String urlAudio;
 }
