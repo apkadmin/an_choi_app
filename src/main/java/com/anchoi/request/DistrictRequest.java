@@ -26,5 +26,6 @@ public class DistrictRequest {
     private String updatedBy;
     @NotBlank(message = "provinceId not null")
     private String provinceId;
+    private String urlAudio;
 
 }

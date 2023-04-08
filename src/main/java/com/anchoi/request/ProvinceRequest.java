@@ -28,4 +28,5 @@ public class ProvinceRequest {
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date updatedDate;
     private String updatedBy;
+    private String urlAudio;
 }
