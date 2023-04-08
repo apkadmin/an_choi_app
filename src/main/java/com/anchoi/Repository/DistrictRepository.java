@@ -1,7 +1,7 @@
 package com.anchoi.repository;
 
 import com.anchoi.models.District;
-import com.anchoi.response.DistrictResponse;
+import com.anchoi.response.SearchResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,7 +17,10 @@ public interface DistrictRepository extends DistrictRepositoryCustomer, JpaRepos
   @Query(value="select * from district d where lower(d.name) = :name and d.province_id = :provinceId", nativeQuery = true)
   List<District> findByNameAndProvinceId(String name, String provinceId);
 
-//  @Query(value="select d.id,d.name,d.population,d.density,d.year_of_density as yearOfDensity, d.coastline as coastline, d.description, d.latitude,d.longitude,d.map_image as mapImage, p.name as provinceName from district d " +
-//          "left join province p on d.province_id = p.id", nativeQuery = true)
-//  List<DistrictResponse> findAllWithProvinceName();
+  @Query("SELECT new com.anchoi.response.SearchResponse(d.id, d.name, 'district', '') FROM District d")
+  List<SearchResponse> searchAll();
+
+  @Query("SELECT new com.anchoi.response.SearchResponse(d.id, d.name, 'district', '') FROM District d where d.name = :name")
+  List<SearchResponse> searchAllByName(String name);
+
 }
