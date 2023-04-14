@@ -65,7 +65,7 @@ public class MediaServiceImpl implements MediaService {
                 Path path = this.root.resolve(new Date().getTime() + "_" + media.getOriginalFilename());
                 Files.copy(media.getInputStream(), path);
                 Media mediaEnt = new Media().builder()
-                        .url( pathUrl + "/"+ path.getFileName())
+                        .url(pathUrl + separate + path.getFileName())
                         .typeMedia(mediaRequest.getTypeMedia())
                         .type(mediaRequest.getType())
                         .fileName("" + path.getFileName())
@@ -91,7 +91,7 @@ public class MediaServiceImpl implements MediaService {
                 try {
                     encoded = Base64Utils.encode(toByteArr(media));
                 } catch (IOException e) {
-                    throw new BusinessException("500", "File failed to upload "+media.getOriginalFilename());
+                    throw new BusinessException("500", "File failed to upload " + media.getOriginalFilename());
                 }
                 String fileEncode = new String(encoded);
                 Media mediaEnt = new Media().builder()
@@ -186,5 +186,19 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public List<Media> loadById(String idRefer) {
         return mediaRepository.findAllByIdRefer(idRefer);
+    }
+
+    public String uploadAudio(MultipartFile audio) {
+        init();
+        try {
+            Path path = this.root.resolve(new Date().getTime() + "_" + audio.getOriginalFilename());
+            Files.copy(audio.getInputStream(), path);
+            return pathUrl + separate + path.getFileName();
+        } catch (Exception e) {
+            if (e instanceof FileAlreadyExistsException) {
+                throw new RuntimeException("A file of that name already exists.");
+            }
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }

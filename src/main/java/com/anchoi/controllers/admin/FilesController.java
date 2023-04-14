@@ -41,6 +41,20 @@ public class FilesController {
         }
     }
 
+    @PostMapping(value="/upload-audio", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> uploadAudio(
+            @RequestParam("audio") MultipartFile audio
+    ) throws BusinessException {
+        String message = "";
+        try {
+            String url = mediaService.uploadAudio(audio);
+
+            return ResponseEntity.status(HttpStatus.OK).body(url);
+        } catch (Exception e) {
+            throw new BusinessException("500", e.getMessage());
+        }
+    }
+
     @PostMapping(value="/v2.0/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<List<Media>> uploadFileV2(
             @RequestParam("medias") MultipartFile[] medias,

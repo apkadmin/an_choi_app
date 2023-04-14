@@ -57,4 +57,13 @@ public class CategoryController {
             return ResponseEntity.status(502).body(e.getMessage());
         }
     }
+
+    @GetMapping("/get-by-type")
+    public ResponseEntity<?> getByType(@RequestParam("type") @NotNull String type) {
+        try {
+            return ResponseEntity.ok(categoryService.getAllByType(type));
+        } catch (Exception e) {
+            return ResponseEntity.status(502).body(e.getMessage());
+        }
+    }
 }

@@ -29,5 +29,6 @@ public class DistrictResponse {
     private String updatedBy;
     private String provinceId;
     private String provinceName;
+    private String urlAudio;
 
 }
