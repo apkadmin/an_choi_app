@@ -11,7 +11,7 @@ public interface ProvinceService {
   ProvinceResponse save(ProvinceRequest request) throws Exception;
   void delete(String id) throws Exception;
 
-  ProvinceResponse findById(String id) throws Exception;
+  Province findById(String id) throws Exception;
 
   List<Province> findAll();
 

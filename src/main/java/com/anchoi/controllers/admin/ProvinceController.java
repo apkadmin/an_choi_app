@@ -60,7 +60,7 @@ public class ProvinceController {
 //  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> findById(@NotBlank String id) throws Exception {
     try {
-      ProvinceResponse response = provinceService.findById(id);
+      Province response = provinceService.findById(id);
 
       return ResponseEntity.ok(response);
     } catch (Exception businessException) {
