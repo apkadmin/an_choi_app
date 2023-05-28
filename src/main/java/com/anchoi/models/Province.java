@@ -49,5 +49,5 @@ public class Province extends BaseEntity {
     private String driverCode;
     @Basic
     @Column(name = "urlAudio")
-    private String url_audio;
+    private String urlAudio;
 }
