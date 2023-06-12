@@ -26,4 +26,15 @@ public class PointVietNamController {
     public ResponseEntity saveALl(@RequestBody() List<PointVietnamEntity> data){
         return  ResponseEntity.ok(pointVietnamService.saveAll(data));
     }
+
+    @GetMapping("/point-parent")
+    public ResponseEntity getByParent( @RequestParam("id") String id){
+        return  ResponseEntity.ok(pointVietnamService.getByParent(id));
+    }
+
+
+    @PostMapping("/point-parent")
+    public ResponseEntity saveByParent( @RequestParam("id") String id,@RequestBody() List<PointVietnamEntity> data){
+        return  ResponseEntity.ok(pointVietnamService.saveByParent(data,id));
+    }
 }

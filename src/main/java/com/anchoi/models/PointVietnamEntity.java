@@ -24,6 +24,9 @@ public class PointVietnamEntity {
     @Column(name = "item_id")
     private String itemId;
 
+    @Column(name = "parent_id")
+    private String parentId;
+
     @Column(name = "x")
     private Double x;
 
