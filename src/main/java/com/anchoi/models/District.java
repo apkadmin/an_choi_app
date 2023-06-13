@@ -27,7 +27,8 @@ import java.util.Date;
                         @ColumnResult(name = "updatedBy", type = String.class),
                         @ColumnResult(name = "provinceId", type = String.class),
                         @ColumnResult(name = "provinceName", type = String.class),
-                        @ColumnResult(name = "urlAudio", type = String.class)
+                        @ColumnResult(name = "urlAudio", type = String.class),
+                        @ColumnResult(name = "square_area", type = String.class)
                     }
         )
 )
@@ -70,4 +71,7 @@ public class District extends BaseEntity {
     @Basic
     @Column(name = "url_audio")
     private String urlAudio;
+    @Basic
+    @Column(name = "square_area")
+    private String squareArea;
 }

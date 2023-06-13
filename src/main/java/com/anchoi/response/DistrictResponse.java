@@ -14,6 +14,7 @@ public class DistrictResponse {
     private String id;
     private String name;
     private String population;
+    private String squareArea;
     private String density;
     private String yearOfDensity;
     private String coastline;
