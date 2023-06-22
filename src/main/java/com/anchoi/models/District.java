@@ -28,7 +28,7 @@ import java.util.Date;
                         @ColumnResult(name = "provinceId", type = String.class),
                         @ColumnResult(name = "provinceName", type = String.class),
                         @ColumnResult(name = "urlAudio", type = String.class),
-                        @ColumnResult(name = "square_area", type = String.class)
+                        @ColumnResult(name = "squareArea", type = String.class)
                     }
         )
 )

@@ -1,5 +1,6 @@
 package com.anchoi.controllers.admin;
 
+import com.anchoi.config.BusinessException;
 import com.anchoi.models.Item;
 import com.anchoi.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,17 @@ public class ItemController {
     public ResponseEntity getItems(){
         return ResponseEntity.ok(itemService.getAllItem());
     }
+
+    @GetMapping(value = "/v1.1/all")
+    public ResponseEntity getItemsV1(){
+        return ResponseEntity.ok(itemService.getAllItemV1());
+    }
+
+    @GetMapping(value = "/detail")
+    public ResponseEntity getDetail(@RequestParam("id") @NotNull String id) throws BusinessException {
+        return ResponseEntity.ok(itemService.getDetail(id));
+    }
+
     @DeleteMapping(value = "/delete")
     public ResponseEntity deleteById(@RequestParam("id") String id){
         itemService.deleteItem(id);

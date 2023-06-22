@@ -5,6 +5,7 @@ import com.anchoi.models.Province;
 import com.anchoi.repository.ProvinceRepository;
 import com.anchoi.request.ProvinceRequest;
 import com.anchoi.response.ProvinceResponse;
+import com.anchoi.response.ProvinceV1Response;
 import com.anchoi.service.ProvinceService;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +39,11 @@ public class ProvinceServiceImpl implements ProvinceService {
         ProvinceResponse response = mapper.convertValue(ent, ProvinceResponse.class);
 
         return response;
+    }
+
+    @Override
+    public List<ProvinceV1Response> findAllV1() {
+        return provinceRepository.searchAllOnlyNameAndId();
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.anchoi.config.BusinessException;
 import com.anchoi.models.Province;
 import com.anchoi.request.ProvinceRequest;
 import com.anchoi.response.ProvinceResponse;
+import com.anchoi.response.ProvinceV1Response;
 import com.anchoi.service.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -70,6 +71,13 @@ public class ProvinceController {
 //  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> findAll() {
     List<Province> response = provinceService.findAll();
+
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/v1.1/findAll")
+  public ResponseEntity<?> findAllV1() {
+    List<ProvinceV1Response> response = provinceService.findAllV1();
 
     return ResponseEntity.ok(response);
   }

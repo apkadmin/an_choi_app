@@ -4,6 +4,7 @@ import com.anchoi.config.BusinessException;
 import com.anchoi.models.District;
 import com.anchoi.request.DistrictRequest;
 import com.anchoi.response.DistrictResponse;
+import com.anchoi.response.DistrictV1Response;
 import com.anchoi.service.DistrictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -70,10 +71,20 @@ public class DistrictController {
   }
 
   @GetMapping("/v1.0/findAll")
-//  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> findAll() throws BusinessException {
     List<DistrictResponse> response = districtService.findAll();
+    return ResponseEntity.ok(response);
+  }
 
+  @GetMapping("/v1.0/find-by-provinceId")
+  public ResponseEntity<?> findAllByProvinceId(@RequestParam("id") String id) throws BusinessException {
+    List<DistrictV1Response> response = districtService.findAllByProvinceId(id);
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/v1.1/findAll")
+  public ResponseEntity<?> findAllV1()  {
+    List<DistrictV1Response> response = districtService.findAllV1();
     return ResponseEntity.ok(response);
   }
 }

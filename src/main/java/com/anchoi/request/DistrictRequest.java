@@ -27,5 +27,6 @@ public class DistrictRequest {
     @NotBlank(message = "provinceId not null")
     private String provinceId;
     private String urlAudio;
+    private String squareArea;
 
 }

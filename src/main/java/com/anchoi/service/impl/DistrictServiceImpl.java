@@ -7,6 +7,7 @@ import com.anchoi.repository.DistrictRepository;
 import com.anchoi.repository.ProvinceRepository;
 import com.anchoi.request.DistrictRequest;
 import com.anchoi.response.DistrictResponse;
+import com.anchoi.response.DistrictV1Response;
 import com.anchoi.service.DistrictService;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -74,6 +75,16 @@ public class DistrictServiceImpl implements DistrictService {
     @Override
     public List<DistrictResponse> findAll() throws BusinessException {
         return districtRepository.findAllWithProvinceName();
+    }
+
+    @Override
+    public List<DistrictV1Response> findAllV1() {
+        return districtRepository.searchAllV1();
+    }
+
+    @Override
+    public List<DistrictV1Response> findAllByProvinceId(String provinceId) {
+        return districtRepository.findAllByProvinceId(provinceId);
     }
 
     @Override
