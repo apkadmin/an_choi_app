@@ -13,6 +13,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import com.anchoi.config.BusinessException;
+import com.anchoi.config.MimeTypes;
 import com.anchoi.models.Media;
 import com.anchoi.repository.MediaRepository;
 import com.anchoi.request.MediaRequest;
@@ -62,10 +63,15 @@ public class MediaServiceImpl implements MediaService {
         List<Media> mediaList = new ArrayList<>();
         try {
             for (MultipartFile media : medias) {
+
                 Path path = this.root.resolve(new Date().getTime() + "_" + media.getOriginalFilename());
                 Files.copy(media.getInputStream(), path);
+                String url =  pathUrl + separate + path.getFileName();
+                if(media.getContentType().toUpperCase().contains("VIDEO")){
+                    url = baseUri + separate + "/video" + UUID.randomUUID().toString() + path.getFileName();
+                }
                 Media mediaEnt = new Media().builder()
-                        .url(pathUrl + separate + path.getFileName())
+                        .url(url)
                         .typeMedia(mediaRequest.getTypeMedia())
                         .type(mediaRequest.getType())
                         .fileName("" + path.getFileName())

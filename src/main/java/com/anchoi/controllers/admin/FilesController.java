@@ -81,19 +81,6 @@ public class FilesController {
         }
     }
 
-//    @GetMapping("/files")
-//    public ResponseEntity<List<Media>> getListFiles() {
-//        List<Media> fileInfos = mediaService.loadAll().map(path -> {
-//            String filename = path.getFileName().toString();
-//            String url = MvcUriComponentsBuilder
-//                    .fromMethodName(FilesController.class, "getFile", path.getFileName().toString()).build().toString();
-//
-//            return new Media(filename, url);
-//        }).collect(Collectors.toList());
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
-//    }
-
     @GetMapping("/files/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> getFile(@PathVariable String filename) {
