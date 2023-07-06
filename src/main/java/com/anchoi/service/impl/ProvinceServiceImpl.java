@@ -49,17 +49,15 @@ public class ProvinceServiceImpl implements ProvinceService {
     }
 
     @Override
-    public ProvinceResponse findById(String id) throws Exception {
-        Province entity;
-        ProvinceResponse response = null;
-        Optional<Province> entOpt = Optional.ofNullable(provinceRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("005", "Not found record")));
+    public Province findById(String id) throws Exception {
+//        ProvinceResponse response = null;
+        Optional<Province> entOpt = provinceRepository.findById(id);
         if (entOpt.isPresent()) {
-            entity = entOpt.get();
-            response = mapper.convertValue(entity, ProvinceResponse.class);
+            return entOpt.get();
+//            response = mapper.convertValue(entity, ProvinceResponse.class);
         }
 
-        return response;
+        return null;
     }
 
     @Override

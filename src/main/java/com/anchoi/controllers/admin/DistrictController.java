@@ -57,9 +57,9 @@ public class DistrictController {
 
   }
 
-  @GetMapping("/v1.0/find")
+  @GetMapping("/v1.0/detail")
 //  @PreAuthorize("hasRole('ADMIN')")
-  public ResponseEntity<?> findById(@NotBlank String id) throws Exception {
+  public ResponseEntity<?> findById(@RequestParam("id") String id) throws Exception {
     try {
       DistrictResponse response = districtService.findById(id);
 

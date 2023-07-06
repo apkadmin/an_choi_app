@@ -45,7 +45,6 @@ public class ProvinceController {
   }
 
   @PostMapping("/v1.0/delete")
-  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity deleteProvince(@NotBlank String id) throws Exception {
     try {
       provinceService.delete(id);
@@ -56,11 +55,10 @@ public class ProvinceController {
     }
   }
 
-  @GetMapping("/v1.0/find")
-//  @PreAuthorize("hasRole('ADMIN')")
-  public ResponseEntity<?> findById(@NotBlank String id) throws Exception {
+  @GetMapping("/v1.0/detail")
+  public ResponseEntity<?> findById(@RequestParam("id")  String id) throws Exception {
     try {
-      ProvinceResponse response = provinceService.findById(id);
+      Province response = provinceService.findById(id);
 
       return ResponseEntity.ok(response);
     } catch (Exception businessException) {

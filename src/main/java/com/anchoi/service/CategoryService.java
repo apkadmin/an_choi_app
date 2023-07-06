@@ -31,4 +31,6 @@ public class CategoryService {
     public Optional<Category> getById(String id) {
         return categoryRepository.findById(id);
     }
+
+    public List<Category> getAllByType(String type){return categoryRepository.getAllByType(type);}
 }
