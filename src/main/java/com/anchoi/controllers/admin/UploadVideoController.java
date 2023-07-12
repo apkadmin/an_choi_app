@@ -1,5 +1,14 @@
 package com.anchoi.controllers.admin;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.anchoi.models.ffmpeg.FFmpegUtils;
 import com.anchoi.models.ffmpeg.TranscodeConfig;
 import org.slf4j.Logger;
@@ -13,87 +22,82 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/upload")
 public class UploadVideoController {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(UploadVideoController.class);
-	
+
 	@Value("${app.video-folder}")
 	private String videoFolder;
 
 	private Path tempDir = Paths.get(System.getProperty("java.io.tmpdir"));
-	
+
 	/**
-	 * 上传视频进行切片处理，返回访问路径
+	 * Upload the video for slice processing and return the access path
 	 * @param video
-	 * @param transcodeConfig
+	//	 * @param transcodeConfig
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@PostMapping
-	public Object upload (@RequestPart(name = "file", required = true) MultipartFile video,
-						@RequestPart(name = "config", required = true) TranscodeConfig transcodeConfig) throws IOException {
-		
-		LOGGER.info("文件信息：title={}, size={}", video.getOriginalFilename(), video.getSize());
-		LOGGER.info("转码配置：{}", transcodeConfig);
-		
-		// 原始文件名称，也就是视频的标题
+	public Object upload (@RequestPart(name = "file", required = true) MultipartFile video
+//			,@RequestPart(name = "title", required = true) String title
+	) throws IOException {
+		TranscodeConfig transcodeConfig = new TranscodeConfig();
+
+		LOGGER.info("file information：title={}, size={}", video.getOriginalFilename(), video.getSize());
+		LOGGER.info("transcoding configuration：{}", transcodeConfig);
+
+		// The original file name, which is the title of the video
 		String title = video.getOriginalFilename();
-		
-		// io到临时文件
+
+		// io to temp file
 		Path tempFile = tempDir.resolve(title);
-		LOGGER.info("io到临时文件：{}", tempFile.toString());
-		
+		LOGGER.info("io to temp file：{}", tempFile.toString());
+
 		try {
-			
+
 			video.transferTo(tempFile);
-			
-			// 删除后缀
+
+			// remove suffix
 			title = title.substring(0, title.lastIndexOf("."));
-			
-			// 按照日期生成子目录
+
+			// Generate subdirectories by date
 			String today = DateTimeFormatter.ofPattern("yyyyMMdd").format(LocalDate.now());
-			
-			// 尝试创建视频目录
-			Path targetFolder = Files.createDirectories(Paths.get(videoFolder, today, title));
-			
-			LOGGER.info("创建文件夹目录：{}", targetFolder);
+
+			// try to create video directory
+			Path targetFolder = Files.createDirectories(Paths.get(videoFolder, title));
+
+			LOGGER.info("Create folder directory：{}", targetFolder);
 			Files.createDirectories(targetFolder);
-			
-			// 执行转码操作
-			LOGGER.info("start transcoding");
+
+			// TODO check resolution of video
+
+			// Perform transcoding
+			LOGGER.info("start transcoding:");
 			try {
 				FFmpegUtils.transcodeToM3u8(tempFile.toString(), targetFolder.toString(), transcodeConfig);
 			} catch (Exception e) {
-				LOGGER.error("转码异常：{}", e.getMessage());
+				LOGGER.error("Transcoding exception：{}", e.getMessage());
 				Map<String, Object> result = new HashMap<>();
 				result.put("success", false);
 				result.put("message", e.getMessage());
 				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
 			}
-			
-			// 封装结果
+
+			// Package result
 			Map<String, Object> videoInfo = new HashMap<>();
 			videoInfo.put("title", title);
-			videoInfo.put("m3u8", String.join("/", "", today, title, "index.m3u8"));
-			videoInfo.put("poster", String.join("/", "", today, title, "poster.jpg"));
-			
+			videoInfo.put("m3u8", String.join("/", "", title, "index.m3u8"));
+			videoInfo.put("poster", String.join("/", "", title, "poster.jpg"));
+
 			Map<String, Object> result = new HashMap<>();
 			result.put("success", true);
 			result.put("data", videoInfo);
 			return result;
 		} finally {
-			// 始终删除临时文件
+			// Always delete temporary files
 			Files.delete(tempFile);
 		}
 	}

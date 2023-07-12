@@ -1,10 +1,10 @@
 package com.anchoi.models.ffmpeg;
 
 public class TranscodeConfig {
-	private String poster;				// 截取封面的时间			HH:mm:ss.[SSS]
-	private String tsSeconds;			// ts分片大小，单位是秒
-	private String cutStart;			// 视频裁剪，开始时间		HH:mm:ss.[SSS]
-	private String cutEnd;				// 视频裁剪，结束时间		HH:mm:ss.[SSS]
+	private String poster = "00:00:00.001";				// 截取封面的时间			HH:mm:ss.[SSS]
+	private String tsSeconds = "10";			// ts分片大小，单位是秒
+	private String cutStart = "";			// 视频裁剪，开始时间		HH:mm:ss.[SSS]
+	private String cutEnd = "";				// 视频裁剪，结束时间		HH:mm:ss.[SSS]
 	public String getPoster() {
 		return poster;
 	}

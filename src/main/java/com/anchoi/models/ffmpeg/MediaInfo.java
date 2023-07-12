@@ -1,8 +1,8 @@
 package com.anchoi.models.ffmpeg;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
+
+import com.google.gson.annotations.SerializedName;
 
 public class MediaInfo {
 	public static class Format {
@@ -28,8 +28,38 @@ public class MediaInfo {
 
 		@SerializedName("profile")
 		private String profile;
+
+		@SerializedName("width")
+		private String width;
+
+		@SerializedName("height")
+		private String height;
+
+		public int getIndex() {
+			return index;
+		}
+
+		public String getCodecName() {
+			return codecName;
+		}
+
+		public String getCodecLongame() {
+			return codecLongame;
+		}
+
+		public String getProfile() {
+			return profile;
+		}
+
+		public String getWidth() {
+			return width;
+		}
+
+		public String getHeight() {
+			return height;
+		}
 	}
-	
+
 	// ----------------------------------
 
 	@SerializedName("streams")
