@@ -19,9 +19,11 @@ import javax.crypto.KeyGenerator;
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.util.StringUtils;
 
 import com.google.gson.Gson;
+import org.springframework.web.multipart.MultipartFile;
 
 
 public class FFmpegUtils {
@@ -92,6 +94,16 @@ public class FFmpegUtils {
 		Files.write(Paths.get(file), stringBuilder.toString().getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 	}
 
+	private static void appendToFile(StringBuilder indexStringBuilder, String destFolder, int resolutionIndex) {
+		indexStringBuilder.append("#EXT-X-STREAM-INF:")
+				.append("BANDWIDTH=").append(BANDWIDTHS.get(resolutionIndex))
+				.append(",RESOLUTION=").append(DIMENSIONS.get(resolutionIndex))
+				.append(LINE_SEPARATOR)
+				.append(" ts_").append(RESOLUTIONS.get(resolutionIndex)).append("/index.m3u8")
+				.append(LINE_SEPARATOR);
+//	 https://chunks01.tvpublica.com.ar/video/BJQRNMF6b_240/index.m3u8 ")
+	}
+
 	/**
 	 * Transcode video to m3u8
 	 * @param source				source video
@@ -139,20 +151,11 @@ public class FFmpegUtils {
 		Files.write(Paths.get(String.join(File.separator, destFolder, "index.m3u8")), indexStringBuilder.toString().getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 	}
 
-	private static void appendToFile(StringBuilder indexStringBuilder, String destFolder, int resolutionIndex) {
-		indexStringBuilder.append("#EXT-X-STREAM-INF:PROGRAM-ID=1")
-				.append(",RESOLUTION=").append(DIMENSIONS.get(resolutionIndex))
-				.append(",BANDWIDTH=").append(BANDWIDTHS.get(resolutionIndex))
-				.append(",CLOSED-CAPTIONS=NONE")
-				.append(" ts_" + RESOLUTIONS.get(resolutionIndex) + "/index.m3u8")
-				.append(LINE_SEPARATOR);
-//	 https://chunks01.tvpublica.com.ar/video/BJQRNMF6b_240/index.m3u8 ")
-	}
+
 
 	private static StringBuilder genFirstInIndex() {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("#EXTM3U").append(LINE_SEPARATOR);
-		stringBuilder.append("#EXT-X-VERSION:3").append(LINE_SEPARATOR);
 		return stringBuilder;
 	}
 
