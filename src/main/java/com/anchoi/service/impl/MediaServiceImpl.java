@@ -1,27 +1,29 @@
 package com.anchoi.service.impl;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
+import com.anchoi.common.FileUtils;
 import com.anchoi.config.BusinessException;
 import com.anchoi.config.MimeTypes;
 import com.anchoi.models.Media;
+import com.anchoi.models.ffmpeg.FFmpegUtils;
+import com.anchoi.models.ffmpeg.TranscodeConfig;
 import com.anchoi.repository.MediaRepository;
 import com.anchoi.request.MediaRequest;
 import com.anchoi.service.MediaService;
+import com.anchoi.service.UploadVideoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.FileSystemUtils;
@@ -34,44 +36,70 @@ public class MediaServiceImpl implements MediaService {
     private String baseUri;
     @Value("${base.uri.separate}")
     private String separate;
-    private Path root;
-    @Value("${base.folder}")
-    private String baseFolder;
-    private String pathUrl;
+    private Path rootImage;
+    private Path rootVideo;
+    private String pathUrlImage;
+    private String pathUrlVideo;
     @Autowired
     private MediaRepository mediaRepository;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UploadVideoService.class);
     @Override
     public void init() {
         try {
-            Date now = new Date();
+            pathUrlVideo = baseUri + separate + "upload";
+            rootVideo = Paths.get(pathUrlVideo);
+            Files.createDirectories(rootVideo);
+        }catch (IOException e) {
+            throw new RuntimeException("Could not initialize folder for upload!");
+        }
+        try {
             int year = Calendar.getInstance().get(Calendar.YEAR);
             int month = Calendar.getInstance().get(Calendar.MONTH);
             int day = Calendar.getInstance().get(Calendar.DATE);
-            String uri = baseUri + separate + year + separate + month + separate + day;
-            root = Paths.get(uri);
-            pathUrl = baseFolder + separate + year + separate + month + separate + day;
-            Files.createDirectories(root);
+            pathUrlImage = baseUri + separate + "uploads" + separate + year + separate + month + separate + day;
+            rootImage = Paths.get(pathUrlImage);
+            Files.createDirectories(rootImage);
         } catch (IOException e) {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
     }
 
     @Override
-    public List<Media> save(MediaRequest mediaRequest, MultipartFile[] medias) {
+    public List<Media> save(MediaRequest mediaRequest, MultipartFile[] medias) throws BusinessException {
         init();
         List<Media> mediaList = new ArrayList<>();
         try {
             for (MultipartFile media : medias) {
-
-                Path path = this.root.resolve(new Date().getTime() + "_" + media.getOriginalFilename());
-                Files.copy(media.getInputStream(), path);
-                String url =  pathUrl + separate + path.getFileName();
-                if(media.getContentType().toUpperCase().contains("VIDEO")){
-                    url = baseUri + separate + "/video" + UUID.randomUUID().toString() + path.getFileName();
+                String mimeType = FileUtils.getRealMimeType(media);
+                if(mediaRequest.getTypeMedia().contains("VIDEO") && !mimeType.startsWith("video")){
+                    throw new BusinessException("500", "Kiểu file và loại danh mục không phù hợp");
                 }
+                if(mediaRequest.getTypeMedia().contains("IMAGE") && !mimeType.startsWith("image")){
+                    throw new BusinessException("500", "Kiểu file và loại danh mục không phù hợp");
+                }
+            }
+            List<CompletableFuture> completableFutures = new ArrayList<>();
+            for (MultipartFile media : medias) {
+                String url = "";
+                Path path = null;
+                String mimeType = FileUtils.getRealMimeType(media);
+                if(mimeType.startsWith("video")) {
+                    path = this.rootVideo.resolve(new Date().getTime() + "_" + media.getOriginalFilename());
+                    url = pathUrlVideo + separate + path.getFileName();
+                    completableFutures.add(transcodeToM3u8(media,path));
+                } else if (mimeType.startsWith("image")) {
+                    path = this.rootImage.resolve(new Date().getTime() + "_" + media.getOriginalFilename());
+                    url = pathUrlImage + separate + path.getFileName();
+                } else {
+                    throw new BusinessException("500", "File not support");
+                }
+//                Files.write(Paths.get(String.join(File.separator, path.getParent().toString(), path.getFileName().toString())),
+//                        media.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                Files.copy(media.getInputStream(), path);
+
                 Media mediaEnt = new Media().builder()
-                        .url(url)
+                        .url(url.replace(baseUri, ""))
                         .typeMedia(mediaRequest.getTypeMedia())
                         .type(mediaRequest.getType())
                         .fileName("" + path.getFileName())
@@ -79,8 +107,20 @@ public class MediaServiceImpl implements MediaService {
                         .build();
                 mediaList.add(mediaEnt);
             }
+            if(!completableFutures.isEmpty()) {
+                Thread thread = new Thread(){
+                    public void run(){
+                        transformData(completableFutures);
+                    }
+                };
+                thread.start();
+
+            }
+
             return mediaRepository.saveAll(mediaList);
-        } catch (Exception e) {
+        } catch (BusinessException ex){
+            throw ex;
+        }catch (Exception e) {
             if (e instanceof FileAlreadyExistsException) {
                 throw new RuntimeException("A file of that name already exists.");
             }
@@ -138,7 +178,7 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public Resource load(String filename) {
         try {
-            Path file = root.resolve(filename);
+            Path file = rootImage.resolve(filename);
             Resource resource = new UrlResource(file.toUri());
 
             if (resource.exists() || resource.isReadable()) {
@@ -153,21 +193,35 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public void deleteAll() {
-        FileSystemUtils.deleteRecursively(root.toFile());
+        FileSystemUtils.deleteRecursively(rootImage.toFile());
     }
 
     @Override
     public Stream<Path> loadAll() {
         try {
-            return Files.walk(this.root, 1)
-                    .filter(path -> !path.equals(this.root)).map(this.root::relativize);
+            return Files.walk(this.rootImage, 1)
+                    .filter(path -> !path.equals(this.rootImage)).map(this.rootImage::relativize);
         } catch (IOException e) {
             throw new RuntimeException("Could not load the files!");
         }
     }
 
-    public void deleteById(String id) {
-        mediaRepository.deleteById(id);
+    public void deleteById(String id)  {
+        Optional<Media> media = mediaRepository.findById(id);
+        if(media.isPresent()) {
+                String path = baseUri + separate + media.get().getUrl();
+                Path temp = Paths.get(path);
+                try {
+                    Files.deleteIfExists(temp);
+                    if(path.contains("upload/")){
+                        File directoryToDelete = new File(path.substring(0,path.lastIndexOf(".")));
+                        FileSystemUtils.deleteRecursively(directoryToDelete);
+                    }
+                } catch (Exception exception){
+                    exception.printStackTrace();
+                }
+            mediaRepository.deleteById(id);
+        }
     }
 
     @Override
@@ -176,14 +230,15 @@ public class MediaServiceImpl implements MediaService {
             Media media = mediaRepository.findByUrl(url);
             if (media != null)
                 mediaRepository.delete(media);
-            String[] arr = url.split(separate);
-            String fileName = arr[arr.length - 1];
-            String path = "";
-            for (int i = 0; i < arr.length - 1; i++) {
-                path += separate + arr[i];
+            String path = baseUri + separate + media.getUrl();
+            Path temp = Paths.get(path);
+            Files.deleteIfExists(temp);
+            if(path.contains("upload/")){
+                File directoryToDelete = new File(path.substring(0,path.lastIndexOf(".")));
+                FileSystemUtils.deleteRecursively(directoryToDelete);
             }
-            Path file = Paths.get(path).resolve(fileName);
-            return Files.deleteIfExists(file);
+
+            return true;
         } catch (IOException e) {
             throw new RuntimeException("Error: " + e.getMessage());
         }
@@ -197,9 +252,9 @@ public class MediaServiceImpl implements MediaService {
     public String uploadAudio(MultipartFile audio) {
         init();
         try {
-            Path path = this.root.resolve(new Date().getTime() + "_" + audio.getOriginalFilename());
+            Path path = this.rootImage.resolve(new Date().getTime() + "_" + audio.getOriginalFilename());
             Files.copy(audio.getInputStream(), path);
-            return pathUrl + separate + path.getFileName();
+            return pathUrlImage + separate + path.getFileName();
         } catch (Exception e) {
             if (e instanceof FileAlreadyExistsException) {
                 throw new RuntimeException("A file of that name already exists.");
@@ -207,4 +262,55 @@ public class MediaServiceImpl implements MediaService {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+
+    public CompletableFuture<Void> transcodeToM3u8(MultipartFile video, Path path) {
+            return CompletableFuture.supplyAsync(() -> {
+                TranscodeConfig transcodeConfig = new TranscodeConfig();
+                LOGGER.info("transcoding configuration：{}", transcodeConfig);
+
+                // io to temp file
+                assert path != null;
+
+                // remove suffix
+                String newDir = path.toFile().getName().substring(0, path.toFile().getName().lastIndexOf("."));
+                Path targetFolder;
+                try {
+                    // try to create video directory
+                     targetFolder = Files.createDirectories(Paths.get(path.getParent().toString() + separate + newDir));
+                } catch (Exception ex){
+                    targetFolder = path.getParent().resolve(newDir);
+                }
+
+
+                // Perform transcoding
+                LOGGER.info("start transcoding:");
+                try {
+                    video.transferTo(targetFolder.resolve(video.getOriginalFilename()));
+                    FFmpegUtils.transcodeToM3u8(targetFolder.resolve(video.getOriginalFilename()).toString(), targetFolder.toString(), transcodeConfig);
+
+                }  catch (Exception e) {
+                    LOGGER.error("Transcoding exception：{}", e.getMessage());
+                } finally {
+                    try {
+                        // Always delete temporary files
+                        Files.delete(targetFolder.resolve(video.getOriginalFilename()));
+                    }catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+                LOGGER.error("Transcoding success video：{}", newDir);
+                return null;
+            });
+
+        }
+
+        @Async
+    public void transformData(List<CompletableFuture> completableFutures){
+        try {
+            CompletableFuture.anyOf(completableFutures.toArray(new CompletableFuture[completableFutures.size()])).get();
+        } catch (Exception exception){
+            exception.printStackTrace();
+        }
+        }
 }
