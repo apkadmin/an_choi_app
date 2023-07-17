@@ -35,6 +35,7 @@ public class FFmpegUtils {
 	private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 	private static final List<String> RESOLUTIONS = Arrays.asList("360", "480", "720", "1080");
 	private static final List<String> DIMENSIONS = Arrays.asList("480x360", "854x480", "1280x720", "1920x1080");
+	private static final List<String> SCALE = Arrays.asList("scale=-2:360,setsar=1", "scale=-2:480,setsar=1", "scale=-2:720,setsar=1", "scale=-2:1080,setsar=1");
 	private static final List<String> BANDWIDTHS = Arrays.asList("1000000", "2000000", "3000000", "4000000");
 
 	/**
@@ -161,7 +162,8 @@ public class FFmpegUtils {
 
 	private static void convertToM3u8(String source, String destFolder, TranscodeConfig config, MediaInfo mediaInfo, int videoIndex) throws IOException, InterruptedException {
 		String resolution = RESOLUTIONS.get(videoIndex);
-		String dimension = DIMENSIONS.get(videoIndex);
+//		String dimension = DIMENSIONS.get(videoIndex);
+		String scale = SCALE.get(videoIndex);
 		String bandwidth = BANDWIDTHS.get(videoIndex);
 		// create working directory
 		Path workDir = Paths.get(destFolder, "ts_" + resolution);
@@ -178,7 +180,8 @@ public class FFmpegUtils {
 		commands.add("-hls_time")				;commands.add(config.getTsSeconds());	// ts切片大小
 		commands.add("-hls_playlist_type")		;commands.add("vod");					// 点播模式
 		commands.add("-hls_segment_filename")	;commands.add("%06d.ts");				// ts切片文件名称
-		commands.add("-s")						;commands.add(dimension);				// dimension
+//		commands.add("-s")						;commands.add(dimension);				// dimension
+		commands.add("-vf")						;commands.add(scale);				// scale
 		if (StringUtils.hasText(config.getCutStart())) {
 			commands.add("-ss")					;commands.add(config.getCutStart());	// start time
 		}
