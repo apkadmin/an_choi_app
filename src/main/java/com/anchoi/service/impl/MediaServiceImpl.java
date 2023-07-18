@@ -37,9 +37,11 @@ public class MediaServiceImpl implements MediaService {
     @Value("${base.uri.separate}")
     private String separate;
     private Path rootImage;
+    private Path rootAudio;
     private Path rootVideo;
     private String pathUrlImage;
     private String pathUrlVideo;
+    private String pathUrlAudio;
     @Autowired
     private MediaRepository mediaRepository;
 
@@ -60,6 +62,14 @@ public class MediaServiceImpl implements MediaService {
             pathUrlImage = baseUri + separate + "uploads" + separate + year + separate + month + separate + day;
             rootImage = Paths.get(pathUrlImage);
             Files.createDirectories(rootImage);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not initialize folder for upload!");
+        }
+
+        try {
+            pathUrlAudio = baseUri + separate + "audios";
+            rootAudio = Paths.get(pathUrlAudio);
+            Files.createDirectories(rootAudio);
         } catch (IOException e) {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
@@ -252,9 +262,9 @@ public class MediaServiceImpl implements MediaService {
     public String uploadAudio(MultipartFile audio) {
         init();
         try {
-            Path path = this.rootImage.resolve(new Date().getTime() + "_" + audio.getOriginalFilename());
+            Path path = this.rootAudio.resolve(new Date().getTime() + "_" + audio.getOriginalFilename());
             Files.copy(audio.getInputStream(), path);
-            return pathUrlImage + separate + path.getFileName();
+            return pathUrlAudio + separate + path.getFileName();
         } catch (Exception e) {
             if (e instanceof FileAlreadyExistsException) {
                 throw new RuntimeException("A file of that name already exists.");
