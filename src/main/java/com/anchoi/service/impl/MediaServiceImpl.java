@@ -264,7 +264,7 @@ public class MediaServiceImpl implements MediaService {
         try {
             Path path = this.rootAudio.resolve(new Date().getTime() + "_" + audio.getOriginalFilename());
             Files.copy(audio.getInputStream(), path);
-            return pathUrlAudio + separate + path.getFileName();
+            return (pathUrlAudio + separate + path.getFileName()).replace(baseUri, "");
         } catch (Exception e) {
             if (e instanceof FileAlreadyExistsException) {
                 throw new RuntimeException("A file of that name already exists.");
