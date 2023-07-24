@@ -28,4 +28,7 @@ public class Media extends BaseEntity {
     @Column(name = "file_name")
     private String fileName;
 
+    @Basic
+    @Column(name = "description", length = 1000)
+    private String description;
 }

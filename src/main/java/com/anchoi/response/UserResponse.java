@@ -1,9 +1,11 @@
 package com.anchoi.response;
 
+import com.anchoi.models.RoleUser;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
+import javax.management.relation.Role;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +30,6 @@ public class UserResponse {
     private String password;
     private String email;
     private String phone;
-    private List<String> roles;
+    private RoleUser role;
 
 }

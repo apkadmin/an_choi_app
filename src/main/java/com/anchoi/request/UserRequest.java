@@ -1,11 +1,7 @@
 package com.anchoi.request;
 
-import com.anchoi.models.ERole;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
-import java.util.Date;
 import java.util.List;
 
 
@@ -20,6 +16,5 @@ public class UserRequest {
     private String username;
     private String email;
     private String phone;
-    private List<ERole> roles;
 
 }

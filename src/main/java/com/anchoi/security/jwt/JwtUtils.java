@@ -73,18 +73,4 @@ public class JwtUtils {
     return false;
   }
 
-//  public String expireToken(String token) {
-//    final Date createdDate = new Date();
-//    final Date expirationDate = createdDate;
-//
-//    final Claims claims = getAllClaimsFromToken(token);
-//    claims.setIssuedAt(createdDate);
-//    claims.setExpiration(expirationDate);
-//
-//    return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
-//  }
-
-  private Claims getAllClaimsFromToken(String token) {
-    return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
-  }
 }

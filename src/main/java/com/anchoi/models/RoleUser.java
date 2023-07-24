@@ -18,22 +18,14 @@ public class RoleUser {
     private UUID id;
 
     @Basic
-    @Column(name = "role_id")
-    private String roleId;
-    @Basic
     @Column(name = "user_id")
     private String userId;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        RoleUser roleUser = (RoleUser) o;
-        return Objects.equals(roleId, roleUser.roleId) && Objects.equals(userId, roleUser.userId);
-    }
+    @Basic
+    @Column(name = "object_list")
+    private String objectList;
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+    @Basic
+    @Column(name = "role_list")
+    private String roleList;
 }

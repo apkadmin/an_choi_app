@@ -1,8 +1,6 @@
 package com.anchoi.security.services;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.anchoi.models.User;
@@ -36,9 +34,14 @@ public class UserDetailsImpl implements UserDetails {
   }
 
   public static UserDetailsImpl build(User user) {
-    List<GrantedAuthority> authorities = user.getRoles().stream()
-        .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-        .collect(Collectors.toList());
+    List<GrantedAuthority> authorities = new ArrayList<>();
+    if(user.getRole() != null && user.getRole().getRoleList() != null){
+      authorities = Arrays.stream(user.getRole().getRoleList().split(";")).map(role -> new SimpleGrantedAuthority(role))
+              .collect(Collectors.toList());
+    }
+    if(user.getUsername().toLowerCase().equals("admin")){
+      authorities = List.of(new SimpleGrantedAuthority("ADMIN"));
+    }
 
     return new UserDetailsImpl(
         user.getId(), 

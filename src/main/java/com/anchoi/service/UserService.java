@@ -1,9 +1,8 @@
 package com.anchoi.service;
 
 import com.anchoi.config.BusinessException;
-import com.anchoi.models.Role;
 import com.anchoi.models.User;
-import com.anchoi.repository.RoleRepository;
+import com.anchoi.repository.RoleUserRepository;
 import com.anchoi.repository.UserRepository;
 import com.anchoi.request.ChangePasswordRequest;
 import com.anchoi.request.UserRequest;
@@ -11,7 +10,6 @@ import com.anchoi.response.UserResponse;
 import com.anchoi.security.jwt.JwtUtils;
 import com.anchoi.security.services.UserDetailsImpl;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,11 +24,11 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final RoleUserRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils) {
+    public UserService(UserRepository userRepository, RoleUserRepository roleRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -60,15 +58,6 @@ public class UserService {
         userEnt.setName(request.getName());
         userEnt.setEmail(request.getEmail());
         userEnt.setPhone(request.getPhone());
-
-        // khong cho phep sua role cua user admin
-        if (!"admin".equalsIgnoreCase(request.getUsername())) {
-            // get roles from request
-            List<Role> roles = roleRepository.findAllByNameIn(request.getRoles());
-            // .stream().map(Enum::name).collect(Collectors.toList())
-            userEnt.setRoles(new HashSet<>(roles));
-        }
-
         User user =  userRepository.save(userEnt);
 
         return convertToResponse(user);
@@ -103,7 +92,7 @@ public class UserService {
                 .updatedBy(u.getUpdatedBy())
                 .name(u.getName())
                 .username(u.getUsername())
-                .roles(u.getRoles().stream().map(role->role.getName().toString()).collect(Collectors.toList()))
+                .role(u.getRole())
                 .build();
     }
 
