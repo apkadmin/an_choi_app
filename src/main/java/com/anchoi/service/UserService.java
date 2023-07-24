@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.Role;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -109,7 +110,10 @@ public class UserService {
         if (!uOpt.isPresent())
             throw new BusinessException("400", "User not found");
         User user = uOpt.get();
-        return convertToResponse(user);
+        RoleUser roleUser = roleRepository.findFirstByUserId(username);
+        UserResponse userResponse = convertToResponse(user);
+        userResponse.setRole(roleUser);
+        return userResponse;
     }
 
     public boolean updatePassword(ChangePasswordRequest request) throws BusinessException {
