@@ -59,10 +59,15 @@ public class AuthController {
         .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
-
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-    String jwt = jwtUtils.generateJwtToken(authentication);
+    RoleUser roleUser = roleRepository.findFirstByUserId(userDetails.getUsername());
+    if(userDetails.getUsername().toLowerCase().equals("admin")){
+      roleUser = new RoleUser();
+      roleUser.setUserId(userDetails.getUsername());
+      roleUser.setObjectList("ADMIN");
+      roleUser.setRoleList("ADMIN");
+    }
+    String jwt = jwtUtils.generateJwtToken(authentication,roleUser);
 
     List<String> roles = userDetails.getAuthorities().stream()
         .map(item -> item.getAuthority())

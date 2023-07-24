@@ -1,10 +1,15 @@
 package com.anchoi.security.jwt;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import com.anchoi.models.RoleUser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,12 +45,16 @@ public class JwtUtils {
     return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
   }
 
-  public String generateJwtToken(Authentication authentication) {
+  public String generateJwtToken(Authentication authentication, RoleUser roleUser) {
 
     UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
-
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("name",userPrincipal.getUsername());
+    claims.put("roleObject", roleUser.getObjectList());
+    claims.put("roleActor", roleUser.getRoleList());
     return Jwts.builder()
             .setSubject((userPrincipal.getUsername()))
+            .addClaims(claims)
             .setIssuedAt(new Date())
             .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
             .signWith(SignatureAlgorithm.HS512, jwtSecret)
