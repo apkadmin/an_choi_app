@@ -3,6 +3,7 @@ package com.anchoi.security.services;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.anchoi.models.RoleUser;
 import com.anchoi.models.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -33,10 +34,10 @@ public class UserDetailsImpl implements UserDetails {
     this.authorities = authorities;
   }
 
-  public static UserDetailsImpl build(User user) {
+  public static UserDetailsImpl build(User user, RoleUser roleUser) {
     List<GrantedAuthority> authorities = new ArrayList<>();
-    if(user.getRole() != null && user.getRole().getRoleList() != null){
-      authorities = Arrays.stream(user.getRole().getRoleList().split(";")).map(role -> new SimpleGrantedAuthority(role))
+    if(roleUser != null && roleUser.getRoleList() != null){
+      authorities = Arrays.stream(roleUser.getRoleList().split(";")).map(role -> new SimpleGrantedAuthority(role))
               .collect(Collectors.toList());
     }
     if(user.getUsername().toLowerCase().equals("admin")){

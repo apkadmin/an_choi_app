@@ -1,6 +1,8 @@
 package com.anchoi.security.services;
 
+import com.anchoi.models.RoleUser;
 import com.anchoi.models.User;
+import com.anchoi.repository.RoleUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,18 +12,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.anchoi.repository.UserRepository;
 
+import javax.management.relation.Role;
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
   @Autowired
   UserRepository userRepository;
+  @Autowired
+  RoleUserRepository roleUserRepository;
 
   @Override
   @Transactional
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     User user = userRepository.findByUsername(username)
         .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
-
-    return UserDetailsImpl.build(user);
+    RoleUser roleUser = roleUserRepository.findFirstByUserId(username);
+    return UserDetailsImpl.build(user,roleUser);
   }
 
 }

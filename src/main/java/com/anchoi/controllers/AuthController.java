@@ -78,6 +78,7 @@ public class AuthController {
   }
 
   @PostMapping("/signup")
+  @Transactional
   public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
       return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
@@ -91,8 +92,10 @@ public class AuthController {
     User user = new User(signUpRequest.getUsername(),
                          signUpRequest.getEmail(),
                          encoder.encode(signUpRequest.getPassword()));
-
-    user.setRole(signUpRequest.getRole());
+    RoleUser roleUser = signUpRequest.getRole();
+    roleUser.setId(UUID.randomUUID());
+    roleUser.setUserId(user.getUsername());
+    roleRepository.save(roleUser);
     userRepository.save(user);
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }
@@ -119,7 +122,7 @@ public class AuthController {
     roleUser.setObjectList(signUpRequest.getRole().getObjectList());
     roleUser.setRoleList(signUpRequest.getRole().getRoleList());
   roleUser.setUserId(signUpRequest.getUsername());
-    user.setRole(roleUser);
+  roleRepository.save(roleUser);
     userRepository.save(user);
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
   }

@@ -1,6 +1,7 @@
 package com.anchoi.service;
 
 import com.anchoi.config.BusinessException;
+import com.anchoi.models.RoleUser;
 import com.anchoi.models.User;
 import com.anchoi.repository.RoleUserRepository;
 import com.anchoi.repository.UserRepository;
@@ -92,7 +93,6 @@ public class UserService {
                 .updatedBy(u.getUpdatedBy())
                 .name(u.getName())
                 .username(u.getUsername())
-                .role(u.getRole())
                 .build();
     }
 
