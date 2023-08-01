@@ -23,7 +23,6 @@ public class ProvinceController {
   ProvinceService provinceService;
 
   @PostMapping("/v1.0/save")
-  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> saveProvince(@Valid @RequestBody ProvinceRequest request) throws Exception {
     try {
       ProvinceResponse response = provinceService.save(request);
@@ -35,7 +34,6 @@ public class ProvinceController {
   }
 
   @PostMapping("/v1.0/update")
-  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> updateProvince(@Valid @RequestBody ProvinceRequest request) throws Exception {
     try {
       ProvinceResponse response = provinceService.update(request);
@@ -68,7 +66,6 @@ public class ProvinceController {
   }
 
   @GetMapping("/v1.0/findAll")
-//  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> findAll() {
     List<Province> response = provinceService.findAll();
 

@@ -23,7 +23,6 @@ public class DistrictController {
   DistrictService districtService;
 
   @PostMapping("/v1.0/save")
-  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> save(@Valid @RequestBody DistrictRequest request) throws Exception {
     try {
       DistrictResponse response = districtService.save(request);
@@ -35,7 +34,6 @@ public class DistrictController {
   }
 
   @PostMapping("/v1.0/update")
-  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> update(@Valid @RequestBody DistrictRequest request) throws Exception {
     try {
       DistrictResponse response = districtService.update(request);
@@ -46,7 +44,6 @@ public class DistrictController {
   }
 
   @PostMapping("/v1.0/delete")
-  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity delete(@NotBlank String id) throws Exception {
     try {
       districtService.delete(id);
@@ -59,7 +56,6 @@ public class DistrictController {
   }
 
   @GetMapping("/v1.0/detail")
-//  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> findById(@RequestParam("id") String id) throws Exception {
     try {
       DistrictResponse response = districtService.findById(id);

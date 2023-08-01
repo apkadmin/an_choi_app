@@ -24,7 +24,6 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> update(@RequestBody @NotNull UserRequest request) {
         try {
             return ResponseEntity.ok(userService.update(request));
@@ -34,7 +33,6 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> delete(@RequestParam("id") @NotNull String id) {
         try {
             userService.delete(id);

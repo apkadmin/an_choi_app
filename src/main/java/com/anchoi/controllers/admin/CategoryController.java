@@ -20,7 +20,6 @@ public class CategoryController {
     }
 
     @PostMapping("/save")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> save(@RequestBody @NotNull Category request) {
         try {
             return ResponseEntity.ok(categoryService.save(request));
@@ -30,7 +29,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/delete")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> delete(@RequestParam("id") @NotNull String id) {
         try {
             categoryService.delete(id);
