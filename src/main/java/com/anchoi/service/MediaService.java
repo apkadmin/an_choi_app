@@ -30,5 +30,6 @@ public interface MediaService {
     List<Media> loadById(String id);
 
     String uploadAudio(MultipartFile audio);
+    public void updateMediaDes(String id,String des);
 }
 

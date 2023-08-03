@@ -273,6 +273,16 @@ public class MediaServiceImpl implements MediaService {
         }
     }
 
+    @Override
+    public void updateMediaDes(String id, String des) {
+        Optional<Media> media = mediaRepository.findById(id);
+
+        if(media.isPresent()){
+            media.get().setDescription(des);
+            mediaRepository.save(media.get());
+        }
+    }
+
 
     public CompletableFuture<Void> transcodeToM3u8(MultipartFile video, Path path) {
             return CompletableFuture.supplyAsync(() -> {
