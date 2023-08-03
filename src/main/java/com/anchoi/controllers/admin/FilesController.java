@@ -6,6 +6,7 @@ import com.anchoi.config.BusinessException;
 import com.anchoi.models.Media;
 import com.anchoi.request.MediaRequest;
 import com.anchoi.response.MessageResponse;
+import com.anchoi.response.ResponseData;
 import com.anchoi.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -75,7 +76,7 @@ public class FilesController {
         String message = "";
         try {
             mediaService.deleteById(fileId);
-            return ResponseEntity.status(HttpStatus.OK).body("OK");
+            return ResponseEntity.ok(ResponseData.ok("OK"));
         } catch (Exception e) {
             throw new BusinessException("500", e.getMessage());
         }

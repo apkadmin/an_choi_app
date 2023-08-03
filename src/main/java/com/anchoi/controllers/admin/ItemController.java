@@ -2,6 +2,7 @@ package com.anchoi.controllers.admin;
 
 import com.anchoi.config.BusinessException;
 import com.anchoi.models.Item;
+import com.anchoi.response.ResponseData;
 import com.anchoi.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +49,7 @@ public class ItemController {
     @DeleteMapping(value = "/delete")
     public ResponseEntity deleteById(@RequestParam("id") String id){
         itemService.deleteItem(id);
-        return ResponseEntity.ok("OK");
+        return ResponseEntity.ok(ResponseData.ok("OK"));
     }
 
     @PostMapping(value = "/add")
