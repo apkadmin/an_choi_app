@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 import com.anchoi.common.FileUtils;
 import com.anchoi.config.BusinessException;
 import com.anchoi.config.MimeTypes;
+import com.anchoi.models.Item;
 import com.anchoi.models.Media;
 import com.anchoi.models.ffmpeg.FFmpegUtils;
 import com.anchoi.models.ffmpeg.TranscodeConfig;
@@ -28,6 +29,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.transaction.Transactional;
 
 @Service
 public class MediaServiceImpl implements MediaService {
@@ -256,7 +259,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public List<Media> loadById(String idRefer) {
-        return mediaRepository.findAllByIdRefer(idRefer);
+        return mediaRepository.findAllByIdReferOrderByIndex(idRefer);
     }
 
     public String uploadAudio(MultipartFile audio) {
@@ -281,6 +284,18 @@ public class MediaServiceImpl implements MediaService {
             media.get().setDescription(des);
             mediaRepository.save(media.get());
         }
+    }
+
+    @Override
+    @Transactional
+    public List<Media> saveAll(List<Media> items) {
+        if(!items.isEmpty()) {
+            for (int i = 0; i < items.size(); i++) {
+                items.get(i).setIndex(i);
+            }
+            mediaRepository.saveAll(items);
+        }
+        return items;
     }
 
 
@@ -333,4 +348,6 @@ public class MediaServiceImpl implements MediaService {
             exception.printStackTrace();
         }
         }
+
+
 }

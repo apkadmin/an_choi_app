@@ -1,6 +1,8 @@
 package com.anchoi.models;
 
 //import com.anchoi.util.SecurityUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -25,12 +27,14 @@ public class BaseEntity implements Serializable {
     private String id;
 
     @Column(name = "created_date", nullable = false)
+    @JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss")
     private Date createdDate;
 
     @Column(name = "created_by")
     private String createdBy;
 
     @Column(name = "updated_date")
+    @JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss")
     private Date updatedDate;
 
     @Column(name = "updated_by")

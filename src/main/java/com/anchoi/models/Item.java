@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "item", schema = "an_choi_app")
+@Table(name = "item")
 public class Item extends BaseEntity {
     @Basic
     @Column(name = "name")
@@ -44,6 +44,5 @@ public class Item extends BaseEntity {
     @Basic
     @Column(name = "url_audio")
     private String urlAudio;
-
 
 }

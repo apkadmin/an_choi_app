@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Controller
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -57,7 +58,7 @@ public class ItemController {
         try {
             return ResponseEntity.ok(itemService.save(item));
         } catch (Exception e){
-            return ResponseEntity.status(502).body(e.getMessage());
+            return ResponseEntity.status(502).body(ResponseData.error(null,e.getMessage()));
         }
     }
 }

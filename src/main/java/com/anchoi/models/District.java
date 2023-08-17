@@ -36,7 +36,7 @@ import java.util.Date;
 @Data
 @Entity
 @EqualsAndHashCode(callSuper=false)
-@Table(name = "district", schema = "an_choi_app", catalog = "")
+@Table(name = "district")
 public class District extends BaseEntity {
     @Basic
     @Column(name = "name")

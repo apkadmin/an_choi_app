@@ -11,7 +11,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "role_user", schema = "an_choi_app", catalog = "")
+@Table(name = "role_user")
 public class RoleUser {
     @Id
     @Column(name = "id", nullable = true)

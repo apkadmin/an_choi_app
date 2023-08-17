@@ -17,4 +17,12 @@ public class ResponseData<T> {
         responseData.setMessage("OK");
         return responseData;
     }
+
+    public static <T> ResponseData error(T data, String message){
+        ResponseData responseData = new ResponseData();
+        responseData.setData(data);
+        responseData.setStatus(400);
+        responseData.setMessage(message);
+        return responseData;
+    }
 }

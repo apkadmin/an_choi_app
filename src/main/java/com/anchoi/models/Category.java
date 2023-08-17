@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @EqualsAndHashCode(callSuper=false)
-@Table(name = "category", schema = "an_choi_app")
+@Table(name = "category")
 public class Category extends BaseEntity {
     @Basic
     @Column(name = "name")

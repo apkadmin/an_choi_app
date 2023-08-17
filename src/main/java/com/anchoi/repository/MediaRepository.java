@@ -11,5 +11,5 @@ public interface MediaRepository extends JpaRepository<Media, String> {
 
     Media findByUrl(String url);
 
-    List<Media> findAllByIdRefer(String idRefer);
+    List<Media> findAllByIdReferOrderByIndex(String idRefer);
 }
