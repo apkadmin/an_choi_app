@@ -26,15 +26,15 @@ public class BaseEntity implements Serializable {
     @Column(name = "id", nullable = false, length = 36)
     private String id;
 
-    @Column(name = "created_date", nullable = false)
-    @JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss")
+    @Column(name = "created_date")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date createdDate;
 
     @Column(name = "created_by")
     private String createdBy;
 
     @Column(name = "updated_date")
-    @JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date updatedDate;
 
     @Column(name = "updated_by")
