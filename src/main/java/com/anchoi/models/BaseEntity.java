@@ -27,14 +27,14 @@ public class BaseEntity implements Serializable {
     private String id;
 
     @Column(name = "created_date")
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdDate;
 
     @Column(name = "created_by")
     private String createdBy;
 
     @Column(name = "updated_date")
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updatedDate;
 
     @Column(name = "updated_by")

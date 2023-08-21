@@ -20,10 +20,10 @@ public class ProvinceResponse {
     private String longitude;
     private String mapImage;
     private String driverCode;
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdDate;
     private String createdBy;
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updatedDate;
     private String updatedBy;
     private String urlAudio;
