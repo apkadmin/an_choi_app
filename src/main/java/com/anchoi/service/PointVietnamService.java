@@ -2,6 +2,7 @@ package com.anchoi.service;
 
 import com.anchoi.models.PointVietnamEntity;
 import com.anchoi.repository.PointVietnamRepository;
+import com.anchoi.response.PointVietnamV1Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,9 @@ public class PointVietnamService {
 
     public List<PointVietnamEntity> getByParent(String parentId){
         return pointVietnamRepository.findAllByParentId(parentId);
+    }
+    public List<PointVietnamV1Response> getByParentV1(String parentId){
+        return pointVietnamRepository.getByParentID(parentId);
     }
 
     @Transactional
