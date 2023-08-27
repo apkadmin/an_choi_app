@@ -43,11 +43,7 @@ public class ItemService {
     }
 
     public Item save(Item item){
-       if(item != null){
-           itemRepository.save(item);
-       }
-
-       return item;
+          return itemRepository.save(item);
     }
 
     public List<ItemResponse> getAllItemV1(){
