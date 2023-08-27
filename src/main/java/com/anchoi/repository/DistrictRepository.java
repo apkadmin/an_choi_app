@@ -19,7 +19,7 @@ public interface DistrictRepository extends DistrictRepositoryCustomer, JpaRepos
   @Query(value="select * from district d where lower(d.name) = :name and d.province_id = :provinceId", nativeQuery = true)
   List<District> findByNameAndProvinceId(String name, String provinceId);
 
-  @Query("SELECT new com.anchoi.response.SearchResponse(d.id, d.name, 'district', '') FROM District d")
+  @Query("SELECT new com.anchoi.response.SearchResponse(d.id, d.name, 'district', '', d.provinceId) FROM District d")
   List<SearchResponse> searchAll();
 
   @Query("SELECT new com.anchoi.response.DistrictV1Response(d.id, d.name,d.provinceId) FROM District d")
