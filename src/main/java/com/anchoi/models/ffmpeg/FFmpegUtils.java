@@ -69,9 +69,9 @@ public class FFmpegUtils {
 
 		// key_info 文件写入
 		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("key").append(LINE_SEPARATOR);					// m3u8加载key文件网络路径
-		stringBuilder.append(keyFile.toString()).append(LINE_SEPARATOR);	// FFmeg加载key_info文件路径
-		stringBuilder.append(iv);											// ASE 向量
+		stringBuilder.append("key").append(LINE_SEPARATOR);                    // m3u8加载key文件网络路径
+		stringBuilder.append(keyFile.toString()).append(LINE_SEPARATOR);    // FFmeg加载key_info文件路径
+		stringBuilder.append(iv);                                            // ASE 向量
 
 		Path keyInfo = Paths.get(folder, "key_info");
 
@@ -83,8 +83,8 @@ public class FFmpegUtils {
 	/**
 	 * 指定的目录下生成 master index.m3u8 文件
 //	 * @param fileName			master m3u8文件地址
-	 * @param indexPath			访问子index.m3u8的路径
-	 * @param bandWidth			流码率
+	 * @param indexPath            访问子index.m3u8的路径
+	 * @param bandWidth            流码率
 	 * @throws IOException
 	 */
 	private static void genIndex(String file, String indexPath, String bandWidth) throws IOException {
@@ -107,9 +107,9 @@ public class FFmpegUtils {
 
 	/**
 	 * Transcode video to m3u8
-	 * @param source				source video
-	 * @param destFolder			target folder
-	 * @param config				configuration information
+	 * @param source                source video
+	 * @param destFolder            target folder
+	 * @param config                configuration information
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
@@ -130,7 +130,15 @@ public class FFmpegUtils {
 		// get list resolution by bitrate
 		double bitrateVideo = Double.parseDouble(mediaInfo.getFormat().getBitRate())/1000000;
 		LOGGER.info("bit rate: {}", bitrateVideo);
-		int heightVideo = Integer.parseInt((mediaInfo.getStreams().get(0)).getHeight());
+
+
+		int heightVideo = 360;
+		for (MediaInfo.Stream stream : mediaInfo.getStreams()) {
+			if(stream.getHeight() != null){
+				heightVideo = Integer.parseInt(stream.getHeight());
+			}
+		}
+
 		int numVideo = 0;
 		if (360 <= heightVideo && heightVideo < 480) {
 			numVideo = 1;
@@ -153,7 +161,6 @@ public class FFmpegUtils {
 	}
 
 
-
 	private static StringBuilder genFirstInIndex() {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("#EXTM3U").append(LINE_SEPARATOR);
@@ -173,29 +180,28 @@ public class FFmpegUtils {
 		// build command
 		List<String> commands = new ArrayList<>();
 		commands.add("ffmpeg");
-		commands.add("-i")						;commands.add(source);					// Source File
-		commands.add("-c:v")					;commands.add("libx264");				// The video is encoded as H264
-		commands.add("-c:a")					;commands.add("copy");					// 音频直接copy
-		commands.add("-hls_key_info_file")		;commands.add(keyInfo.toString());		// 指定密钥文件路径
-		commands.add("-hls_time")				;commands.add(config.getTsSeconds());	// ts切片大小
-		commands.add("-hls_playlist_type")		;commands.add("vod");					// 点播模式
-		commands.add("-hls_segment_filename")	;commands.add("%06d.ts");				// ts切片文件名称
+		commands.add("-i");commands.add(source);                    // Source File
+		commands.add("-c:v");commands.add("libx264");                // The video is encoded as H264
+		commands.add("-c:a");commands.add("copy");                    // 音频直接copy
+		commands.add("-hls_key_info_file");commands.add(keyInfo.toString());        // 指定密钥文件路径
+		commands.add("-hls_time");commands.add(config.getTsSeconds());    // ts切片大小
+		commands.add("-hls_playlist_type");commands.add("vod");                    // 点播模式
+		commands.add("-hls_segment_filename");commands.add("%06d.ts");                // ts切片文件名称
 //		commands.add("-s")						;commands.add(dimension);				// dimension
-		commands.add("-vf")						;commands.add(scale);				// scale
+		commands.add("-vf");commands.add(scale);                // scale
 		if (StringUtils.hasText(config.getCutStart())) {
-			commands.add("-ss")					;commands.add(config.getCutStart());	// start time
+			commands.add("-ss");commands.add(config.getCutStart());    // start time
 		}
 		if (StringUtils.hasText(config.getCutEnd())) {
-			commands.add("-to")					;commands.add(config.getCutEnd());		// end time
+			commands.add("-to");commands.add(config.getCutEnd());        // end time
 		}
-		commands.add("index.m3u8");														// Generate m3u8 file
+		commands.add("index.m3u8");                                                        // Generate m3u8 file
 
 		// build process
 		Process process = new ProcessBuilder()
 				.command(commands)
 				.directory(workDir.toFile())
-				.start()
-				;
+				.start();
 
 		// Read process standard output
 		new Thread(() -> {
@@ -247,10 +253,10 @@ public class FFmpegUtils {
 	public static MediaInfo getMediaInfo(String source) throws IOException, InterruptedException {
 		List<String> commands = new ArrayList<>();
 		commands.add("ffprobe");
-		commands.add("-i")				;commands.add(source);
+		commands.add("-i");commands.add(source);
 		commands.add("-show_format");
 		commands.add("-show_streams");
-		commands.add("-print_format")	;commands.add("json");
+		commands.add("-print_format");commands.add("json");
 
 		Process process = new ProcessBuilder(commands)
 				.start();
@@ -272,9 +278,9 @@ public class FFmpegUtils {
 
 	/**
 	 * 截取视频的指定时间帧，生成图片文件
-	 * @param source		源文件
-	 * @param file			图片文件
-	 * @param time			截图时间 HH:mm:ss.[SSS]
+	 * @param source        源文件
+	 * @param file            图片文件
+	 * @param time            截图时间 HH:mm:ss.[SSS]
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
@@ -282,12 +288,13 @@ public class FFmpegUtils {
 
 		List<String> commands = new ArrayList<>();
 		commands.add("ffmpeg");
-		commands.add("-i")				;commands.add(source);
-		commands.add("-ss")				;commands.add(time);
+		commands.add("-i");commands.add(source);
+		commands.add("-ss");commands.add(time);
 		commands.add("-y");
-		commands.add("-q:v")			;commands.add("1");
-		commands.add("-frames:v")		;commands.add("1");
-		commands.add("-f");				;commands.add("image2");
+		commands.add("-q:v");commands.add("1");
+		commands.add("-frames:v");commands.add("1");
+		commands.add("-f");
+		;commands.add("image2");
 		commands.add(file);
 
 		Process process = new ProcessBuilder(commands)
