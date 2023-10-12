@@ -29,7 +29,7 @@ public interface MediaService {
 
     List<Media> loadById(String id);
 
-    String uploadAudio(MultipartFile audio);
+    String uploadMedia(MultipartFile media,String type);
     public void updateMediaDes(String id,String des);
     List<Media> saveAll(List<Media> items);
 }

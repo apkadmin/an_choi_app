@@ -10,6 +10,7 @@ import com.anchoi.response.ResponseData;
 import com.anchoi.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -42,19 +43,22 @@ public class FilesController {
         }
     }
 
-    @PostMapping(value="/upload-audio", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value="/upload-media", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadAudio(
-            @RequestParam("audio") MultipartFile audio
+            @RequestParam("audio") MultipartFile media,
+            @RequestParam("type") String type
     ) throws BusinessException {
         String message = "";
         try {
-            String url = mediaService.uploadAudio(audio);
+            String url = mediaService.uploadMedia(media,type);
 
             return ResponseEntity.status(HttpStatus.OK).body(url);
         } catch (Exception e) {
             throw new BusinessException("500", e.getMessage());
         }
     }
+
+
 
     @PostMapping(value="/v2.0/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<List<Media>> uploadFileV2(
