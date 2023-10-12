@@ -15,5 +15,7 @@ public class QuestionRequest {
     private String type;
     private String description;
     private String title;
+    private String hard;
+    private String urlImage;
     private List<QuestionDetail> questionDetails;
 }

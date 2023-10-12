@@ -30,6 +30,8 @@ public class QuestionService {
           response.setTitle(item.getTitle());
           response.setDescription(item.getDescription());
           response.setUrlAudio(item.getUrlAudio());
+           response.setUrlImage(item.getUrlImage());
+           response.setHard(item.getHard());
           return response;
        }).collect(Collectors.toList());
     }
@@ -45,6 +47,8 @@ public class QuestionService {
                 response.setTitle(item.get().getTitle());
                 response.setType(item.get().getType());
                 response.setQuestionDetails(detail);
+                response.setUrlImage(item.get().getUrlImage());
+                response.setHard(item.get().getHard());
                 return response;
             }
             return null;
@@ -58,6 +62,8 @@ public class QuestionService {
             item.get().setDescription(request.getDescription());
             item.get().setTitle(request.getTitle());
             item.get().setType(request.getType());
+            item.get().setUrlImage(request.getUrlImage());
+            item.get().setHard(request.getHard());
             questionRepository.save(item.get());
             request.getQuestionDetails().forEach(x -> {
                 x.setQuestionId(request.getId());
@@ -75,7 +81,8 @@ public class QuestionService {
         question.setDescription(request.getDescription());
         question.setType(request.getType());
         question.setUrlAudio(request.getUrlAudio());
-
+        question.setUrlImage(request.getUrlImage());
+        question.setHard(request.getHard());
 
        Question newd = questionRepository.save(question);
         request.setId(newd.getId());

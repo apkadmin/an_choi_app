@@ -15,6 +15,11 @@ public class Question extends BaseEntity {
 
     @Column(name = "title", length = 1000)
     private String title;
+    @Column(name = "url_image", length = 1000)
+    private String urlImage;
+
+    @Column(name = "hard")
+    private String hard;
 
     @Column(name = "type")
     private String type;
