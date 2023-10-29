@@ -5,6 +5,7 @@ import java.util.List;
 import com.anchoi.config.BusinessException;
 import com.anchoi.models.Media;
 import com.anchoi.request.MediaRequest;
+import com.anchoi.request.MediaUploadRequest;
 import com.anchoi.response.MessageResponse;
 import com.anchoi.response.ResponseData;
 import com.anchoi.service.MediaService;
@@ -44,14 +45,13 @@ public class FilesController {
     }
 
     @PostMapping(value="/upload-media", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadAudio(
-            @RequestParam("audio") MultipartFile media,
-            @RequestParam("type") String type
+    public ResponseEntity<String> uploadMedia(
+            @RequestParam("media") MultipartFile medias,
+            String type
     ) throws BusinessException {
-        String message = "";
         try {
-            String url = mediaService.uploadMedia(media,type);
-
+            System.out.println(type);
+            String url = mediaService.uploadMedia(medias,type);
             return ResponseEntity.status(HttpStatus.OK).body(url);
         } catch (Exception e) {
             throw new BusinessException("500", e.getMessage());

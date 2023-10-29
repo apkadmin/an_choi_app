@@ -98,4 +98,13 @@ public class QuestionService {
         questionRepository.deleteById(id);
         questionDetailRepository.deleteAllByQuestionId(id);
     }
+
+    public List<Question> getByTypeAndHard(String type){
+        if(type.isEmpty()){
+            type = "%%";
+        } else {
+            type =  "%"+type+"%";
+        }
+        return questionRepository.getByTypeLike(type);
+    }
 }

@@ -262,25 +262,27 @@ public class MediaServiceImpl implements MediaService {
         return mediaRepository.findAllByIdReferOrderByIndex(idRefer);
     }
 
+    @Override
     public String uploadMedia(MultipartFile media, String type) {
         init();
         try {
-            if(type == "audio") {
+            if(type.equals("audio")) {
                 Path path = this.rootAudio.resolve(new Date().getTime() + "_" + media.getOriginalFilename());
                 Files.copy(media.getInputStream(), path);
                 return (pathUrlAudio + separate + path.getFileName()).replace(baseUri, "");
-            }
-            if(type == "image"){
+            } else if(type.equals("image")){
                 Path path = this.rootImage.resolve(new Date().getTime() + "_" + media.getOriginalFilename());
                 Files.copy(media.getInputStream(), path);
                 return (pathUrlImage + separate + path.getFileName()).replace(baseUri, "");
             }
-            if(type == "video"){
+          else  if(type.equals("video")){
                 Path path = this.rootVideo.resolve(new Date().getTime() + "_" + media.getOriginalFilename());
                 Files.copy(media.getInputStream(), path);
                 return (pathUrlVideo + separate + path.getFileName()).replace(baseUri, "");
+            } else {
+                return "";
             }
-            return "";
+
         } catch (Exception e) {
             if (e instanceof FileAlreadyExistsException) {
                 throw new RuntimeException("A file of that name already exists.");

@@ -1,6 +1,7 @@
 package com.anchoi.controllers.admin;
 import com.anchoi.config.BusinessException;
 import com.anchoi.models.Post;
+import com.anchoi.models.Question;
 import com.anchoi.request.QuestionRequest;
 import com.anchoi.response.QuestionResponse;
 import com.anchoi.service.PostService;
@@ -26,6 +27,10 @@ public class QuestionController {
     @GetMapping
     public ResponseEntity<List<QuestionResponse>> getAllPosts() {
         return ResponseEntity.ok().body(questionService.getListQuestion());
+    }
+    @GetMapping("/get-question")
+    public ResponseEntity<List<Question>> getQuestionByType(@RequestParam()  String type) {
+        return ResponseEntity.ok().body(questionService.getByTypeAndHard(type));
     }
 
     @GetMapping("/{id}")

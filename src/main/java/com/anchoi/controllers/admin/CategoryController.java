@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -23,6 +24,15 @@ public class CategoryController {
     public ResponseEntity<?> save(@RequestBody @NotNull Category request) {
         try {
             return ResponseEntity.ok(categoryService.save(request));
+        } catch (Exception e) {
+            return ResponseEntity.ok(e.getMessage());
+        }
+    }
+
+    @PostMapping("/save-all")
+    public ResponseEntity<?> save(@RequestBody List<Category> request) {
+        try {
+            return ResponseEntity.ok(categoryService.saveAll(request));
         } catch (Exception e) {
             return ResponseEntity.ok(e.getMessage());
         }

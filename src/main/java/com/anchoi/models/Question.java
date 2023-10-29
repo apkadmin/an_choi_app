@@ -2,9 +2,8 @@ package com.anchoi.models;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "question")
@@ -26,4 +25,7 @@ public class Question extends BaseEntity {
 
     @Column(name = "url_audio")
     private String urlAudio;
+
+    @OneToMany(mappedBy = "questionId", cascade = CascadeType.ALL)
+    private List<QuestionDetail> questionDetails;
 }

@@ -4,8 +4,10 @@ import com.anchoi.models.Category;
 import com.anchoi.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CategoryService {
@@ -18,6 +20,18 @@ public class CategoryService {
 
     public Category save(Category request) {
         return categoryRepository.save(request);
+    }
+
+    @Transactional
+    public List<Category> saveAll(List<Category> request) {
+        request.stream().forEach(item -> {
+            if(item.getId() == null){
+                item.setId(UUID.randomUUID().toString());
+            }
+        });
+        categoryRepository.deleteAll();
+
+        return categoryRepository.saveAll(request);
     }
 
     public void delete(String id) {
