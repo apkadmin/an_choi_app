@@ -25,11 +25,10 @@ public class CategoryService {
     @Transactional
     public List<Category> saveAll(List<Category> request) {
         request.stream().forEach(item -> {
-            if(item.getId() == null){
+            if(item.getId().isEmpty()){
                 item.setId(UUID.randomUUID().toString());
             }
         });
-        categoryRepository.deleteAll();
 
         return categoryRepository.saveAll(request);
     }
