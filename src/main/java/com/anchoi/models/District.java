@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @SqlResultSetMapping(name = "FIND_ALL_WITH_PROVINCE_NAME",
         classes = @ConstructorResult(
@@ -39,9 +40,6 @@ import java.util.Date;
 @Table(name = "district")
 public class District extends BaseEntity {
     @Basic
-    @Column(name = "name")
-    private String name;
-    @Basic
     @Column(name = "population")
     private String population;
     @Basic
@@ -53,9 +51,6 @@ public class District extends BaseEntity {
     @Basic
     @Column(name = "coastline")
     private String coastline;
-    @Basic
-    @Column(name = "description")
-    private String description;
     @Basic
     @Column(name = "latitude")
     private String latitude;
@@ -69,9 +64,8 @@ public class District extends BaseEntity {
     @Column(name = "province_id")
     private String provinceId;
     @Basic
-    @Column(name = "url_audio")
-    private String urlAudio;
-    @Basic
     @Column(name = "square_area")
     private String squareArea;
+    @OneToMany(mappedBy = "mediaId", cascade = CascadeType.ALL)
+    List<MediaI18n> mediaI18nList;
 }

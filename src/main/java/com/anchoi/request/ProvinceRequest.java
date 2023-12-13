@@ -29,4 +29,5 @@ public class ProvinceRequest {
     private Date updatedDate;
     private String updatedBy;
     private String urlAudio;
+    private String language;
 }

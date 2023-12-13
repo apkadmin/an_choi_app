@@ -18,6 +18,6 @@ public class QuestionRequest {
     private String hard;
     private String urlImage;
     private List<QuestionDetail> questionDetails;
-
+    private String language;
 
 }

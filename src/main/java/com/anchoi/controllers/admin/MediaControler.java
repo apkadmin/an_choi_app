@@ -1,8 +1,7 @@
 package com.anchoi.controllers.admin;
 
-import com.anchoi.models.Item;
 import com.anchoi.models.Media;
-import com.anchoi.models.MediaDesRequest;
+import com.anchoi.request.MediaDesRequest;
 import com.anchoi.response.ResponseData;
 import com.anchoi.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;

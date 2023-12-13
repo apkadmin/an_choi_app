@@ -3,6 +3,7 @@ package com.anchoi.models;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -29,10 +30,9 @@ public class Media extends BaseEntity {
     private String fileName;
 
     @Basic
-    @Column(name = "`description`", length = 1000)
-    private String description;
-
-    @Basic
     @Column(name = "`index`")
     private Integer index;
+
+    @OneToMany(mappedBy = "mediaId", cascade = CascadeType.ALL)
+    List<MediaI18n> mediaI18ns;
 }

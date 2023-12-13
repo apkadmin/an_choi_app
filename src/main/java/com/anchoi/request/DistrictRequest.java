@@ -3,6 +3,7 @@ package com.anchoi.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
@@ -28,5 +29,6 @@ public class DistrictRequest {
     private String provinceId;
     private String urlAudio;
     private String squareArea;
+    private String language;
 
 }

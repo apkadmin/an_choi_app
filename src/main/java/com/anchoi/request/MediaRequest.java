@@ -7,4 +7,5 @@ public class MediaRequest {
     private String typeMedia;
     private String idRefer;
     private String type;
+    private String language;
 }

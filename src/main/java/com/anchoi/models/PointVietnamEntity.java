@@ -32,4 +32,7 @@ public class PointVietnamEntity {
 
     @Column(name = "y")
     private Double y;
+
+    @Column(name = "language")
+    private String language;
 }

@@ -30,6 +30,9 @@ public class JigsawDataEntity {
     @Column(name = "updated_by")
     private String updatedBy;
 
+    @Column(name = "language")
+    private String language;
+
     @PrePersist
     public void prePersist() {
         this.setCreatedDate(new Date());
