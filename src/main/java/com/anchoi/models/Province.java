@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -11,9 +12,6 @@ import javax.persistence.*;
 @Table(name = "province")
 public class Province extends BaseEntity {
 
-    @Basic
-    @Column(name = "name")
-    private String name;
     @Basic
     @Column(name = "type")
     private String type;
@@ -33,9 +31,6 @@ public class Province extends BaseEntity {
     @Column(name = "coastline")
     private String coastline;
     @Basic
-    @Column(name = "description")
-    private String description;
-    @Basic
     @Column(name = "latitude")
     private String latitude;
     @Basic
@@ -47,7 +42,7 @@ public class Province extends BaseEntity {
     @Basic
     @Column(name = "driver_code")
     private String driverCode;
-    @Basic
-    @Column(name = "urlAudio")
-    private String urlAudio;
+
+    @OneToMany(mappedBy = "provinceId", cascade = CascadeType.ALL)
+    List<ProvinceI18n> provinceI18ns;
 }

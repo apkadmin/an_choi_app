@@ -10,12 +10,10 @@ import java.util.Date;
 @Data
 public class DistrictRequest {
     private String id;
-    private String name;
     private String population;
-    private String density;
+    private String density;ObjectMapper
     private String yearOfDensity;
     private String coastline;
-    private String description;
     private String latitude;
     private String longitude;
     private String mapImage;
@@ -29,6 +27,5 @@ public class DistrictRequest {
     private String provinceId;
     private String urlAudio;
     private String squareArea;
-    private String language;
 
 }

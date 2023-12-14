@@ -66,6 +66,6 @@ public class District extends BaseEntity {
     @Basic
     @Column(name = "square_area")
     private String squareArea;
-    @OneToMany(mappedBy = "mediaId", cascade = CascadeType.ALL)
-    List<MediaI18n> mediaI18nList;
+    @OneToMany(mappedBy = "districtId", cascade = CascadeType.ALL)
+    List<DistrictI18n> districtI18ns;
 }

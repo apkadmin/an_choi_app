@@ -4,14 +4,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
 @Table(name = "item")
 public class Item extends BaseEntity {
-    @Basic
-    @Column(name = "name")
-    private String name;
     @Basic
     @Column(name = "category_id")
     private String categoryId;
@@ -24,9 +22,6 @@ public class Item extends BaseEntity {
     @Basic
     @Column(name = "address")
     private String address;
-    @Basic
-    @Column(name = "description")
-    private String description;
     @Basic
     @Column(name = "latitude")
     private String latitude;
@@ -41,8 +36,7 @@ public class Item extends BaseEntity {
     @Column(name = "long_map")
     private String longMap;
 
-    @Basic
-    @Column(name = "url_audio")
-    private String urlAudio;
+    @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL)
+    List<ItemI18n> itemI18ns;
 
 }

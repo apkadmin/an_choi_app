@@ -25,7 +25,7 @@ public class DistrictServiceImpl implements DistrictService {
     final DistrictRepository districtRepository;
     final ProvinceRepository provinceRepository;
 
-    private final ObjectMapper mapper = new ObjectMapper().configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true).registerModule(new JavaTimeModule()); ;
+    private final ObjectMapper mapper = new ObjectMapper().configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true).registerModule(new JavaTimeModule());
 
     public DistrictServiceImpl(DistrictRepository districtRepository, ProvinceRepository provinceRepository) {
         this.districtRepository = districtRepository;

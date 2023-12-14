@@ -65,4 +65,7 @@ public class CommonUtils {
         }
     }
 
+    public static toObject(Object ource, T des){
+        MapStruc modelMapper = new ModelMapper();
+    }
 }
