@@ -1,11 +1,9 @@
 package com.anchoi.request;
 
-import com.anchoi.models.RoleUser;
+import com.anchoi.entity.RoleUser;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Set;
 
 import javax.validation.constraints.*;
 

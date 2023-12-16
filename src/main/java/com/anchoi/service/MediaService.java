@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.anchoi.config.BusinessException;
-import com.anchoi.models.Media;
+import com.anchoi.entity.Media;
 import com.anchoi.request.MediaRequest;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;

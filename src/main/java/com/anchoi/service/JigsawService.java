@@ -1,7 +1,7 @@
 package com.anchoi.service;
 
 import com.anchoi.config.BusinessException;
-import com.anchoi.models.JigsawDataEntity;
+import com.anchoi.entity.JigsawDataEntity;
 import com.anchoi.repository.JigsawDetailRepository;
 import com.anchoi.repository.JigsawRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,6 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

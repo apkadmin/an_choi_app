@@ -1,6 +1,6 @@
 package com.anchoi.service;
 
-import com.anchoi.models.RoleUser;
+import com.anchoi.entity.RoleUser;
 import com.anchoi.repository.RoleUserRepository;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package com.anchoi.service;
 
-import com.anchoi.models.Question;
-import com.anchoi.models.QuestionDetail;
+import com.anchoi.entity.Question;
+import com.anchoi.entity.QuestionDetail;
 import com.anchoi.repository.QuestionRepository;
 import com.anchoi.request.QuestionRequest;
 import com.anchoi.repository.QuestionDetailRepository;

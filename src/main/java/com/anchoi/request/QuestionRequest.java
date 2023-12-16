@@ -1,11 +1,8 @@
 package com.anchoi.request;
 
-import com.anchoi.models.Question;
-import com.anchoi.models.QuestionDetail;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.anchoi.entity.QuestionDetail;
 import lombok.Data;
 
-import java.util.Date;
 import java.util.List;
 
 @Data

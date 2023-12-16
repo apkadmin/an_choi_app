@@ -1,14 +1,12 @@
 package com.anchoi.controllers.admin;
 
 import com.anchoi.config.BusinessException;
-import com.anchoi.models.District;
 import com.anchoi.request.DistrictRequest;
 import com.anchoi.response.DistrictResponse;
 import com.anchoi.response.DistrictV1Response;
 import com.anchoi.service.DistrictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

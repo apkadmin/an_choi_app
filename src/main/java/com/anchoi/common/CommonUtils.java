@@ -5,10 +5,14 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
+import org.modelmapper.spi.MatchingStrategy;
 
 import java.io.IOException;
 
 public class CommonUtils {
+ static  ModelMapper mapper;
     public static <T> T stringToBean(String str, Class<T> clazz) {
         if (str != null && str.length() > 0 && clazz != null) {
             if (clazz != Integer.TYPE && clazz != Integer.class) {
@@ -65,7 +69,20 @@ public class CommonUtils {
         }
     }
 
-    public static toObject(Object ource, T des){
-        MapStruc modelMapper = new ModelMapper();
+    public static <S,T> T toObject(S s, Class<T> des){
+        getMapper();
+        return mapper.map(s, des);
+    }
+
+    public static <T> T toObject(String s, Class<T> des){
+        getMapper();
+        return mapper.map(s, des);
+    }
+
+    public static  void getMapper(){
+        if(mapper == null){
+            mapper = new ModelMapper();
+            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+        }
     }
 }

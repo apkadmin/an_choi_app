@@ -1,14 +1,13 @@
 package com.anchoi.controllers.admin;
 
 import com.anchoi.config.BusinessException;
-import com.anchoi.models.Province;
+import com.anchoi.entity.Province;
 import com.anchoi.request.ProvinceRequest;
 import com.anchoi.response.ProvinceResponse;
 import com.anchoi.response.ProvinceV1Response;
 import com.anchoi.service.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

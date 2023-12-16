@@ -1,8 +1,7 @@
-package com.anchoi.models;
+package com.anchoi.entity;
 
 //import com.anchoi.util.SecurityUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;

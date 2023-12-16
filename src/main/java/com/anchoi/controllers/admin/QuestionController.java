@@ -1,17 +1,14 @@
 package com.anchoi.controllers.admin;
 import com.anchoi.config.BusinessException;
-import com.anchoi.models.Post;
-import com.anchoi.models.Question;
+import com.anchoi.entity.Question;
 import com.anchoi.request.QuestionRequest;
 import com.anchoi.response.QuestionResponse;
-import com.anchoi.service.PostService;
 import com.anchoi.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

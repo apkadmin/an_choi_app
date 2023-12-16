@@ -1,6 +1,6 @@
 package com.anchoi.controllers.admin;
 
-import com.anchoi.models.Media;
+import com.anchoi.entity.Media;
 import com.anchoi.request.MediaDesRequest;
 import com.anchoi.response.ResponseData;
 import com.anchoi.service.MediaService;

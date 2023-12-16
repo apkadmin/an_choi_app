@@ -1,6 +1,6 @@
 package com.anchoi.repository;
 
-import com.anchoi.models.PointVietnamEntity;
+import com.anchoi.entity.PointVietnamEntity;
 import com.anchoi.response.PointVietnamV1Response;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

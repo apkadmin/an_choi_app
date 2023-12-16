@@ -1,11 +1,9 @@
-package com.anchoi.models;
+package com.anchoi.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.util.Objects;
 import java.util.UUID;
 
 @Getter

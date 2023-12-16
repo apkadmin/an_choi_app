@@ -1,7 +1,6 @@
 package com.anchoi.service;
 
 import com.anchoi.config.BusinessException;
-import com.anchoi.models.District;
 import com.anchoi.request.DistrictRequest;
 import com.anchoi.response.DistrictResponse;
 import com.anchoi.response.DistrictV1Response;

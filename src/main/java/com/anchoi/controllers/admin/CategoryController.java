@@ -1,6 +1,6 @@
 package com.anchoi.controllers.admin;
 
-import com.anchoi.models.Category;
+import com.anchoi.entity.Category;
 import com.anchoi.service.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

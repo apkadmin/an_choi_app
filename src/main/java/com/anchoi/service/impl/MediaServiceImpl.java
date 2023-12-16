@@ -9,11 +9,9 @@ import java.util.stream.Stream;
 
 import com.anchoi.common.FileUtils;
 import com.anchoi.config.BusinessException;
-import com.anchoi.config.MimeTypes;
-import com.anchoi.models.Item;
-import com.anchoi.models.Media;
-import com.anchoi.models.ffmpeg.FFmpegUtils;
-import com.anchoi.models.ffmpeg.TranscodeConfig;
+import com.anchoi.entity.Media;
+import com.anchoi.entity.ffmpeg.FFmpegUtils;
+import com.anchoi.entity.ffmpeg.TranscodeConfig;
 import com.anchoi.repository.MediaRepository;
 import com.anchoi.request.MediaRequest;
 import com.anchoi.service.MediaService;

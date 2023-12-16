@@ -2,7 +2,7 @@ package com.anchoi.service;
 
 import com.anchoi.repository.DistrictRepository;
 import com.anchoi.repository.ItemRepository;
-import com.anchoi.repository.ProvinceRepository;
+import com.anchoi.repository.province.ProvinceRepository;
 import com.anchoi.response.SearchResponse;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +23,9 @@ public class SearchService {
         this.districtRepository =districtRepository;
         this. itemRepository = itemRepository;
     }
-    public List<SearchResponse> searchAll() {
+    public List<SearchResponse> searchAllApp(String lang) {
         List<SearchResponse> result = new ArrayList<>();
-        List<SearchResponse> provinces = provinceRepository.searchAll();
+        List<SearchResponse> provinces = provinceRepository.searchAllByNameApp(lang);
         List<SearchResponse> districts = districtRepository.searchAll();
         List<SearchResponse> items = itemRepository.searchAll();
 
@@ -38,7 +38,7 @@ public class SearchService {
 
     public List<SearchResponse> searchAllByName(String name) {
         List<SearchResponse> result = new ArrayList<>();
-        List<SearchResponse> provinces = provinceRepository.searchAllByName(name);
+        List<SearchResponse> provinces = provinceRepository.searchAllByNameApp(name);
         List<SearchResponse> districts = districtRepository.searchAllByName(name);
         List<SearchResponse> items = itemRepository.searchAllByName(name);
 

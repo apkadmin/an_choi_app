@@ -1,6 +1,6 @@
 package com.anchoi.service;
 
-import com.anchoi.models.Category;
+import com.anchoi.entity.Category;
 import com.anchoi.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 

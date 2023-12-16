@@ -1,7 +1,6 @@
 package com.anchoi.repository;
 
-import com.anchoi.models.District;
-import com.anchoi.response.DistrictResponse;
+import com.anchoi.entity.District;
 import com.anchoi.response.DistrictV1Response;
 import com.anchoi.response.SearchResponse;
 import org.springframework.data.jpa.repository.JpaRepository;

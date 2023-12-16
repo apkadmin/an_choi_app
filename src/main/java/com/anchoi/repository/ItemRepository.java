@@ -1,6 +1,6 @@
 package com.anchoi.repository;
 
-import com.anchoi.models.Item;
+import com.anchoi.entity.Item;
 import com.anchoi.response.ItemResponse;
 import com.anchoi.response.SearchResponse;
 import org.springframework.data.jpa.repository.JpaRepository;

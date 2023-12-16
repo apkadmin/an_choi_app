@@ -1,4 +1,4 @@
-package com.anchoi.models;
+package com.anchoi.entity;
 
 import lombok.Data;
 

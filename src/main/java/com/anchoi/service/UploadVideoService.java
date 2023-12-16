@@ -1,7 +1,7 @@
 package com.anchoi.service;
 
-import com.anchoi.models.ffmpeg.FFmpegUtils;
-import com.anchoi.models.ffmpeg.TranscodeConfig;
+import com.anchoi.entity.ffmpeg.FFmpegUtils;
+import com.anchoi.entity.ffmpeg.TranscodeConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,13 +1,11 @@
 package com.anchoi.response;
 
-import com.anchoi.models.RoleUser;
+import com.anchoi.entity.RoleUser;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
-import javax.management.relation.Role;
 import java.util.Date;
-import java.util.List;
 
 
 @Data

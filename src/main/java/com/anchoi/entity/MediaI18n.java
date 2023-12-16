@@ -1,4 +1,4 @@
-package com.anchoi.models;
+package com.anchoi.entity;
 
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class MediaI18n {
     @Id
     @Column(name = "Id")
-    private Integer id;
+    private String id;
 
     @Column(name = "media_id")
     private String mediaId;

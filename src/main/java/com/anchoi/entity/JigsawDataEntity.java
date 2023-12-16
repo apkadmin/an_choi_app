@@ -1,8 +1,7 @@
-package com.anchoi.models;
+package com.anchoi.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;

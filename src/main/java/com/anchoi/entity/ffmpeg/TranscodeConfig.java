@@ -1,4 +1,4 @@
-package com.anchoi.models.ffmpeg;
+package com.anchoi.entity.ffmpeg;
 
 public class TranscodeConfig {
 	private String poster = "00:00:00.001";				// 截取封面的时间			HH:mm:ss.[SSS]

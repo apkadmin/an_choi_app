@@ -1,4 +1,4 @@
-package com.anchoi.models.ffmpeg;
+package com.anchoi.entity.ffmpeg;
 
 import java.util.List;
 

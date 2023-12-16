@@ -1,8 +1,8 @@
 package com.anchoi.service;
 
 import com.anchoi.config.BusinessException;
-import com.anchoi.models.RoleUser;
-import com.anchoi.models.User;
+import com.anchoi.entity.RoleUser;
+import com.anchoi.entity.User;
 import com.anchoi.repository.RoleUserRepository;
 import com.anchoi.repository.UserRepository;
 import com.anchoi.request.ChangePasswordRequest;
@@ -16,8 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.management.relation.Role;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

@@ -1,4 +1,4 @@
-package com.anchoi.controllers;
+package com.anchoi.controllers.admin;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,8 +9,8 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import com.anchoi.config.BusinessException;
-import com.anchoi.models.RoleUser;
-import com.anchoi.models.User;
+import com.anchoi.entity.RoleUser;
+import com.anchoi.entity.User;
 import com.anchoi.request.LoginRequest;
 import com.anchoi.request.SignupRequest;
 import com.anchoi.repository.RoleUserRepository;

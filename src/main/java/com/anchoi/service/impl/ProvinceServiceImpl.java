@@ -1,8 +1,8 @@
 package com.anchoi.service.impl;
 
 import com.anchoi.config.BusinessException;
-import com.anchoi.models.Province;
-import com.anchoi.repository.ProvinceRepository;
+import com.anchoi.entity.Province;
+import com.anchoi.repository.province.ProvinceRepository;
 import com.anchoi.request.ProvinceRequest;
 import com.anchoi.response.ProvinceResponse;
 import com.anchoi.response.ProvinceV1Response;

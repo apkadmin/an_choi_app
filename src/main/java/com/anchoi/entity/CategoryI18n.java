@@ -1,4 +1,4 @@
-package com.anchoi.models;
+package com.anchoi.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -6,7 +6,7 @@ import javax.persistence.Id;
 public class CategoryI18n {
     @Id
     @Column(name = "Id")
-    private Integer id;
+    private String id;
 
     @Column(name = "category_id")
     private String categoryId;

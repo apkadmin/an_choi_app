@@ -4,12 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-
-import com.anchoi.models.RoleUser;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonArray;
+import com.anchoi.entity.RoleUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +12,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.WebUtils;
 
 import com.anchoi.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;

@@ -1,11 +1,9 @@
-package com.anchoi.models;
+package com.anchoi.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 
 @Data

@@ -1,6 +1,6 @@
 package com.anchoi.controllers.admin;
 
-import com.anchoi.models.PointVietnamEntity;
+import com.anchoi.entity.PointVietnamEntity;
 import com.anchoi.service.PointVietnamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

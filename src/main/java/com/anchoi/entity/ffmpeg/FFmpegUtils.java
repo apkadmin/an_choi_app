@@ -1,4 +1,4 @@
-package com.anchoi.models.ffmpeg;
+package com.anchoi.entity.ffmpeg;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,11 +19,9 @@ import javax.crypto.KeyGenerator;
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.util.StringUtils;
 
 import com.google.gson.Gson;
-import org.springframework.web.multipart.MultipartFile;
 
 
 public class FFmpegUtils {

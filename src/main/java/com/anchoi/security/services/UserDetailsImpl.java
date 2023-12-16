@@ -3,8 +3,8 @@ package com.anchoi.security.services;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.anchoi.models.RoleUser;
-import com.anchoi.models.User;
+import com.anchoi.entity.RoleUser;
+import com.anchoi.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

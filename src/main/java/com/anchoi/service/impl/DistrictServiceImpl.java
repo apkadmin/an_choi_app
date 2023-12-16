@@ -1,10 +1,10 @@
 package com.anchoi.service.impl;
 
 import com.anchoi.config.BusinessException;
-import com.anchoi.models.District;
-import com.anchoi.models.Province;
+import com.anchoi.entity.District;
+import com.anchoi.entity.Province;
 import com.anchoi.repository.DistrictRepository;
-import com.anchoi.repository.ProvinceRepository;
+import com.anchoi.repository.province.ProvinceRepository;
 import com.anchoi.request.DistrictRequest;
 import com.anchoi.response.DistrictResponse;
 import com.anchoi.response.DistrictV1Response;
@@ -13,7 +13,6 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

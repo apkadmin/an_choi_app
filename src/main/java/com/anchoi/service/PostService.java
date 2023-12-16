@@ -1,7 +1,7 @@
 package com.anchoi.service;
 
 import com.anchoi.config.BusinessException;
-import com.anchoi.models.Post;
+import com.anchoi.entity.Post;
 import com.anchoi.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

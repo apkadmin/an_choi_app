@@ -1,7 +1,7 @@
 package com.anchoi.security.services;
 
-import com.anchoi.models.RoleUser;
-import com.anchoi.models.User;
+import com.anchoi.entity.RoleUser;
+import com.anchoi.entity.User;
 import com.anchoi.repository.RoleUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.anchoi.repository.UserRepository;
-
-import javax.management.relation.Role;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

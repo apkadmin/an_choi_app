@@ -1,4 +1,4 @@
-package com.anchoi.models;
+package com.anchoi.entity;
 
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class DistrictI18n {
     @Id
     @Column(name = "Id")
-    private Integer id;
+    private String id;
 
     @Column(name = "district_id")
     private String districtId;

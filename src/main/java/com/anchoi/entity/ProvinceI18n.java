@@ -1,7 +1,6 @@
-package com.anchoi.models;
+package com.anchoi.entity;
 
 import lombok.Data;
-import org.hibernate.annotations.Generated;
 
 import javax.persistence.*;
 
@@ -11,7 +10,7 @@ import javax.persistence.*;
 public class ProvinceI18n {
     @Id
     @Column(name = "Id")
-    private Integer id;
+    private String id;
 
     @Column(name = "province_id")
     private String provinceId;

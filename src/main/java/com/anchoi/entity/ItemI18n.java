@@ -1,4 +1,4 @@
-package com.anchoi.models;
+package com.anchoi.entity;
 
 import lombok.Data;
 
@@ -13,7 +13,7 @@ import javax.persistence.Table;
 public class ItemI18n {
     @Id
     @Column(name = "Id")
-    private Integer id;
+    private String id;
 
     @Column(name = "item_id")
     private String itemId;

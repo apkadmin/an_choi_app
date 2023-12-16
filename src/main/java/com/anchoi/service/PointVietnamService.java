@@ -1,6 +1,6 @@
 package com.anchoi.service;
 
-import com.anchoi.models.PointVietnamEntity;
+import com.anchoi.entity.PointVietnamEntity;
 import com.anchoi.repository.PointVietnamRepository;
 import com.anchoi.response.PointVietnamV1Response;
 import org.springframework.beans.factory.annotation.Autowired;

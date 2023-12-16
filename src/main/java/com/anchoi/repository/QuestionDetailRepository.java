@@ -1,6 +1,6 @@
 package com.anchoi.repository;
 
-import com.anchoi.models.QuestionDetail;
+import com.anchoi.entity.QuestionDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

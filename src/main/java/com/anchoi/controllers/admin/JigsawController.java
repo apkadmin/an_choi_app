@@ -1,11 +1,10 @@
 package com.anchoi.controllers.admin;
 
 import com.anchoi.config.BusinessException;
-import com.anchoi.models.JigsawDataEntity;
+import com.anchoi.entity.JigsawDataEntity;
 import com.anchoi.service.JigsawService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -3,15 +3,13 @@ package com.anchoi.controllers.admin;
 import java.util.List;
 
 import com.anchoi.config.BusinessException;
-import com.anchoi.models.Media;
+import com.anchoi.entity.Media;
 import com.anchoi.request.MediaRequest;
-import com.anchoi.request.MediaUploadRequest;
 import com.anchoi.response.MessageResponse;
 import com.anchoi.response.ResponseData;
 import com.anchoi.service.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

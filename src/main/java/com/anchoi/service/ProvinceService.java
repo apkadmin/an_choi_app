@@ -1,6 +1,6 @@
 package com.anchoi.service;
 
-import com.anchoi.models.Province;
+import com.anchoi.entity.Province;
 import com.anchoi.request.ProvinceRequest;
 import com.anchoi.response.ProvinceResponse;
 import com.anchoi.response.ProvinceV1Response;

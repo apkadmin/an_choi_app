@@ -1,7 +1,7 @@
 package com.anchoi.service;
 
 import com.anchoi.config.BusinessException;
-import com.anchoi.models.Item;
+import com.anchoi.entity.Item;
 import com.anchoi.repository.ItemRepository;
 import com.anchoi.response.ItemResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class ItemService {
