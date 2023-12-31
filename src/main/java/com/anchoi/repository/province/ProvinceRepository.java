@@ -18,8 +18,8 @@ public interface ProvinceRepository extends JpaRepository<Province, String> {
 
   //xu ly cho app
   @Query("SELECT new com.anchoi.response.ProvinceV1Response(p.id, i18n.name, p.driverCode) FROM Province p join ProvinceI18n i18n on i18n.provinceId = p.id and i18n.languageId=:lang")
-  List<ProvinceV1Response> searchAllOnlyNameAndIdApp();
+  List<ProvinceV1Response> searchAllOnlyNameAndIdApp(String lang);
 
-  @Query("SELECT new com.anchoi.response.SearchResponse(p.id, p.name, 'province', p.type ) FROM Province p join ProvinceI18n i18n on i18n.provinceId = p.id where i18n.name = :name")
+  @Query("SELECT new com.anchoi.response.SearchResponse(p.id, i18n.name, 'province', p.type ) FROM Province p join ProvinceI18n i18n on i18n.provinceId = p.id where i18n.name = :name")
   List<SearchResponse> searchAllByNameApp(String name);
 }

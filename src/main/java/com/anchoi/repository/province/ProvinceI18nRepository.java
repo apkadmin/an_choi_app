@@ -4,6 +4,10 @@ import com.anchoi.entity.ProvinceI18n;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ProvinceI18nRepository extends JpaRepository<ProvinceI18n,String> {
+    public List<ProvinceI18n> findByName(String name);
+    public void deleteAllByProvinceId(String provinceId);
 }

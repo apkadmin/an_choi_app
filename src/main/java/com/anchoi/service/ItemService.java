@@ -1,14 +1,16 @@
 package com.anchoi.service;
 
+import com.anchoi.common.CommonUtils;
 import com.anchoi.config.BusinessException;
 import com.anchoi.entity.Item;
-import com.anchoi.repository.ItemRepository;
+import com.anchoi.repository.item.ItemRepository;
 import com.anchoi.response.ItemResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemService {
@@ -46,7 +48,7 @@ public class ItemService {
     }
 
     public List<ItemResponse> getAllItemV1(){
-        return itemRepository.getAllItemV1();
+        return itemRepository.findAll().stream().map(item -> CommonUtils.toObject(item, ItemResponse.class)).collect(Collectors.toList());
     }
 }
 

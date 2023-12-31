@@ -1,4 +1,4 @@
-package com.anchoi.repository;
+package com.anchoi.repository.question;
 
 import com.anchoi.entity.Question;
 import org.springframework.data.jpa.repository.JpaRepository;

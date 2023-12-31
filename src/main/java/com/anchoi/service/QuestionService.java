@@ -2,9 +2,9 @@ package com.anchoi.service;
 
 import com.anchoi.entity.Question;
 import com.anchoi.entity.QuestionDetail;
-import com.anchoi.repository.QuestionRepository;
+import com.anchoi.repository.question.QuestionRepository;
 import com.anchoi.request.QuestionRequest;
-import com.anchoi.repository.QuestionDetailRepository;
+import com.anchoi.repository.question.QuestionDetailRepository;
 import com.anchoi.response.QuestionResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

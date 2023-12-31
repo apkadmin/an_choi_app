@@ -1,4 +1,4 @@
-package com.anchoi.repository;
+package com.anchoi.repository.manage;
 
 import java.util.List;
 import java.util.Optional;

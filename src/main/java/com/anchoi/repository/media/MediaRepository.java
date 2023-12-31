@@ -1,4 +1,4 @@
-package com.anchoi.repository;
+package com.anchoi.repository.media;
 
 import com.anchoi.entity.Media;
 import org.springframework.data.jpa.repository.JpaRepository;

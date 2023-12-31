@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DistrictI18nRepository extends JpaRepository<DistrictI18n,String> {
+    void deleteAllByDistrictId(String id);
 }

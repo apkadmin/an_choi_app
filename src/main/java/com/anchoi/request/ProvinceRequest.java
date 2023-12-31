@@ -26,5 +26,5 @@ public class ProvinceRequest {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updatedDate;
     private String updatedBy;
-    private List<I18nRequest> i18n;
+    private List<I18nRequest> provinceI18ns;
 }

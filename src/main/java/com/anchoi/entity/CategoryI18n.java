@@ -1,8 +1,15 @@
 package com.anchoi.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
+import lombok.Data;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Data
+@Table(name = "category_i18n")
 public class CategoryI18n {
     @Id
     @Column(name = "Id")

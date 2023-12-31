@@ -10,12 +10,15 @@ import java.util.stream.Stream;
 import com.anchoi.common.FileUtils;
 import com.anchoi.config.BusinessException;
 import com.anchoi.entity.Media;
+import com.anchoi.entity.MediaI18n;
 import com.anchoi.entity.ffmpeg.FFmpegUtils;
 import com.anchoi.entity.ffmpeg.TranscodeConfig;
-import com.anchoi.repository.MediaRepository;
+import com.anchoi.repository.media.MediaI18nRepository;
+import com.anchoi.repository.media.MediaRepository;
 import com.anchoi.request.MediaRequest;
 import com.anchoi.service.MediaService;
 import com.anchoi.service.UploadVideoService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class MediaServiceImpl implements MediaService {
 
     @Value("${base.uri}")
@@ -43,8 +47,9 @@ public class MediaServiceImpl implements MediaService {
     private String pathUrlImage;
     private String pathUrlVideo;
     private String pathUrlAudio;
-    @Autowired
-    private MediaRepository mediaRepository;
+
+    private final MediaRepository mediaRepository;
+    private final MediaI18nRepository mediaI18nRepository;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UploadVideoService.class);
     @Override
@@ -291,11 +296,10 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public void updateMediaDes(String id, String des) {
-        Optional<Media> media = mediaRepository.findById(id);
-
+        Optional<MediaI18n> media = mediaI18nRepository.findById(id);
         if(media.isPresent()){
             media.get().setDescription(des);
-            mediaRepository.save(media.get());
+            mediaI18nRepository.save(media.get());
         }
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class ProvinceResponse {
@@ -27,7 +28,7 @@ public class ProvinceResponse {
     private Date updatedDate;
     private String updatedBy;
     private String urlAudio;
-
+    private List<I18nResponse> provinceI18ns;
     public ProvinceResponse(String id, String name, String driverCode) {
         this.id = id;
         this.name = name;

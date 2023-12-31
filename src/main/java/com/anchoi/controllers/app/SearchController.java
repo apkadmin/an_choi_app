@@ -1,4 +1,4 @@
-package com.anchoi.controllers.admin;
+package com.anchoi.controllers.app;
 
 import com.anchoi.response.SearchResponse;
 import com.anchoi.service.SearchService;

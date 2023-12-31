@@ -1,4 +1,4 @@
-package com.anchoi.repository;
+package com.anchoi.repository.category;
 
 import com.anchoi.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;

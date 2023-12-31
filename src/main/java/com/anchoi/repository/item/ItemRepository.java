@@ -1,4 +1,4 @@
-package com.anchoi.repository;
+package com.anchoi.repository.item;
 
 import com.anchoi.entity.Item;
 import com.anchoi.response.ItemResponse;
@@ -14,12 +14,10 @@ public interface ItemRepository extends JpaRepository<Item, String> {
     List<Item> getAllByProvinceId(String provinceId);
     List<Item> getAllByDistrictId(String districtId);
 
-    @Query("SELECT new com.anchoi.response.SearchResponse(i.id, i.name, 'item', i.categoryId) FROM Item i")
-    List<SearchResponse> searchAll();
-    @Query("SELECT new com.anchoi.response.ItemResponse(i.id, i.name, i.categoryId, i.provinceId,i.districtId) FROM Item i")
-    List<ItemResponse> getAllItemV1();
+    @Query("SELECT new com.anchoi.response.SearchResponse(i.id, i18n.name, 'item', i.categoryId) FROM Item i join ItemI18n i18n on i18n.itemId = i.id where i18n.languageId=:lang")
+    List<SearchResponse> searchAll(String lang);
 
-    @Query("SELECT new com.anchoi.response.SearchResponse(i.id, i.name, 'item', i.categoryId) FROM Item i where i.name = :name")
+    @Query("SELECT new com.anchoi.response.SearchResponse(i.id, i18n.name, 'item', i.categoryId) FROM Item i join ItemI18n i18n on i18n.itemId = i.id  where i18n.name = :name")
     List<SearchResponse> searchAllByName(String name);
 
 }

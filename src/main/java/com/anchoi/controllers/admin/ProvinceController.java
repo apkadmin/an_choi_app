@@ -33,9 +33,9 @@ public class ProvinceController {
   }
 
   @PostMapping("/v1.0/update")
-  public ResponseEntity<?> updateProvince(@Valid @RequestBody ProvinceRequest request) throws Exception {
+  public ResponseEntity<?> updateProvince(@Valid @RequestBody ProvinceRequest request, @RequestParam() String id) throws Exception {
     try {
-      ProvinceResponse response = provinceService.update(request);
+      ProvinceResponse response = provinceService.update(request, id);
       return ResponseEntity.ok(response);
     } catch (Exception businessException) {
       return ResponseEntity.ok(businessException);
@@ -56,25 +56,16 @@ public class ProvinceController {
   @GetMapping("/v1.0/detail")
   public ResponseEntity<?> findById(@RequestParam("id")  String id) throws Exception {
     try {
-      Province response = provinceService.findById(id);
-
+      ProvinceResponse response = provinceService.findById(id);
       return ResponseEntity.ok(response);
     } catch (Exception businessException) {
       return ResponseEntity.ok(businessException);
     }
   }
 
-  @GetMapping("/v1.0/findAll")
-  public ResponseEntity<?> findAll() {
-    List<Province> response = provinceService.findAll();
-
-    return ResponseEntity.ok(response);
-  }
-
   @GetMapping("/v1.1/findAll")
-  public ResponseEntity<?> findAllV1() {
-    List<ProvinceV1Response> response = provinceService.findAllV1();
-
+  public ResponseEntity<?> findAllV1(@RequestHeader(value = "lang", defaultValue = "vi") String lang) {
+    List<ProvinceV1Response> response = provinceService.findAllV1(lang);
     return ResponseEntity.ok(response);
   }
 }

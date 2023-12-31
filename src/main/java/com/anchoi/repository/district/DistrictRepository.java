@@ -1,4 +1,4 @@
-package com.anchoi.repository;
+package com.anchoi.repository.district;
 
 import com.anchoi.entity.District;
 import com.anchoi.response.DistrictV1Response;
@@ -12,22 +12,20 @@ import java.util.List;
 @Repository
 public interface DistrictRepository extends DistrictRepositoryCustomer, JpaRepository<District, String> {
 
-  @Query(value="select * from district d where lower(d.name) = :name", nativeQuery = true)
+  @Query(value="select * from district d", nativeQuery = true)
   List<District> findByName(String name);
 
-  @Query(value="select * from district d where lower(d.name) = :name and d.province_id = :provinceId", nativeQuery = true)
-  List<District> findByNameAndProvinceId(String name, String provinceId);
 
-  @Query("SELECT new com.anchoi.response.SearchResponse(d.id, d.name, 'district', '', d.provinceId) FROM District d")
+  @Query("SELECT new com.anchoi.response.SearchResponse(d.id, '', 'district', '', d.provinceId) FROM District d")
   List<SearchResponse> searchAll();
 
-  @Query("SELECT new com.anchoi.response.DistrictV1Response(d.id, d.name,d.provinceId) FROM District d")
+  @Query("SELECT new com.anchoi.response.DistrictV1Response(d.id, i18n.name,d.provinceId) FROM District d join DistrictI18n i18n on i18n.districtId = d.id")
   List<DistrictV1Response> searchAllV1();
-  @Query("SELECT new com.anchoi.response.DistrictV1Response(d.id, d.name,d.provinceId) FROM District d where d.provinceId = :provinceId")
+  @Query("SELECT new com.anchoi.response.DistrictV1Response(d.id,  '' ,d.provinceId) FROM District d where d.provinceId = :provinceId")
   List<DistrictV1Response> findAllByProvinceId(String provinceId);
 
 
-  @Query("SELECT new com.anchoi.response.SearchResponse(d.id, d.name, 'district', '') FROM District d where d.name = :name")
+  @Query("SELECT new com.anchoi.response.SearchResponse(d.id, i18n.name, 'district', '') FROM District d join DistrictI18n i18n on i18n.districtId = d.id where i18n.name = :name")
   List<SearchResponse> searchAllByName(String name);
 
 }

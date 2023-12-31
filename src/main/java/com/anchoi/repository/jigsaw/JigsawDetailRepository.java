@@ -1,4 +1,4 @@
-package com.anchoi.repository;
+package com.anchoi.repository.jigsaw;
 
 import com.anchoi.entity.JigsawDetailEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

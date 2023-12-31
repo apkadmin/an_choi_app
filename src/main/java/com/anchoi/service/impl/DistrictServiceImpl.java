@@ -1,9 +1,12 @@
 package com.anchoi.service.impl;
 
+import com.anchoi.common.CommonUtils;
 import com.anchoi.config.BusinessException;
 import com.anchoi.entity.District;
+import com.anchoi.entity.DistrictI18n;
 import com.anchoi.entity.Province;
-import com.anchoi.repository.DistrictRepository;
+import com.anchoi.repository.district.DistrictI18nRepository;
+import com.anchoi.repository.district.DistrictRepository;
 import com.anchoi.repository.province.ProvinceRepository;
 import com.anchoi.request.DistrictRequest;
 import com.anchoi.response.DistrictResponse;
@@ -12,24 +15,23 @@ import com.anchoi.service.DistrictService;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class DistrictServiceImpl implements DistrictService {
 
-    final DistrictRepository districtRepository;
-    final ProvinceRepository provinceRepository;
+    private final DistrictRepository districtRepository;
+    private final ProvinceRepository provinceRepository;
+    private final DistrictI18nRepository districtI18nRepository;
 
-    private final ObjectMapper mapper = new ObjectMapper().configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true).registerModule(new JavaTimeModule());
-
-    public DistrictServiceImpl(DistrictRepository districtRepository, ProvinceRepository provinceRepository) {
-        this.districtRepository = districtRepository;
-        this.provinceRepository = provinceRepository;
-    }
 
     @Override
     public DistrictResponse save(DistrictRequest request) throws BusinessException {
@@ -37,14 +39,11 @@ public class DistrictServiceImpl implements DistrictService {
         if (!provinces.isPresent())
             throw new BusinessException("002", "Province not found");
 
-        List<District> districts = districtRepository.findByNameAndProvinceId(request.getName().toLowerCase(), request.getProvinceId());
-        if (!districts.isEmpty())
-            throw new BusinessException("003","District has exist");
 
-        District toSave = mapper.convertValue(request, District.class);
-        toSave.setId("");
+        District toSave = CommonUtils.toObject(request, District.class);
+        toSave.setId(UUID.randomUUID().toString());
         District ent = districtRepository.save(toSave);
-        DistrictResponse response = mapper.convertValue(ent, DistrictResponse.class);
+        DistrictResponse response = CommonUtils.toObject(ent, DistrictResponse.class);
 
         return response;
     }
@@ -65,7 +64,7 @@ public class DistrictServiceImpl implements DistrictService {
                 .orElseThrow(() -> new BusinessException("005","Not found record")));
         if (entOpt.isPresent()) {
             entity = entOpt.get();
-            response = mapper.convertValue(entity, DistrictResponse.class);
+            response = CommonUtils.toObject(entity, DistrictResponse.class);
         }
 
         return response;
@@ -93,14 +92,19 @@ public class DistrictServiceImpl implements DistrictService {
         DistrictResponse response = null;
         Optional<District> entOpt = Optional.ofNullable(districtRepository.findById(request.getId())
                 .orElseThrow(() -> new BusinessException("005","Not found record")));
+        districtI18nRepository.deleteAllByDistrictId(request.getId());
+        if(CommonUtils.isEmpty(request.getDistrictI18ns())) {
+            List<DistrictI18n> i18nList = request.getDistrictI18ns().stream().map(i18nRequest -> {
+                DistrictI18n districtI18n =  CommonUtils.toObject(i18nRequest, DistrictI18n.class);
+                districtI18n.setId(UUID.randomUUID().toString());
+                districtI18n.setDistrictId(request.getId());
+             return districtI18n ;
+            }).collect(Collectors.toList());
+        }
         if (entOpt.isPresent()) {
-            // k cho phep sua ma tinh (provinceId)
-//            if (!request.getProvinceId().equals(entOpt.get().getProvinceId()))
-//                throw new BusinessException("004", "Province not allowed update");
-            District toUpdate = mapper.convertValue(request, District.class);
-
+            District toUpdate = CommonUtils.toObject(request, District.class);
             District updatedEnt = districtRepository.save(toUpdate);
-            response = mapper.convertValue(updatedEnt, DistrictResponse.class);
+            response = CommonUtils.toObject(updatedEnt, DistrictResponse.class);
         }
 
         return response;

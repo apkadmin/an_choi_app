@@ -10,12 +10,10 @@ import java.util.List;
 public interface ProvinceService {
 
   ProvinceResponse save(ProvinceRequest request) throws Exception;
-  List<ProvinceV1Response> findAllV1();
+  List<ProvinceV1Response> findAllV1(String lang);
   void delete(String id) throws Exception;
 
-  Province findById(String id) throws Exception;
+  ProvinceResponse findById(String id) throws Exception;
 
-  List<Province> findAll();
-
-  ProvinceResponse update(ProvinceRequest request) throws Exception;
+  ProvinceResponse update(ProvinceRequest request, String id) throws Exception;
 }

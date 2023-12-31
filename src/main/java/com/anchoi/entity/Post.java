@@ -9,8 +9,19 @@ import java.util.List;
 @Data
 @Table(name = "post")
 public class Post  extends BaseEntity{
-    @OneToMany(mappedBy = "postId", cascade = CascadeType.ALL)
-  List<PostI18n> postI18nList;
+    @Id
+    @Column(name = "id")
+    private String id;
 
+    @Column(name = "group_id")
+    private String groupId;
 
+    @Column(name = "language_id")
+    private String languageId;
+
+    @Column(name = "body")
+    private String body;
+
+    @Column(name = "name")
+    private String name;
 }

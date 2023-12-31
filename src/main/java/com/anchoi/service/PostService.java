@@ -2,7 +2,7 @@ package com.anchoi.service;
 
 import com.anchoi.config.BusinessException;
 import com.anchoi.entity.Post;
-import com.anchoi.repository.PostRepository;
+import com.anchoi.repository.post.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +35,6 @@ public class PostService {
         Optional<Post> existingPost = postRepository.findById(id);
         if (existingPost.isPresent()) {
             Post post = existingPost.get();
-            post.setTitle(updatedPost.getTitle());
-            post.setBody(updatedPost.getBody());
             post.setUpdatedDate(new Date());
             post.setUpdatedBy(updatedPost.getUpdatedBy());
             return postRepository.save(post);

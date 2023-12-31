@@ -10,6 +10,7 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MatchingStrategy;
 
 import java.io.IOException;
+import java.util.Collection;
 
 public class CommonUtils {
  static  ModelMapper mapper;
@@ -84,5 +85,17 @@ public class CommonUtils {
             mapper = new ModelMapper();
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
         }
+    }
+
+    public static boolean isEmpty(Collection obj) {
+        return obj == null || obj.isEmpty();
+    }
+
+    public static boolean isEmpty(String string) {
+        return string == null || string.trim().isEmpty();
+    }
+
+    public static boolean isEmpty(Object obj) {
+        return obj == null || obj.toString().trim().isEmpty();
     }
 }

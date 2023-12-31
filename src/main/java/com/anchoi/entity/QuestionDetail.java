@@ -14,6 +14,6 @@ public class QuestionDetail extends BaseEntity {
     private String question;
     @Column(name = "result")
     private Boolean result;
-    @Column(name = "questionId")
+    @Column(name = "question_id")
     private String questionId;
 }

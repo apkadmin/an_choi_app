@@ -2,8 +2,8 @@ package com.anchoi.service;
 
 import com.anchoi.config.BusinessException;
 import com.anchoi.entity.JigsawDataEntity;
-import com.anchoi.repository.JigsawDetailRepository;
-import com.anchoi.repository.JigsawRepository;
+import com.anchoi.repository.jigsaw.JigsawDetailRepository;
+import com.anchoi.repository.jigsaw.JigsawRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -28,4 +28,6 @@ public class Question extends BaseEntity {
 
     @OneToMany(mappedBy = "questionId", cascade = CascadeType.ALL)
     private List<QuestionDetail> questionDetails;
+    @Column(name = "language_id")
+    private String languageId;
 }

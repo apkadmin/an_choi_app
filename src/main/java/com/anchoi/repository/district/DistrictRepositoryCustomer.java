@@ -1,4 +1,4 @@
-package com.anchoi.repository;
+package com.anchoi.repository.district;
 
 import com.anchoi.config.BusinessException;
 import com.anchoi.response.DistrictResponse;

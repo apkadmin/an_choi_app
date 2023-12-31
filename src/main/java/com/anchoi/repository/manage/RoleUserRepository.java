@@ -1,4 +1,4 @@
-package com.anchoi.repository;
+package com.anchoi.repository.manage;
 
 import com.anchoi.entity.RoleUser;
 import org.springframework.data.jpa.repository.JpaRepository;

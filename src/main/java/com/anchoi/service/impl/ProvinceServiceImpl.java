@@ -1,8 +1,12 @@
 package com.anchoi.service.impl;
 
+import com.anchoi.common.CommonUtils;
 import com.anchoi.config.BusinessException;
 import com.anchoi.entity.Province;
+import com.anchoi.entity.ProvinceI18n;
+import com.anchoi.repository.province.ProvinceI18nRepository;
 import com.anchoi.repository.province.ProvinceRepository;
+import com.anchoi.request.I18nRequest;
 import com.anchoi.request.ProvinceRequest;
 import com.anchoi.response.ProvinceResponse;
 import com.anchoi.response.ProvinceV1Response;
@@ -10,41 +14,58 @@ import com.anchoi.service.ProvinceService;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class ProvinceServiceImpl implements ProvinceService {
 
-    final ProvinceRepository provinceRepository;
-
-    private final ObjectMapper mapper = new ObjectMapper().configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true).registerModule(new JavaTimeModule()); ;
-
-    public ProvinceServiceImpl(ProvinceRepository provinceRepository) {
-        this.provinceRepository = provinceRepository;
-    }
-
+    private final ProvinceRepository provinceRepository;
+    private final ProvinceI18nRepository provinceI18nRepository;
+    //For WEB
     @Override
+    @Transactional()
     public ProvinceResponse save(ProvinceRequest request) throws BusinessException {
-        List<Province> provinces = provinceRepository.findByName(request.getName().toLowerCase());
+        String name = "";
+
+        if(!CommonUtils.isEmpty(request.getId())){
+            request.setId(UUID.randomUUID().toString());
+        }
+
+        List<ProvinceI18n> i18nList = new ArrayList<>();
+
+        if(!CommonUtils.isEmpty(request.getProvinceI18ns())) {
+            for (I18nRequest res : request.getProvinceI18ns()){
+                if(!CommonUtils.isEmpty(res.getName())){
+                    name = res.getName();
+                }
+                if(CommonUtils.isEmpty(res.getId())){
+                    res.setId(UUID.randomUUID().toString());
+                }
+                ProvinceI18n temp = CommonUtils.toObject(res, ProvinceI18n.class);
+                temp.setProvinceId(request.getId());
+                i18nList.add(temp);
+            }
+        }
+        List<ProvinceI18n> provinces = provinceI18nRepository.findByName(name.toLowerCase());
         if (!provinces.isEmpty())
             throw new BusinessException("001","Province has exist");
-
-        Province toSave = mapper.convertValue(request, Province.class);
-        toSave.setId("");
+        Province toSave = CommonUtils.toObject(request, Province.class);
         Province ent = provinceRepository.save(toSave);
-        ProvinceResponse response = mapper.convertValue(ent, ProvinceResponse.class);
-
-        return response;
+        provinceI18nRepository.deleteAllByProvinceId(toSave.getId());
+        provinceI18nRepository.saveAll(i18nList);
+        return CommonUtils.toObject(request, ProvinceResponse.class);
     }
 
-    @Override
-    public List<ProvinceV1Response> findAllV1() {
-        return provinceRepository.searchAllOnlyNameAndId();
-    }
 
     @Override
     public void delete(String id) throws Exception {
@@ -52,37 +73,56 @@ public class ProvinceServiceImpl implements ProvinceService {
                 .orElseThrow(() -> new BusinessException("005", "Not found record")));
 
         entOpt.ifPresent(provinceRepository::delete);
+        provinceI18nRepository.deleteAllByProvinceId(id);
     }
 
     @Override
-    public Province findById(String id) throws Exception {
-//        ProvinceResponse response = null;
+    public ProvinceResponse findById(String id) throws Exception {
         Optional<Province> entOpt = provinceRepository.findById(id);
-        if (entOpt.isPresent()) {
-            return entOpt.get();
-//            response = mapper.convertValue(entity, ProvinceResponse.class);
+        if(!entOpt.isEmpty()){
+           return CommonUtils.toObject(entOpt, ProvinceResponse.class);
         }
-
         return null;
     }
 
     @Override
-    public List<Province> findAll() {
-        return provinceRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
-    }
+    public ProvinceResponse update(ProvinceRequest request, String id) throws Exception {
+        String name = "";
 
-    @Override
-    public ProvinceResponse update(ProvinceRequest request) throws Exception {
-        ProvinceResponse response = null;
-        Optional<Province> entOpt = Optional.ofNullable(provinceRepository.findById(request.getId())
-                .orElseThrow(() -> new BusinessException("005","Not found record")));
-        if (entOpt.isPresent()) {
-            Province toUpdate = mapper.convertValue(request, Province.class);
-
-            Province updatedEnt = provinceRepository.save(toUpdate);
-            response = mapper.convertValue(updatedEnt, ProvinceResponse.class);
+        if(CommonUtils.isEmpty(id)){
+            throw new BusinessException("001","Id is Required");
         }
 
-        return response;
+        List<ProvinceI18n> i18nList = new ArrayList<>();
+
+        if(!CommonUtils.isEmpty(request.getProvinceI18ns())) {
+            for (I18nRequest res : request.getProvinceI18ns()){
+                if(!CommonUtils.isEmpty(res.getName())){
+                    name = res.getName();
+                }
+                if(CommonUtils.isEmpty(res.getId())){
+                    res.setId(UUID.randomUUID().toString());
+                }
+                ProvinceI18n temp = CommonUtils.toObject(res, ProvinceI18n.class);
+                temp.setProvinceId(id);
+                i18nList.add(temp);
+            }
+        }
+        List<ProvinceI18n> provinces = provinceI18nRepository.findByName(name.toLowerCase());
+        if (!provinces.isEmpty())
+            throw new BusinessException("001","Province has exist");
+        Province toSave = CommonUtils.toObject(request, Province.class);
+        toSave.setId(id);
+        Province ent = provinceRepository.save(toSave);
+        provinceI18nRepository.deleteAllByProvinceId(id);
+        provinceI18nRepository.saveAll(i18nList);
+        return CommonUtils.toObject(request, ProvinceResponse.class);
+    }
+
+
+    //for APP
+    @Override
+  public List<ProvinceV1Response> findAllV1(String lang){
+       return provinceRepository.searchAllOnlyNameAndIdApp(lang);
     }
 }

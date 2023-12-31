@@ -1,7 +1,7 @@
 package com.anchoi.service;
 
 import com.anchoi.entity.Category;
-import com.anchoi.repository.CategoryRepository;
+import com.anchoi.repository.category.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
