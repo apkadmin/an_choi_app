@@ -1,7 +1,7 @@
 package com.anchoi.repository.impl;
 
 import com.anchoi.config.BusinessException;
-import com.anchoi.repository.DistrictRepositoryCustomer;
+import com.anchoi.repository.district.DistrictRepositoryCustomer;
 import com.anchoi.response.DistrictResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
