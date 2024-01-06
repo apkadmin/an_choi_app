@@ -1,14 +1,17 @@
 package com.anchoi.service;
 
+import com.anchoi.common.CommonUtils;
 import com.anchoi.config.BusinessException;
 import com.anchoi.entity.Post;
 import com.anchoi.repository.post.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class PostService {
@@ -19,16 +22,32 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    public List<Post> getAllPosts(String langId) {
+        if(langId == null){
+            langId = "vi";
+        }
+        return postRepository.findAllByLanguageIdOrderByCreatedDate(langId);
     }
 
-    public Optional<Post> getPostById(String id) {
-        return postRepository.findById(id);
+    public Post getPostById(String id, String langId) {
+        Post post = postRepository.findFirstByGroupIdAndLanguageId(id,langId);
+        if(CommonUtils.isEmpty(post)){
+            post = new Post();
+            post.setGroupId(id);
+            post.setLanguageId(langId);
+            post.setId(UUID.randomUUID().toString());
+        }
+            return post;
     }
 
     public Post createPost(Post post) {
         return postRepository.save(post);
+    }
+
+    @Transactional
+    public List<Post> createPost(List<Post> posts) {
+        List<Post> postResult = postRepository.saveAllAndFlush(posts);
+        return postResult;
     }
 
     public Post updatePost(String id, Post updatedPost) throws BusinessException{

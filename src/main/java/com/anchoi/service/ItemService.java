@@ -3,23 +3,24 @@ package com.anchoi.service;
 import com.anchoi.common.CommonUtils;
 import com.anchoi.config.BusinessException;
 import com.anchoi.entity.Item;
+import com.anchoi.repository.item.ItemI18nRepository;
 import com.anchoi.repository.item.ItemRepository;
 import com.anchoi.response.ItemResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ItemService {
     private final ItemRepository itemRepository;
+    private final ItemI18nRepository itemI18nRepository;
 
-    @Autowired
-    public ItemService(ItemRepository itemRepository) {
-        this.itemRepository = itemRepository;
-    }
 
     public List<Item> getListByProvince(String provinceId){
         return itemRepository.getAllByProvinceId(provinceId);
@@ -39,7 +40,9 @@ public class ItemService {
         throw new BusinessException("500", "Id not exits");
     }
 
+    @Transactional
     public void deleteItem(String itemId){
+        itemI18nRepository.deleteAllByItemId(itemId);
         itemRepository.deleteById(itemId);
     }
 

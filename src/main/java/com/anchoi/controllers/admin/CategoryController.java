@@ -1,6 +1,7 @@
 package com.anchoi.controllers.admin;
 
 import com.anchoi.entity.Category;
+import com.anchoi.response.ResponseData;
 import com.anchoi.service.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +24,7 @@ public class CategoryController {
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody @NotNull Category request) {
         try {
-            return ResponseEntity.ok(categoryService.save(request));
+            return ResponseEntity.ok(ResponseData.ok(categoryService.save(request)));
         } catch (Exception e) {
             return ResponseEntity.ok(e.getMessage());
         }
@@ -32,7 +33,7 @@ public class CategoryController {
     @PostMapping("/save-all")
     public ResponseEntity<?> save(@RequestBody List<Category> request) {
         try {
-            return ResponseEntity.ok(categoryService.saveAll(request));
+            return ResponseEntity.ok(ResponseData.ok(categoryService.saveAll(request)));
         } catch (Exception e) {
             return ResponseEntity.ok(e.getMessage());
         }
@@ -43,16 +44,16 @@ public class CategoryController {
     public ResponseEntity<?> delete(@RequestParam("id") @NotNull String id) {
         try {
             categoryService.delete(id);
-            return ResponseEntity.ok("Deleted");
+            return ResponseEntity.ok(ResponseData.ok("Success!!"));
         } catch (Exception e) {
-            return ResponseEntity.status(502).body(e.getMessage());
+            return ResponseEntity.status(502).body(ResponseData.error(null,e.getMessage()));
         }
     }
 
     @GetMapping("")
     public ResponseEntity<?> getAll() {
         try {
-            return ResponseEntity.ok(categoryService.getAll());
+            return ResponseEntity.ok(ResponseData.ok(categoryService.getAll()));
         } catch (Exception e) {
             return ResponseEntity.status(502).body(e.getMessage());
         }
@@ -61,7 +62,7 @@ public class CategoryController {
     @GetMapping("/get-by-id")
     public ResponseEntity<?> getById(@RequestParam("id") @NotNull String id) {
         try {
-            return ResponseEntity.ok(categoryService.getById(id));
+            return ResponseEntity.ok(ResponseData.ok(categoryService.getById(id)));
         } catch (Exception e) {
             return ResponseEntity.status(502).body(e.getMessage());
         }
@@ -70,7 +71,7 @@ public class CategoryController {
     @GetMapping("/get-by-type")
     public ResponseEntity<?> getByType(@RequestParam("type") @NotNull String type) {
         try {
-            return ResponseEntity.ok(categoryService.getAllByType(type));
+            return ResponseEntity.ok(ResponseData.ok(categoryService.getAllByType(type)));
         } catch (Exception e) {
             return ResponseEntity.status(502).body(e.getMessage());
         }

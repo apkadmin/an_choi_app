@@ -35,7 +35,7 @@ public class Item extends BaseEntity {
     @Column(name = "long_map")
     private String longMap;
 
-    @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "itemId", cascade = CascadeType.ALL)
     List<ItemI18n> itemI18ns;
 
 }

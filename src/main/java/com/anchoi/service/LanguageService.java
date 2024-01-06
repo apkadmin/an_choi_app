@@ -11,7 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LanguageService {
     private final LanguageRepository languageRepository;
-    List<Language> getAll(){
+    public  List<Language> getAll(){
         return languageRepository.findAll();
     }
 }

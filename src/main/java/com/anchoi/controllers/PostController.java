@@ -21,18 +21,23 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Post>> getAllPosts() {
-        return ResponseEntity.ok().body(postService.getAllPosts());
+    public ResponseEntity<List<Post>> getAllPosts(@RequestHeader(value = "lang",defaultValue = "vi") String langId) {
+        return ResponseEntity.ok().body(postService.getAllPosts(langId));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Post>> getPostById(@PathVariable String id) {
-        return ResponseEntity.ok().body(postService.getPostById(id));
+    public ResponseEntity<Post> getPostById(@PathVariable String id, @RequestHeader("lang") String langId) {
+        return ResponseEntity.ok().body(postService.getPostById(id, langId));
     }
 
     @PostMapping
     public ResponseEntity<Post> createPost(@RequestBody Post post) {
         return ResponseEntity.ok().body(postService.createPost(post));
+    }
+
+    @PostMapping("/all")
+    public ResponseEntity<List<Post>> createPostAll(@RequestBody List<Post> posts) {
+        return ResponseEntity.ok().body(postService.createPost(posts));
     }
 
     @PutMapping("/{id}")
