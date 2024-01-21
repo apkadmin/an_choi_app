@@ -18,9 +18,7 @@ public class Item extends BaseEntity {
     @Basic
     @Column(name = "district_id")
     private String districtId;
-    @Basic
-    @Column(name = "address")
-    private String address;
+
     @Basic
     @Column(name = "latitude")
     private String latitude;

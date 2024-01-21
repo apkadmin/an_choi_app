@@ -3,17 +3,17 @@ package com.anchoi.response;
 import lombok.Data;
 
 @Data
-public class ProvinceV1Response {
+public class ProvinceI18nResponse {
     private String id;
     private String name;
     private String driverCode;
 
-    public ProvinceV1Response(String id, String name, String driverCode) {
+    public ProvinceI18nResponse(String id, String name, String driverCode) {
         this.id = id;
         this.name = name;
         this.driverCode = driverCode;
     }
 
-    public ProvinceV1Response() {
+    public ProvinceI18nResponse() {
     }
 }

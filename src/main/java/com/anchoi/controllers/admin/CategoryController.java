@@ -69,9 +69,9 @@ public class CategoryController {
     }
 
     @GetMapping("/get-by-type")
-    public ResponseEntity<?> getByType(@RequestParam("type") @NotNull String type) {
+    public ResponseEntity<?> getByType(@RequestParam("type") @NotNull String type, @RequestHeader(value = "lang",defaultValue = "vi") String langCode) {
         try {
-            return ResponseEntity.ok(ResponseData.ok(categoryService.getAllByType(type)));
+            return ResponseEntity.ok(ResponseData.ok(categoryService.getAllByType(type, langCode)));
         } catch (Exception e) {
             return ResponseEntity.status(502).body(e.getMessage());
         }

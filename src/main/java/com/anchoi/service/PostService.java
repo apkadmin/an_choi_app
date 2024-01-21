@@ -41,6 +41,7 @@ public class PostService {
     }
 
     public Post createPost(Post post) {
+        post.setUpdatedDate(new Date());
         return postRepository.save(post);
     }
 

@@ -10,18 +10,14 @@ import com.anchoi.repository.district.DistrictRepository;
 import com.anchoi.repository.province.ProvinceRepository;
 import com.anchoi.request.DistrictRequest;
 import com.anchoi.response.DistrictResponse;
-import com.anchoi.response.DistrictV1Response;
+import com.anchoi.response.DistrictI18nResponse;
 import com.anchoi.service.DistrictService;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import javax.transaction.Transactional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +38,10 @@ public class DistrictServiceImpl implements DistrictService {
 
         District toSave = CommonUtils.toObject(request, District.class);
         toSave.setId(UUID.randomUUID().toString());
+        if(!CommonUtils.isEmpty(toSave.getDistrictI18ns()))
+            toSave.getDistrictI18ns().forEach(item -> item.setDistrictId(toSave.getId()));
+        toSave.setUpdatedDate(new Date());
+        toSave.setCreatedDate(new Date());
         District ent = districtRepository.save(toSave);
         DistrictResponse response = CommonUtils.toObject(ent, DistrictResponse.class);
 
@@ -71,39 +71,40 @@ public class DistrictServiceImpl implements DistrictService {
     }
 
     @Override
-    public List<DistrictResponse> findAll() throws BusinessException {
-        return districtRepository.findAllWithProvinceName();
+    public List<DistrictI18nResponse> findAll(String lang) throws BusinessException {
+        return districtRepository.findAll(lang);
     }
 
     @Override
-    public List<DistrictV1Response> findAllV1() {
-        return districtRepository.searchAllV1();
+    public List<DistrictI18nResponse> findAllByProvinceId(String provinceId, String lang) {
+        return districtRepository.findAllByProvinceId(provinceId, lang);
     }
 
     @Override
-    public List<DistrictV1Response> findAllByProvinceId(String provinceId) {
-        return districtRepository.findAllByProvinceId(provinceId);
-    }
-
-    @Override
-    public DistrictResponse update(DistrictRequest request) throws Exception {
-        if (request == null || StringUtils.isBlank(request.getId()))
-            throw new BusinessException("006", "Id must be not null");
+    @Transactional()
+    public DistrictResponse update(DistrictRequest request, String id) throws Exception {
         DistrictResponse response = null;
-        Optional<District> entOpt = Optional.ofNullable(districtRepository.findById(request.getId())
+        Optional<District> entOpt = Optional.ofNullable(districtRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("005","Not found record")));
-        districtI18nRepository.deleteAllByDistrictId(request.getId());
-        if(CommonUtils.isEmpty(request.getDistrictI18ns())) {
-            List<DistrictI18n> i18nList = request.getDistrictI18ns().stream().map(i18nRequest -> {
-                DistrictI18n districtI18n =  CommonUtils.toObject(i18nRequest, DistrictI18n.class);
-                districtI18n.setId(UUID.randomUUID().toString());
-                districtI18n.setDistrictId(request.getId());
-             return districtI18n ;
-            }).collect(Collectors.toList());
-        }
+
         if (entOpt.isPresent()) {
             District toUpdate = CommonUtils.toObject(request, District.class);
+            toUpdate.setDistrictI18ns(new ArrayList<>());
+            toUpdate.setUpdatedDate(new Date());
             District updatedEnt = districtRepository.save(toUpdate);
+            districtI18nRepository.deleteAllByDistrictId(id);
+            districtI18nRepository.flush();
+            if(!CommonUtils.isEmpty(request.getDistrictI18ns())) {
+                List<DistrictI18n> i18nList = request.getDistrictI18ns().stream().map(i18nRequest -> {
+                    DistrictI18n districtI18n =  CommonUtils.toObject(i18nRequest, DistrictI18n.class);
+                    districtI18n.setId(UUID.randomUUID().toString());
+                    districtI18n.setDistrictId(id);
+                    return districtI18n ;
+                }).collect(Collectors.toList());
+
+                districtI18nRepository.saveAll(i18nList);
+            }
+
             response = CommonUtils.toObject(updatedEnt, DistrictResponse.class);
         }
 

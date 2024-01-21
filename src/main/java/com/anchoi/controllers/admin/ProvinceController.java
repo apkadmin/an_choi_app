@@ -1,10 +1,10 @@
 package com.anchoi.controllers.admin;
 
 import com.anchoi.config.BusinessException;
-import com.anchoi.entity.Province;
 import com.anchoi.request.ProvinceRequest;
 import com.anchoi.response.ProvinceResponse;
-import com.anchoi.response.ProvinceV1Response;
+import com.anchoi.response.ProvinceI18nResponse;
+import com.anchoi.response.ResponseData;
 import com.anchoi.service.ProvinceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +16,29 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/admin/province")
+@RequestMapping("/api/province")
 public class ProvinceController {
   @Autowired
   ProvinceService provinceService;
 
-  @PostMapping("/v1.0/save")
-  public ResponseEntity<?> saveProvince(@Valid @RequestBody ProvinceRequest request) throws Exception {
+  @GetMapping()
+  public ResponseEntity<?> findAll(@RequestHeader(value = "lang", defaultValue = "vi") String lang) {
+    List<ProvinceI18nResponse> response = provinceService.findAll(lang);
+    return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("{id}")
+  public ResponseEntity<?> findById(@PathVariable  String id) throws Exception {
+    try {
+      ProvinceResponse response = provinceService.findById(id);
+      return ResponseEntity.ok(response);
+    } catch (Exception businessException) {
+      return ResponseEntity.ok(businessException.getMessage());
+    }
+  }
+
+  @PostMapping("save")
+  public ResponseEntity<?> save(@Valid @RequestBody ProvinceRequest request) throws Exception {
     try {
       ProvinceResponse response = provinceService.save(request);
       return ResponseEntity.ok(response);
@@ -32,8 +48,8 @@ public class ProvinceController {
 
   }
 
-  @PostMapping("/v1.0/update")
-  public ResponseEntity<?> updateProvince(@Valid @RequestBody ProvinceRequest request, @RequestParam() String id) throws Exception {
+  @PutMapping("/update")
+  public ResponseEntity<?> update(@Valid @RequestBody ProvinceRequest request, @RequestParam() String id) throws Exception {
     try {
       ProvinceResponse response = provinceService.update(request, id);
       return ResponseEntity.ok(response);
@@ -42,30 +58,17 @@ public class ProvinceController {
     }
   }
 
-  @PostMapping("/v1.0/delete")
-  public ResponseEntity deleteProvince(@NotBlank String id) throws Exception {
+  @DeleteMapping("{id}")
+  public ResponseEntity deleteProvince(@PathVariable String id) throws Exception {
     try {
       provinceService.delete(id);
-
-      return ResponseEntity.ok("Deleted");
+      return ResponseEntity.ok(ResponseData.ok("OK"));
     } catch (Exception businessException) {
       return ResponseEntity.ok(businessException);
     }
   }
 
-  @GetMapping("/v1.0/detail")
-  public ResponseEntity<?> findById(@RequestParam("id")  String id) throws Exception {
-    try {
-      ProvinceResponse response = provinceService.findById(id);
-      return ResponseEntity.ok(response);
-    } catch (Exception businessException) {
-      return ResponseEntity.ok(businessException);
-    }
-  }
 
-  @GetMapping("/v1.1/findAll")
-  public ResponseEntity<?> findAllV1(@RequestHeader(value = "lang", defaultValue = "vi") String lang) {
-    List<ProvinceV1Response> response = provinceService.findAllV1(lang);
-    return ResponseEntity.ok(response);
-  }
+
+
 }

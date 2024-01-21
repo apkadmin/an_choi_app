@@ -3,15 +3,15 @@ package com.anchoi.response;
 import lombok.Data;
 
 @Data
-public class DistrictV1Response {
+public class DistrictI18nResponse {
     private String id;
     private String name;
     private String provinceId;
 
-    public DistrictV1Response() {
+    public DistrictI18nResponse() {
     }
 
-    public DistrictV1Response(String id, String name, String provinceId) {
+    public DistrictI18nResponse(String id, String name, String provinceId) {
         this.id = id;
         this.name = name;
         this.provinceId = provinceId;

@@ -2,6 +2,7 @@ package com.anchoi.service;
 
 import com.anchoi.entity.Category;
 import com.anchoi.repository.category.CategoryRepository;
+import com.anchoi.response.CategoryResponse;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -45,5 +46,5 @@ public class CategoryService {
         return categoryRepository.findById(id);
     }
 
-    public List<Category> getAllByType(String type){return categoryRepository.getAllByType(type);}
+    public List<CategoryResponse> getAllByType(String type, String langCode){return categoryRepository.getAllByType(type, langCode);}
 }

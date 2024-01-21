@@ -3,7 +3,7 @@ package com.anchoi.service;
 import com.anchoi.config.BusinessException;
 import com.anchoi.request.DistrictRequest;
 import com.anchoi.response.DistrictResponse;
-import com.anchoi.response.DistrictV1Response;
+import com.anchoi.response.DistrictI18nResponse;
 
 import java.util.List;
 
@@ -14,9 +14,8 @@ public interface DistrictService {
 
   DistrictResponse findById(String id) throws Exception;
 
-  List<DistrictResponse> findAll() throws BusinessException;
-  List<DistrictV1Response> findAllV1();
-  List<DistrictV1Response> findAllByProvinceId(String provinceId);
+  List<DistrictI18nResponse> findAll(String lang) throws BusinessException;
+  List<DistrictI18nResponse> findAllByProvinceId(String provinceId, String lang);
 
-  DistrictResponse update(DistrictRequest request) throws Exception;
+  DistrictResponse update(DistrictRequest request, String id) throws Exception;
 }

@@ -2,10 +2,7 @@ package com.anchoi.entity;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -29,6 +26,10 @@ public class ItemI18n {
 
     @Column(name = "url_audio")
     private String urlAudio;
+
+    @Basic
+    @Column(name = "address")
+    private String address;
 
 
 }

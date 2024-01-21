@@ -3,24 +3,39 @@ package com.anchoi.controllers.admin;
 import com.anchoi.config.BusinessException;
 import com.anchoi.request.DistrictRequest;
 import com.anchoi.response.DistrictResponse;
-import com.anchoi.response.DistrictV1Response;
+import com.anchoi.response.DistrictI18nResponse;
+import com.anchoi.response.ResponseData;
 import com.anchoi.service.DistrictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/admin/district")
+@RequestMapping("/api/district")
 public class DistrictController {
   @Autowired
   DistrictService districtService;
+  @GetMapping("")
+  public ResponseEntity<?> findAll(@RequestHeader(value = "lang", defaultValue = "vi") String lang) throws BusinessException {
+    List<DistrictI18nResponse> response = districtService.findAll(lang);
+    return ResponseEntity.ok(response);
+  }
+  @GetMapping("{id}")
+  public ResponseEntity<?> findById(@PathVariable() String id) throws Exception {
+    try {
+      DistrictResponse response = districtService.findById(id);
 
-  @PostMapping("/v1.0/save")
+      return ResponseEntity.ok(response);
+    } catch (Exception businessException) {
+      return ResponseEntity.ok(businessException);
+    }
+  }
+
+  @PostMapping("/save")
   public ResponseEntity<?> save(@Valid @RequestBody DistrictRequest request) throws Exception {
     try {
       DistrictResponse response = districtService.save(request);
@@ -31,54 +46,40 @@ public class DistrictController {
 
   }
 
-  @PostMapping("/v1.0/update")
-  public ResponseEntity<?> update(@Valid @RequestBody DistrictRequest request) throws Exception {
+  @PutMapping("/update")
+  public ResponseEntity<?> update(@Valid @RequestBody DistrictRequest request, @RequestParam() String id) throws Exception {
     try {
-      DistrictResponse response = districtService.update(request);
+      DistrictResponse response = districtService.update(request, id);
       return ResponseEntity.ok(response);
     } catch (BusinessException businessException) {
       return ResponseEntity.ok(new BusinessException(businessException.getCode(), businessException.getDesc()));
     }
   }
 
-  @PostMapping("/v1.0/delete")
-  public ResponseEntity delete(@NotBlank String id) throws Exception {
+  @DeleteMapping("{id}")
+  public ResponseEntity delete(@PathVariable String id) throws Exception {
     try {
       districtService.delete(id);
 
-      return ResponseEntity.ok("Deleted");
+      return ResponseEntity.ok(ResponseData.ok("OK"));
     } catch (BusinessException businessException) {
       return ResponseEntity.ok(new BusinessException(businessException.getCode(), businessException.getDesc()));
     }
 
   }
 
-  @GetMapping("/v1.0/detail")
-  public ResponseEntity<?> findById(@RequestParam("id") String id) throws Exception {
-    try {
-      DistrictResponse response = districtService.findById(id);
 
-      return ResponseEntity.ok(response);
-    } catch (Exception businessException) {
-      return ResponseEntity.ok(businessException);
-    }
-  }
 
-  @GetMapping("/v1.0/findAll")
-  public ResponseEntity<?> findAll() throws BusinessException {
-    List<DistrictResponse> response = districtService.findAll();
+
+  @GetMapping("/find-by-province")
+  public ResponseEntity<?> findAllByProvinceId(@RequestParam("id") String id, @RequestHeader(value = "lang", defaultValue = "vi") String lang) throws BusinessException {
+    List<DistrictI18nResponse> response = districtService.findAllByProvinceId(id, lang);
     return ResponseEntity.ok(response);
   }
 
-  @GetMapping("/v1.0/find-by-provinceId")
-  public ResponseEntity<?> findAllByProvinceId(@RequestParam("id") String id) throws BusinessException {
-    List<DistrictV1Response> response = districtService.findAllByProvinceId(id);
-    return ResponseEntity.ok(response);
-  }
-
-  @GetMapping("/v1.1/findAll")
-  public ResponseEntity<?> findAllV1()  {
-    List<DistrictV1Response> response = districtService.findAllV1();
-    return ResponseEntity.ok(response);
-  }
+//  @GetMapping("/v1.1/findAll")
+//  public ResponseEntity<?> findAllV1()  {
+//    List<DistrictV1Response> response = districtService.findAllV1();
+//    return ResponseEntity.ok(response);
+//  }
 }
