@@ -7,15 +7,18 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
+import com.anchoi.common.CommonUtils;
 import com.anchoi.common.FileUtils;
 import com.anchoi.config.BusinessException;
 import com.anchoi.entity.Media;
 import com.anchoi.entity.MediaI18n;
 import com.anchoi.entity.ffmpeg.FFmpegUtils;
 import com.anchoi.entity.ffmpeg.TranscodeConfig;
+import com.anchoi.repository.CommonRepository;
 import com.anchoi.repository.media.MediaI18nRepository;
 import com.anchoi.repository.media.MediaRepository;
 import com.anchoi.request.MediaRequest;
+import com.anchoi.response.MediaResponse;
 import com.anchoi.service.MediaService;
 import com.anchoi.service.UploadVideoService;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +52,7 @@ public class MediaServiceImpl implements MediaService {
     private String pathUrlAudio;
 
     private final MediaRepository mediaRepository;
+    private final CommonRepository commonRepository;
     private final MediaI18nRepository mediaI18nRepository;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UploadVideoService.class);
@@ -261,8 +265,8 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public List<Media> loadById(String idRefer) {
-        return mediaRepository.findAllByIdReferOrderByIndex(idRefer);
+    public List<MediaResponse> loadByRefId(String idRefer, String lang) {
+        return commonRepository.findAllByIdReferOrderByIndex(idRefer, lang);
     }
 
     @Override
@@ -295,11 +299,18 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public void updateMediaDes(String id, String des) {
-        Optional<MediaI18n> media = mediaI18nRepository.findById(id);
-        if(media.isPresent()){
-            media.get().setDescription(des);
-            mediaI18nRepository.save(media.get());
+    public void updateMediaDes(String id, String des, String lang) {
+        List<MediaI18n> media = mediaI18nRepository.findAllByMediaIdAndLanguageId(id,lang);
+        if(!CommonUtils.isEmpty(media)){
+            media.get(0).setDescription(des);
+            mediaI18nRepository.save(media.get(0));
+        } else {
+            MediaI18n mediaI18n = new MediaI18n();
+            mediaI18n.setId(UUID.randomUUID().toString());
+            mediaI18n.setDescription(des);
+            mediaI18n.setMediaId(id);
+            mediaI18n.setLanguageId(lang);
+            mediaI18nRepository.save(mediaI18n);
         }
     }
 

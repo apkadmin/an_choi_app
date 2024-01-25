@@ -1,5 +1,7 @@
 package com.anchoi.controllers.admin;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.anchoi.config.BusinessException;
@@ -8,6 +10,9 @@ import com.anchoi.request.MediaRequest;
 import com.anchoi.response.MessageResponse;
 import com.anchoi.response.ResponseData;
 import com.anchoi.service.MediaService;
+import com.anchoi.service.UploadVideoService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -21,11 +26,40 @@ import javax.validation.constraints.NotBlank;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/admin/file")
+@RequestMapping("/api/file")
 public class FilesController {
 
     @Autowired
     MediaService mediaService;
+
+
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FilesController.class);
+
+    @Autowired
+    private UploadVideoService uploadVideoService;
+
+    /**
+     * Upload the video for slice processing and return the access path
+     * @param
+    //	 * @param transcodeConfig
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/video")
+    public Object uploadVideo(@RequestPart(name = "files", required = true) MultipartFile[] videos
+    ) throws IOException {
+        // save origin videos
+        List<String> paths = new ArrayList<>();
+        for (MultipartFile video : videos) {
+            String path = uploadVideoService.saveOriginVideo(video);
+            paths.add(path);
+        }
+        // convert to m3u8
+        uploadVideoService.transcodeToM3u8s(videos);
+
+        return paths;
+    }
 
     @PostMapping(value="/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<List<Media>> uploadFile(
@@ -94,9 +128,8 @@ public class FilesController {
 
     @GetMapping("/files-by-id-reference")
     @ResponseBody
-    public ResponseEntity<?> getFileByReference(@RequestParam("id") @NotBlank String id) {
-        List<Media> media = mediaService.loadById(id);
-        return ResponseEntity.ok(media);
+    public ResponseEntity<?> getFileByReference(@RequestParam("id") @NotBlank String id, @RequestHeader(name = "lang", defaultValue = "vi") String lang) {
+        return ResponseEntity.ok(mediaService.loadByRefId(id, lang));
     }
 
     @DeleteMapping()

@@ -18,7 +18,8 @@ public class MediaControler {
     MediaService mediaService;
     @PostMapping("/add-des")
     public ResponseEntity<?> updateDescription(@RequestBody() MediaDesRequest request){
-        mediaService.updateMediaDes(request.getId(),request.getDescription());
+
+        mediaService.updateMediaDes(request.getId(),request.getDescription(),request.getLanguage());
         return ResponseEntity.ok(ResponseData.ok("OK"));
     }
 

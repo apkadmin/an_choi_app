@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import com.anchoi.config.BusinessException;
 import com.anchoi.entity.Media;
 import com.anchoi.request.MediaRequest;
+import com.anchoi.response.MediaResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,10 +28,10 @@ public interface MediaService {
 
     public Stream<Path> loadAll();
 
-    List<Media> loadById(String id);
+    List<MediaResponse> loadByRefId(String id, String lang);
 
     String uploadMedia(MultipartFile media,String type);
-    public void updateMediaDes(String id,String des);
+    public void updateMediaDes(String id,String des, String lang);
     List<Media> saveAll(List<Media> items);
 }
 
