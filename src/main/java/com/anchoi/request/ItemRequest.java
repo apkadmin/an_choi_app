@@ -12,6 +12,7 @@ public class ItemRequest {
     private String id;
     private String categoryId;
     private String districtId;
+    private String provinceId;
     private String latitude;
     private String longitude;
     private String latMap;
