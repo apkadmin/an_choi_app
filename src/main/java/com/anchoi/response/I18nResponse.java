@@ -10,4 +10,5 @@ public class I18nResponse {
         private String name;
         private String description;
         private String urlAudio;
+        private String address;
 }

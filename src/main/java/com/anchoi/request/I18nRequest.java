@@ -14,4 +14,5 @@ public class I18nRequest {
         private String name;
         private String description;
         private String urlAudio;
+        private String address;
 }
