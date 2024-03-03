@@ -1,6 +1,7 @@
 package com.anchoi.repository.district;
 
 import com.anchoi.entity.District;
+import com.anchoi.response.AreaResponse;
 import com.anchoi.response.DistrictI18nResponse;
 import com.anchoi.response.SearchResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,7 +25,10 @@ public interface DistrictRepository extends DistrictRepositoryCustomer, JpaRepos
   @Query("SELECT new com.anchoi.response.SearchResponse(d.id, i18n.name, 'district', '') FROM District d join DistrictI18n i18n on i18n.districtId = d.id where i18n.name = :name")
   List<SearchResponse> searchAllByName(String name);
 
-  @Query("SELECT new com.anchoi.response.SearchResponse(d.id, '', 'district', '', d.provinceId) FROM District d")
-  List<SearchResponse> searchAll();
+  @Query("SELECT new com.anchoi.response.SearchResponse(d.id, i18n.name, 'district', '', d.provinceId) FROM District d join DistrictI18n i18n on i18n.districtId = d.id where i18n.languageId = :lang")
+  List<SearchResponse> searchAllByLang(String lang);
 
+
+  @Query("SELECT new com.anchoi.response.AreaResponse(d.id, i18n.name, d.squareArea, '',d.population,d.density,d.yearOfDensity, d.coastline,i18n.description, d.latitude, d.longitude,d.mapImage, '',d.createdDate,d.createdBy,d.updatedDate,d.updatedBy, i18n.urlAudio ) FROM District d join DistrictI18n i18n on i18n.districtId = d.id where i18n.languageId=:lang and d.id=:id")
+  AreaResponse searchByIdAndLang(String id, String lang);
 }

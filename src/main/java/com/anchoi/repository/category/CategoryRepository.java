@@ -12,4 +12,7 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, String> {
     @Query("SELECT new com.anchoi.response.CategoryResponse(c.id,c.icon, c.type,c.value,i18n.name) from Category c join  CategoryI18n i18n on i18n.categoryId = c.id where i18n.languageId =:langCode and c.type=:type")
     List<CategoryResponse> getAllByType(String type, String langCode);
+
+    @Query("SELECT new com.anchoi.response.CategoryResponse(c.id,c.icon, c.type,c.value,i18n.name) from Category c join  CategoryI18n i18n on i18n.categoryId = c.id where i18n.languageId =:langCode or c.type in ('MAP_CONFIG','TRUE_AUDIO_GAME','FAIL_AUDIO_GAME','BACKGROUND_AUDIO_GAME') ")
+    List<CategoryResponse> getAllByLang(String langCode);
 }

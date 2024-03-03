@@ -32,10 +32,7 @@ public class PointVietNamController {
         return  ResponseEntity.ok(pointVietnamService.getByParent(id));
     }
 
-    @GetMapping("/v1/point-parent")
-    public ResponseEntity getByParentV1( @RequestParam("id") String id){
-        return  ResponseEntity.ok(pointVietnamService.getByParentV1(id));
-    }
+
     @PostMapping("/point-parent")
     public ResponseEntity saveByParent( @RequestParam("id") String id,@RequestBody() List<PointVietnamEntity> data){
         return  ResponseEntity.ok(pointVietnamService.saveByParent(data,id));

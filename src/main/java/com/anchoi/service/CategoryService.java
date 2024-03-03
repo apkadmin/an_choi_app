@@ -47,4 +47,10 @@ public class CategoryService {
     }
 
     public List<CategoryResponse> getAllByType(String type, String langCode){return categoryRepository.getAllByType(type, langCode);}
+
+    //for APP
+    public List<CategoryResponse> getAllByLang(String lang) {
+        return categoryRepository.getAllByLang(lang);
+    }
+
 }

@@ -28,9 +28,8 @@ public class PointVietnamService {
     public List<PointVietnamEntity> getByParent(String parentId){
         return pointVietnamRepository.findAllByParentId(parentId);
     }
-    public List<PointVietnamV1Response> getByParentV1(String parentId){
-       return new ArrayList<>();
-//        return pointVietnamRepository.getByParentID(parentId);
+    public List<PointVietnamV1Response> getByParentV1(String parentId, String lang){
+        return pointVietnamRepository.getByParentID(parentId, lang);
     }
 
     @Transactional

@@ -9,6 +9,7 @@ import com.anchoi.repository.district.DistrictI18nRepository;
 import com.anchoi.repository.district.DistrictRepository;
 import com.anchoi.repository.province.ProvinceRepository;
 import com.anchoi.request.DistrictRequest;
+import com.anchoi.response.AreaResponse;
 import com.anchoi.response.DistrictResponse;
 import com.anchoi.response.DistrictI18nResponse;
 import com.anchoi.service.DistrictService;
@@ -110,4 +111,11 @@ public class DistrictServiceImpl implements DistrictService {
 
         return response;
     }
+
+    @Override
+    public AreaResponse findByIdAndLang(String id, String lang) {
+        return districtRepository.searchByIdAndLang(id, lang);
+    }
+
+
 }

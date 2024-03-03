@@ -8,6 +8,7 @@ import com.anchoi.repository.province.ProvinceI18nRepository;
 import com.anchoi.repository.province.ProvinceRepository;
 import com.anchoi.request.I18nRequest;
 import com.anchoi.request.ProvinceRequest;
+import com.anchoi.response.AreaResponse;
 import com.anchoi.response.ProvinceResponse;
 import com.anchoi.response.ProvinceI18nResponse;
 import com.anchoi.service.ProvinceService;
@@ -112,6 +113,11 @@ public class ProvinceServiceImpl implements ProvinceService {
         provinceI18nRepository.deleteAllByProvinceId(id);
         provinceI18nRepository.saveAll(i18nList);
         return CommonUtils.toObject(request, ProvinceResponse.class);
+    }
+
+    @Override
+    public AreaResponse findByIdAndLang(String id, String lang) {
+      return provinceRepository.searchByIdAndLang(id,lang);
     }
 
     @Override

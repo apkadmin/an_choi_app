@@ -1,6 +1,7 @@
 package com.anchoi.service;
 
 import com.anchoi.request.ProvinceRequest;
+import com.anchoi.response.AreaResponse;
 import com.anchoi.response.ProvinceResponse;
 import com.anchoi.response.ProvinceI18nResponse;
 
@@ -15,4 +16,8 @@ public interface ProvinceService {
   ProvinceResponse findById(String id) throws Exception;
 
   ProvinceResponse update(ProvinceRequest request, String id) throws Exception;
+
+  AreaResponse findByIdAndLang(String id, String lang);
+
+
 }

@@ -7,6 +7,7 @@ import com.anchoi.entity.ItemI18n;
 import com.anchoi.repository.item.ItemI18nRepository;
 import com.anchoi.repository.item.ItemRepository;
 import com.anchoi.request.ItemRequest;
+import com.anchoi.response.ItemAppResponse;
 import com.anchoi.response.ItemI18nResponse;
 import com.anchoi.response.ItemResponse;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,11 @@ public class ItemService {
         }
         throw new BusinessException("500", "Id not exits");
     }
+
+    public ItemAppResponse getDetailByLang(String id, String lang) {
+        return itemRepository.getDetailByLang(id,lang);
+    }
+
 
     @Transactional
     public void deleteItem(String itemId){

@@ -25,18 +25,14 @@ public class SearchService {
     }
     public List<SearchResponse> searchAllApp(String lang) {
         List<SearchResponse> result = new ArrayList<>();
-        List<SearchResponse> provinces = provinceRepository.searchAllByNameApp(lang);
-        List<SearchResponse> districts = districtRepository.searchAll();
-        List<SearchResponse> items = itemRepository.searchAll(lang);
-
-        result.addAll(provinces);
-        result.addAll(districts);
-        result.addAll(items);
+        result.addAll(provinceRepository.searchAllByLang(lang));
+        result.addAll(districtRepository.searchAllByLang(lang));
+        result.addAll(itemRepository.searchAllByLang(lang));
 
         return result;
     }
 
-    public List<SearchResponse> searchAllByName(String name) {
+    public List<SearchResponse> searchAllByName(String name, String lang) {
         List<SearchResponse> result = new ArrayList<>();
         List<SearchResponse> provinces = provinceRepository.searchAllByNameApp(name);
         List<SearchResponse> districts = districtRepository.searchAllByName(name);
