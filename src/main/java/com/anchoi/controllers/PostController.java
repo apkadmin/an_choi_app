@@ -40,10 +40,6 @@ public class PostController {
         return ResponseEntity.ok().body(postService.createPost(posts));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Post> updatePost(@PathVariable String id, @RequestBody Post updatedPost) throws BusinessException {
-        return ResponseEntity.ok().body(postService.updatePost(id, updatedPost));
-    }
 
     @DeleteMapping("/{id}")
     public void deletePost(@PathVariable String id) {

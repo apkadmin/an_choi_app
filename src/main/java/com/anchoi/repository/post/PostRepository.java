@@ -12,4 +12,6 @@ public interface PostRepository extends JpaRepository<Post,String> {
         Post findFirstByGroupIdAndLanguageId(String groupId,String lang);
         void deleteAllByGroupId(String id);
         List<Post> findAllByLanguageIdOrderByCreatedDate(String langId);
+
+        List<Post> findAllByLanguageId(String lang);
 }

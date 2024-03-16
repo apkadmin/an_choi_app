@@ -23,4 +23,15 @@ public class SyncData {
         return ResponseEntity.ok().body("OK");
     }
 
+    @GetMapping("/replace")
+    public ResponseEntity<String> replaceData(@RequestHeader(value = "lang", defaultValue = "vi") String lang) {
+        syncService.replaceData(lang);
+        return ResponseEntity.ok().body("OK");
+    }
+    @GetMapping("/removeData")
+    public ResponseEntity<String> removeData(@RequestHeader(value = "lang", defaultValue = "vi") String lang) {
+        syncService.removeData(lang);
+        return ResponseEntity.ok().body("OK");
+    }
+
 }

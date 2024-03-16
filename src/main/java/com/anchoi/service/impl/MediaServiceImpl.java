@@ -376,6 +376,23 @@ public class MediaServiceImpl implements MediaService {
             exception.printStackTrace();
         }
         }
+    @Override
+    public boolean deleteByUrlNotMedia(String url) {
+        try {
+            if (url != null) {
+                String path = baseUri + separate + url.replaceAll("..", "");
+                Path temp = Paths.get(path);
+                Files.deleteIfExists(temp);
+                if (path.contains("upload/")) {
+                    File directoryToDelete = new File(path.substring(0, path.lastIndexOf(".")));
+                    FileSystemUtils.deleteRecursively(directoryToDelete);
+                }
+            }
 
+            return true;
+        } catch (IOException e) {
+            throw new RuntimeException("Error: " + e.getMessage());
+        }
+    }
 
 }

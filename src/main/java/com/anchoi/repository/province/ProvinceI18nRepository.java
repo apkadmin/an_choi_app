@@ -12,4 +12,5 @@ import java.util.List;
 public interface ProvinceI18nRepository extends JpaRepository<ProvinceI18n,String> {
     public List<ProvinceI18n> findByName(String name);
     public void deleteAllByProvinceId(String provinceId);
+    public List<ProvinceI18n> findAllByLanguageId(String languageId);
 }

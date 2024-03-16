@@ -8,18 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 public class PostService {
     private final PostRepository postRepository;
+    private final SyncService syncService;
 
     @Autowired
-    public PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository, SyncService syncService) {
         this.postRepository = postRepository;
+        this.syncService = syncService;
     }
 
     public List<Post> getAllPosts(String langId) {
@@ -42,13 +42,37 @@ public class PostService {
 
     public Post createPost(Post post) {
         post.setUpdatedDate(new Date());
+        Optional<Post> existingPost = postRepository.findById(post.getId());
+        if(existingPost.isPresent() && !post.getTitle().equals(existingPost.get().getTitle())) {
+            syncService.syncData(post.getGroupId(), existingPost.get().getTitle(), post.getTitle(), post.getLanguageId());
+        }
         return postRepository.save(post);
     }
 
     @Transactional
     public List<Post> createPost(List<Post> posts) {
-        List<Post> postResult = postRepository.saveAllAndFlush(posts);
-        return postResult;
+        if(posts != null && !posts.isEmpty()) {
+            List<Post> oldPost = postRepository.findAllByGroupId(posts.get(0).getGroupId());
+            if(oldPost  != null && !oldPost.isEmpty()){
+                posts.forEach(i -> {
+                    AtomicBoolean isExsis = new AtomicBoolean(false);
+                oldPost.forEach(item -> {
+                        if(item.getLanguageId().equals(i.getLanguageId()) && !item.getTitle().equals(i.getTitle())){
+                            syncService.syncData(item.getGroupId(),item.getTitle(),i.getTitle(),item.getLanguageId());
+                        }
+                        if(item.getLanguageId().equals(i.getLanguageId())){
+                            isExsis.set(true);
+                        }
+                    });
+                if(!isExsis.get()) {
+                    syncService.syncData(i.getGroupId(),"",i.getTitle(),i.getLanguageId());
+                }
+                });
+            }
+            List<Post> postResult = postRepository.saveAllAndFlush(posts);
+            return postResult;
+        }
+        return new ArrayList<>();
     }
 
     public Post updatePost(String id, Post updatedPost) throws BusinessException{
@@ -63,7 +87,14 @@ public class PostService {
         }
     }
 
+    @Transactional
     public void deletePost(String id) {
-        postRepository.deleteById(id);
+        List<Post> existingPost = postRepository.findAllByGroupId(id);
+        if(existingPost != null && !existingPost.isEmpty()) {
+            existingPost.forEach(i -> {
+                syncService.syncData(id, i.getTitle(), "", i.getLanguageId());
+            });
+        }
+        postRepository.deleteAllByGroupId(id);
     }
 }

@@ -33,5 +33,7 @@ public interface MediaService {
     String uploadMedia(MultipartFile media,String type);
     public void updateMediaDes(String id,String des, String lang);
     List<Media> saveAll(List<Media> items);
+
+    public boolean deleteByUrlNotMedia(String url);
 }
 

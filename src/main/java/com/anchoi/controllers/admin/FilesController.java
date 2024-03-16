@@ -152,4 +152,22 @@ public class FilesController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse(message));
         }
     }
+    @DeleteMapping("/delete-url")
+    public ResponseEntity<?> deleteFileByUrl(@RequestHeader() String url){
+        String message = "";
+        try {
+            boolean existed = mediaService.deleteByUrlNotMedia(url);
+
+            if (existed) {
+                message = "Delete the file successfully: " + url;
+                return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
+            }
+
+            message = "The file does not exist!";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse(message));
+        } catch (Exception e) {
+            message = "Could not delete the file: " + url + ". Error: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse(message));
+        }
+    }
 }
