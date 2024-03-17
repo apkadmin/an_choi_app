@@ -29,4 +29,7 @@ public interface ItemRepository extends JpaRepository<Item, String> {
     @Query("SELECT new com.anchoi.response.ItemAppResponse(i.id, i.categoryId,i.districtId,i.provinceId,i.latitude,i.longitude,i.latMap,i.longMap,i.createdDate, i.createdBy, i.updatedDate, i.updatedBy,i18n.name,i18n.description, i18n.urlAudio, i18n.address) FROM Item i join ItemI18n i18n on i18n.itemId = i.id where i18n.languageId=:lang and i.id=:id")
     ItemAppResponse getDetailByLang(String id, String lang);
 
+    @Query("SELECT new com.anchoi.response.SearchResponse(i.id, i18n.name, 'item', i.categoryId) FROM Item i join ItemI18n i18n on i18n.itemId = i.id where i18n.languageId=:lang and i.id in (:id)")
+    List<SearchResponse> searchAllListIdAndByLang(List<String> id,String lang);
+
 }

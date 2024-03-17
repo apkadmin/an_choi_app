@@ -63,8 +63,8 @@ public class AppController {
     }
 
     @GetMapping("/search-by-name")
-    public List<SearchResponse> searchAllByName(@RequestHeader(value = "name", defaultValue = "vi") String name, @RequestHeader(value = "lang", defaultValue = "vi") String lang) {
-        return searchService.searchAllByName(name, lang);
+    public ResponseEntity searchAllByName(@RequestHeader(value = "name") String name, @RequestHeader(value = "lang", defaultValue = "vi") String lang) {
+        return ResponseEntity.ok(ResponseData.ok(searchService.searchAllByName(name, lang)));
     }
 
     @GetMapping("/province/{id}")

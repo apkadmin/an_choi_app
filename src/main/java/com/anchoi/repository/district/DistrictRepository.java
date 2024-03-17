@@ -31,4 +31,9 @@ public interface DistrictRepository extends DistrictRepositoryCustomer, JpaRepos
 
   @Query("SELECT new com.anchoi.response.AreaResponse(d.id, i18n.name, d.squareArea, '',d.population,d.density,d.yearOfDensity, d.coastline,i18n.description, d.latitude, d.longitude,d.mapImage, '',d.createdDate,d.createdBy,d.updatedDate,d.updatedBy, i18n.urlAudio ) FROM District d join DistrictI18n i18n on i18n.districtId = d.id where i18n.languageId=:lang and d.id=:id")
   AreaResponse searchByIdAndLang(String id, String lang);
+  @Query("SELECT new com.anchoi.response.SearchResponse(d.id, i18n.name, 'district', '', d.provinceId) FROM District d join DistrictI18n i18n on i18n.districtId = d.id where i18n.languageId = :lang and d.id in (:id)")
+  List<SearchResponse> searchByListIdAndLang(List<String> id, String lang);
+
+  @Query("SELECT new com.anchoi.response.SearchResponse(d.id, i18n.name, 'district', '', d.provinceId) FROM District d join DistrictI18n i18n on i18n.districtId = d.id")
+  List<SearchResponse> searchAll();
 }

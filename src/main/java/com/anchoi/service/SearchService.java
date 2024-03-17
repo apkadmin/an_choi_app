@@ -1,5 +1,7 @@
 package com.anchoi.service;
 
+import com.anchoi.common.CommonUtils;
+import com.anchoi.entity.Province;
 import com.anchoi.repository.district.DistrictRepository;
 import com.anchoi.repository.item.ItemRepository;
 import com.anchoi.repository.province.ProvinceRepository;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SearchService {
@@ -34,13 +37,12 @@ public class SearchService {
 
     public List<SearchResponse> searchAllByName(String name, String lang) {
         List<SearchResponse> result = new ArrayList<>();
-        List<SearchResponse> provinces = provinceRepository.searchAllByNameApp(name);
-        List<SearchResponse> districts = districtRepository.searchAllByName(name);
-        List<SearchResponse> items = itemRepository.searchAllByName(name);
+        List<SearchResponse> districts = districtRepository.searchAllByLang("vi");
+        List<String> ids = districts.stream().filter(item -> CommonUtils.removeVietnameseTones(item.getName().toLowerCase().replace(" ","")).contains(CommonUtils.removeVietnameseTones(name.toLowerCase().replace(" ","")))).map(SearchResponse::getId).collect(Collectors.toList());
 
-        result.addAll(provinces);
-        result.addAll(districts);
-        result.addAll(items);
+        if(!ids.isEmpty()) {
+            result.addAll(districtRepository.searchByListIdAndLang(ids, lang));
+        }
 
         return result;
     }

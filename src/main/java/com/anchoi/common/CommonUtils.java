@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import io.undertow.predicate.RegularExpressionPredicate;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MatchingStrategy;
@@ -98,4 +99,25 @@ public class CommonUtils {
     public static boolean isEmpty(Object obj) {
         return obj == null || obj.toString().trim().isEmpty();
     }
+
+    public static String removeVietnameseTones(String str) {
+        str = str.replaceAll("[àáạảãâầấậẩẫăằắặẳẵ]", "a");
+        str = str.replaceAll("[èéẹẻẽêềếệểễ]", "e");
+        str = str.replaceAll("[ìíịỉĩ]", "i");
+        str = str.replaceAll("[òóọỏõôồốộổỗơờớợởỡ]", "o");
+        str = str.replaceAll("[ùúụủũưừứựửữ]", "u");
+        str = str.replaceAll("[ỳýỵỷỹ]", "y");
+        str = str.replaceAll("đ", "d");
+        str = str.replaceAll("[ÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴ]", "A");
+        str = str.replaceAll("[ÈÉẸẺẼÊỀẾỆỂỄ]", "E");
+        str = str.replaceAll("[ÌÍỊỈĨ]", "I");
+        str = str.replaceAll("[ÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠ]", "O");
+        str = str.replaceAll("[ÙÚỤỦŨƯỪỨỰỬỮ]", "U");
+        str = str.replaceAll("[ỲÝỴỶỸ]", "Y");
+        str = str.replaceAll("Đ", "D");
+        str = str.replaceAll(" ", "");
+        str = str.replaceAll("-", "");
+        return str;
+    }
+
 }
