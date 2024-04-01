@@ -45,6 +45,8 @@ public class PostService {
         Optional<Post> existingPost = postRepository.findById(post.getId());
         if(existingPost.isPresent() && !post.getTitle().equals(existingPost.get().getTitle())) {
             syncService.syncData(post.getGroupId(), existingPost.get().getTitle(), post.getTitle(), post.getLanguageId());
+        } else {
+            syncService.syncData(post.getGroupId(), null, post.getTitle(), post.getLanguageId());
         }
         return postRepository.save(post);
     }
@@ -53,22 +55,27 @@ public class PostService {
     public List<Post> createPost(List<Post> posts) {
         if(posts != null && !posts.isEmpty()) {
             List<Post> oldPost = postRepository.findAllByGroupId(posts.get(0).getGroupId());
-            if(oldPost  != null && !oldPost.isEmpty()){
                 posts.forEach(i -> {
                     AtomicBoolean isExsis = new AtomicBoolean(false);
-                oldPost.forEach(item -> {
-                        if(item.getLanguageId().equals(i.getLanguageId()) && !item.getTitle().equals(i.getTitle())){
-                            syncService.syncData(item.getGroupId(),item.getTitle(),i.getTitle(),item.getLanguageId());
-                        }
-                        if(item.getLanguageId().equals(i.getLanguageId())){
-                            isExsis.set(true);
-                        }
-                    });
+                    if (oldPost != null && !oldPost.isEmpty()) {
+                        oldPost.forEach(item -> {
+                            if (item.getLanguageId().equals(i.getLanguageId())) {
+                                if (!item.getTitle().equals(i.getTitle())) {
+                                    syncService.syncData(item.getGroupId(), item.getTitle(), i.getTitle(), item.getLanguageId());
+                                } else {
+                                    syncService.syncData(item.getGroupId(), null, i.getTitle(), item.getLanguageId());
+                                }
+                            }
+                            if (item.getLanguageId().equals(i.getLanguageId())) {
+                                isExsis.set(true);
+                            }
+                        });
+                    }
+
                 if(!isExsis.get()) {
-                    syncService.syncData(i.getGroupId(),"",i.getTitle(),i.getLanguageId());
+                    syncService.syncData(i.getGroupId(),null,i.getTitle(),i.getLanguageId());
                 }
                 });
-            }
             List<Post> postResult = postRepository.saveAllAndFlush(posts);
             return postResult;
         }
