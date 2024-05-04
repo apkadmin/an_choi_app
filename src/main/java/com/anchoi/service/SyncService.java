@@ -16,6 +16,7 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -71,6 +72,51 @@ public class SyncService {
             });
         });
         itemI18nRepository.saveAll(itemI18ns);
+    }
+
+
+    @Transactional
+    public void syncServicePostId(String id){
+        Optional<Post> post =  postRepository.findById(id);
+        if(post.isPresent()) {
+            Post x = post.get();
+            List<ProvinceI18n> provinceI18ns = provinceI18nRepository.findAllByLanguageId(x.getLanguageId());
+            provinceI18ns.forEach(item -> {
+                    item.setDescription(replaceWords(item.getDescription(), " " + x.getTitle().trim(), " <a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), "," + x.getTitle().trim(), ",<a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), "." + x.getTitle().trim(), ".<a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), ";" + x.getTitle().trim(), ";<a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), "\"" + x.getTitle().trim(), "\"<a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), "'" + x.getTitle().trim(), "'<a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), "(" + x.getTitle().trim(), "(<a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+            });
+            provinceI18nRepository.saveAll(provinceI18ns);
+
+            List<DistrictI18n> districtI18ns = districtI18nRepository.findAllByLanguageId(x.getLanguageId());
+            districtI18ns.forEach(item -> {
+
+                    item.setDescription(replaceWords(item.getDescription(), " " + x.getTitle().trim(), " <a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), "," + x.getTitle().trim(), ",<a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), "." + x.getTitle().trim(), ".<a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), ";" + x.getTitle().trim(), ";<a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), "\"" + x.getTitle().trim(), "\"<a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), "'" + x.getTitle().trim(), "'<a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), "(" + x.getTitle().trim(), "(<a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+            });
+            districtI18nRepository.saveAll(districtI18ns);
+
+            List<ItemI18n> itemI18ns = itemI18nRepository.findAllByLanguageId(x.getLanguageId());
+            itemI18ns.forEach(item -> {
+                    item.setDescription(replaceWords(item.getDescription(), " " + x.getTitle().trim(), " <a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), "," + x.getTitle().trim(), ",<a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), "." + x.getTitle().trim(), ".<a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), ";" + x.getTitle().trim(), ";<a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), "\"" + x.getTitle().trim(), "\"<a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), "'" + x.getTitle().trim(), "'<a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), "(" + x.getTitle().trim(), "(<a href=\"https://anchoivietnam.com.vn/post/" + x.getGroupId() + "\">" + x.getTitle() + "</a>"));
+            });
+            itemI18nRepository.saveAll(itemI18ns);
+        }
     }
 
     @Transactional
@@ -163,8 +209,21 @@ public class SyncService {
             provinceI18ns.forEach(item ->{
                 if(name != null && !name.isEmpty()) {
                     item.setDescription(replaceWords(item.getDescription(), " " + name.trim(), " <a href=\"https://anchoivietnam.com.vn/post/" + id + "\">" + name + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(),","+name.trim(),",<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+name+"</a>"));
+                    item.setDescription(replaceWords(item.getDescription(),"."+name.trim(),".<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+name+"</a>"));
+                    item.setDescription(replaceWords(item.getDescription(),";"+name.trim(),";<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+name+"</a>"));
+                    item.setDescription(replaceWords(item.getDescription(),"\""+name.trim(),"\"<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+name+"</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), "'" +name.trim(), "'<a href=\"https://anchoivietnam.com.vn/post/" +id + "\">"+name+"</a>"));
+                    item.setDescription(replaceWords(item.getDescription(),"("+name.trim(),"(<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+name+"</a>"));
+
                 }
-                if(oldName != null && !oldName.isEmpty()){
+                if(oldName != null && !oldName.isEmpty() && !oldName.equals(name)){
+                    item.setDescription(replaceWords(item.getDescription(),",<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
+                    item.setDescription(replaceWords(item.getDescription(),".<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
+                    item.setDescription(replaceWords(item.getDescription(),";<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
+                    item.setDescription(replaceWords(item.getDescription(),"\"<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
+                    item.setDescription(replaceWords(item.getDescription(),"'<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
+                    item.setDescription(replaceWords(item.getDescription(),"(<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
                     item.setDescription(replaceWords(item.getDescription()," <a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
                 }
             });
@@ -174,8 +233,20 @@ public class SyncService {
             districtI18ns.forEach(item ->{
                 if(name != null && !name.isEmpty()) {
                     item.setDescription(replaceWords(item.getDescription(), " " + name.trim(), " <a href=\"https://anchoivietnam.com.vn/post/" + id + "\">" + name + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(),","+name.trim(),",<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+name+"</a>"));
+                    item.setDescription(replaceWords(item.getDescription(),"."+name.trim(),".<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+name+"</a>"));
+                    item.setDescription(replaceWords(item.getDescription(),";"+name.trim(),";<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+name+"</a>"));
+                    item.setDescription(replaceWords(item.getDescription(),"\""+name.trim(),"\"<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+name+"</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), "'" +name.trim(), "'<a href=\"https://anchoivietnam.com.vn/post/" +id + "\">"+name+"</a>"));
+                    item.setDescription(replaceWords(item.getDescription(),"("+name.trim(),"(<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+name+"</a>"));
                 }
-                if(oldName != null && !oldName.isEmpty()){
+                if(oldName != null && !oldName.isEmpty() && !oldName.equals(name)){
+                    item.setDescription(replaceWords(item.getDescription(),",<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
+                    item.setDescription(replaceWords(item.getDescription(),".<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
+                    item.setDescription(replaceWords(item.getDescription(),";<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
+                    item.setDescription(replaceWords(item.getDescription(),"\"<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
+                    item.setDescription(replaceWords(item.getDescription(),"'<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
+                    item.setDescription(replaceWords(item.getDescription(),"(<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
                     item.setDescription(replaceWords(item.getDescription()," <a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
                 }
             });
@@ -185,8 +256,20 @@ public class SyncService {
             itemI18ns.forEach(item ->{
                 if(name != null && !name.isEmpty()) {
                     item.setDescription(replaceWords(item.getDescription(), " " + name.trim(), " <a href=\"https://anchoivietnam.com.vn/post/" + id + "\">" + name + "</a>"));
+                    item.setDescription(replaceWords(item.getDescription(),","+name.trim(),",<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+name+"</a>"));
+                    item.setDescription(replaceWords(item.getDescription(),"."+name.trim(),".<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+name+"</a>"));
+                    item.setDescription(replaceWords(item.getDescription(),";"+name.trim(),";<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+name+"</a>"));
+                    item.setDescription(replaceWords(item.getDescription(),"\""+name.trim(),"\"<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+name+"</a>"));
+                    item.setDescription(replaceWords(item.getDescription(), "'" +name.trim(), "'<a href=\"https://anchoivietnam.com.vn/post/" +id + "\">"+name+"</a>"));
+                    item.setDescription(replaceWords(item.getDescription(),"("+name.trim(),"(<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+name+"</a>"));
                 }
-                if(oldName != null && !oldName.isEmpty()){
+                if(oldName != null && !oldName.isEmpty() && !oldName.equals(name)){
+                    item.setDescription(replaceWords(item.getDescription(),",<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
+                    item.setDescription(replaceWords(item.getDescription(),".<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
+                    item.setDescription(replaceWords(item.getDescription(),";<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
+                    item.setDescription(replaceWords(item.getDescription(),"\"<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
+                    item.setDescription(replaceWords(item.getDescription(),"'<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
+                    item.setDescription(replaceWords(item.getDescription(),"(<a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
                     item.setDescription(replaceWords(item.getDescription()," <a href=\"https://anchoivietnam.com.vn/post/"+id + "\">"+oldName.trim()+"</a>"," " + oldName.trim()));
                 }
             });

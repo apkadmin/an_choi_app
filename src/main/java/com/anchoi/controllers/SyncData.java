@@ -4,10 +4,7 @@ import com.anchoi.entity.Post;
 import com.anchoi.service.SyncService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,6 +17,12 @@ public class SyncData {
     @GetMapping
     public ResponseEntity<String> syncPost(@RequestHeader(value = "lang", defaultValue = "vi") String lang) {
         syncService.syncService(lang);
+        return ResponseEntity.ok().body("OK");
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<String> syncPostId(@PathVariable() String id) {
+        syncService.syncServicePostId(id);
         return ResponseEntity.ok().body("OK");
     }
 
