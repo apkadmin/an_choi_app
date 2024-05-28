@@ -1,6 +1,7 @@
 package com.anchoi.controllers;
 import com.anchoi.config.BusinessException;
 import com.anchoi.entity.Post;
+import com.anchoi.response.PostResponse;
 import com.anchoi.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -21,7 +23,7 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Post>> getAllPosts(@RequestHeader(value = "lang",defaultValue = "vi") String langId) {
+    public ResponseEntity<List<PostResponse>> getAllPosts(@RequestHeader(value = "lang",defaultValue = "vi") String langId) {
         return ResponseEntity.ok().body(postService.getAllPosts(langId));
     }
 
@@ -31,7 +33,7 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<Post> createPost(@RequestBody Post post) {
+    public ResponseEntity<Post> createPost(@RequestBody Post post) throws ExecutionException, InterruptedException {
         return ResponseEntity.ok().body(postService.createPost(post));
     }
 

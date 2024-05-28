@@ -4,12 +4,15 @@ import com.anchoi.common.CommonUtils;
 import com.anchoi.config.BusinessException;
 import com.anchoi.entity.Post;
 import com.anchoi.repository.post.PostRepository;
+import com.anchoi.response.PostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -22,11 +25,12 @@ public class PostService {
         this.syncService = syncService;
     }
 
-    public List<Post> getAllPosts(String langId) {
+    public List<PostResponse> getAllPosts(String langId) {
         if(langId == null){
             langId = "vi";
         }
-        return postRepository.findAllByLanguageIdOrderByCreatedDate(langId);
+        List<Post> posts = postRepository.findAllByLanguageIdOrderByCreatedDate(langId);
+        return posts.stream().map(e -> CommonUtils.toObject(e, PostResponse.class)).collect(Collectors.toList());
     }
 
     public Post getPostById(String id, String langId) {
@@ -40,7 +44,7 @@ public class PostService {
             return post;
     }
 
-    public Post createPost(Post post) {
+    public Post createPost(Post post) throws ExecutionException, InterruptedException {
         post.setUpdatedDate(new Date());
         Optional<Post> existingPost = postRepository.findById(post.getId());
         if(existingPost.isPresent() && !post.getTitle().equals(existingPost.get().getTitle())) {
@@ -61,9 +65,21 @@ public class PostService {
                         oldPost.forEach(item -> {
                             if (item.getLanguageId().equals(i.getLanguageId())) {
                                 if (!item.getTitle().equals(i.getTitle())) {
-                                    syncService.syncData(item.getGroupId(), item.getTitle(), i.getTitle(), item.getLanguageId());
+                                    try {
+                                        syncService.syncData(item.getGroupId(), item.getTitle(), i.getTitle(), item.getLanguageId());
+                                    } catch (ExecutionException e) {
+                                        throw new RuntimeException(e);
+                                    } catch (InterruptedException e) {
+                                        throw new RuntimeException(e);
+                                    }
                                 } else {
-                                    syncService.syncData(item.getGroupId(), null, i.getTitle(), item.getLanguageId());
+                                    try {
+                                        syncService.syncData(item.getGroupId(), null, i.getTitle(), item.getLanguageId());
+                                    } catch (ExecutionException e) {
+                                        throw new RuntimeException(e);
+                                    } catch (InterruptedException e) {
+                                        throw new RuntimeException(e);
+                                    }
                                 }
                             }
                             if (item.getLanguageId().equals(i.getLanguageId())) {
@@ -73,7 +89,13 @@ public class PostService {
                     }
 
                 if(!isExsis.get()) {
-                    syncService.syncData(i.getGroupId(),null,i.getTitle(),i.getLanguageId());
+                    try {
+                        syncService.syncData(i.getGroupId(),null,i.getTitle(),i.getLanguageId());
+                    } catch (ExecutionException e) {
+                        throw new RuntimeException(e);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 });
             List<Post> postResult = postRepository.saveAllAndFlush(posts);
@@ -99,7 +121,13 @@ public class PostService {
         List<Post> existingPost = postRepository.findAllByGroupId(id);
         if(existingPost != null && !existingPost.isEmpty()) {
             existingPost.forEach(i -> {
-                syncService.syncData(id, i.getTitle(), "", i.getLanguageId());
+                try {
+                    syncService.syncData(id, i.getTitle(), "", i.getLanguageId());
+                } catch (ExecutionException e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             });
         }
         postRepository.deleteAllByGroupId(id);
