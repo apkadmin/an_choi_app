@@ -82,7 +82,6 @@ public class FilesController {
             String type
     ) throws BusinessException {
         try {
-            System.out.println(type);
             String url = mediaService.uploadMedia(medias,type);
             return ResponseEntity.status(HttpStatus.OK).body(url);
         } catch (Exception e) {
