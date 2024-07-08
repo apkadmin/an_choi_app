@@ -1,6 +1,7 @@
 package com.anchoi.controllers.app;
 
 import com.anchoi.config.BusinessException;
+import com.anchoi.entity.GameUser;
 import com.anchoi.entity.JigsawDataEntity;
 import com.anchoi.entity.Question;
 import com.anchoi.response.DistrictI18nResponse;
@@ -32,6 +33,7 @@ public class AppController {
     private final MediaService mediaService;
     private final JigsawService jigsawService;
     private final QuestionService questionService;
+    private final GameUserService gameUserService;
 
 
 
@@ -116,5 +118,34 @@ public class AppController {
     public ResponseEntity<?> getQuestionByType(@RequestParam()  String type) {
         return ResponseEntity.ok().body(ResponseData.ok(questionService.getByTypeAndHard(type)));
     }
+
+
+    @PostMapping("/game/game_users")
+    public GameUser createGameUser(@RequestBody GameUser gameUser) {
+        return gameUserService.createGameUser(gameUser);
+    }
+
+    @GetMapping("/game/top3/{gameId}")
+    public ResponseEntity<List<GameUser>> getTop3ByGameId(@PathVariable String gameId) {
+        List<GameUser> top3Users = gameUserService.getTop3ByGameId(gameId);
+        if (top3Users.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(top3Users);
+        }
+    }
+
+
+    @GetMapping("/game/{gameId}")
+    public ResponseEntity<List<GameUser>> getTop3ByUserIdAndGameId(@PathVariable String gameId, @RequestHeader String userId) {
+        List<GameUser> top3Games = gameUserService.getTop3ByUserIdAndGameId(gameId, userId);
+        if (top3Games.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(top3Games);
+        }
+    }
+
+
 
 }
