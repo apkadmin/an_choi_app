@@ -39,7 +39,7 @@ public class AppController {
 
     @GetMapping(value = "/language")
     public ResponseEntity<?> getAllLang(){
-        return ResponseEntity.ok(ResponseData.ok(languageService.getAll()));
+        return ResponseEntity.ok(ResponseData.ok(languageService.getAllApp()));
     }
 
     @GetMapping(value = "/category")
@@ -136,7 +136,7 @@ public class AppController {
     }
 
 
-    @GetMapping("/game/{gameId}")
+    @GetMapping("/game/user/{gameId}")
     public ResponseEntity<List<GameUser>> getTop3ByUserIdAndGameId(@PathVariable String gameId, @RequestHeader String userId) {
         List<GameUser> top3Games = gameUserService.getTop3ByUserIdAndGameId(gameId, userId);
         if (top3Games.isEmpty()) {

@@ -18,4 +18,7 @@ public class Language {
 
     @Column(name = "icon")
     private String icon;
+
+    @Column(name = "active")
+    private Boolean active;
 }

@@ -14,4 +14,8 @@ public class LanguageService {
     public  List<Language> getAll(){
         return languageRepository.findAll();
     }
+
+    public  List<Language> getAllApp(){
+        return languageRepository.findAllByActive(true);
+    }
 }
