@@ -59,21 +59,21 @@ public class ItemService {
         Item item = CommonUtils.toObject(itemRequest, Item.class);
         item.setUpdatedDate(new Date());
         item.setCreatedDate(new Date());
-        if(!CommonUtils.isEmpty(item.getId())){
+        if(CommonUtils.isEmpty(item.getId())){
             item.setId(UUID.randomUUID().toString());
         }
-
+        itemRepository.save(item);
         List<ItemI18n> itemI18ns = new ArrayList<>();
         if(!CommonUtils.isEmpty(itemRequest.getItemI18ns())){
             itemRequest.getItemI18ns().forEach(i -> {
                 ItemI18n itemI18n = CommonUtils.toObject(i, ItemI18n.class);
-                if(!CommonUtils.isEmpty(i.getId())) itemI18n.setId(UUID.randomUUID().toString());
+                if(CommonUtils.isEmpty(i.getId())){itemI18n.setId(UUID.randomUUID().toString());};
                 itemI18n.setItemId(item.getId());
                 itemI18ns.add(itemI18n);
             });
             itemI18nRepository.saveAll(itemI18ns);
         }
-        itemRepository.save(item);
+
 
         return CommonUtils.toObject(itemRequest, ItemResponse.class);
     }

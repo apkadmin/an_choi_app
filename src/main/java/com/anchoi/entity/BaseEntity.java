@@ -47,6 +47,9 @@ public class BaseEntity implements Serializable {
 
     @PreUpdate
     public void preUpdate() {
+        if(getCreatedDate() == null){
+            this.setCreatedDate(new Date());
+        }
         this.setUpdatedDate(new Date());
         this.setUpdatedBy("system");
     }

@@ -1,5 +1,6 @@
 package com.anchoi.service;
 
+import com.anchoi.common.CommonUtils;
 import com.anchoi.entity.Question;
 import com.anchoi.entity.QuestionDetail;
 import com.anchoi.repository.question.QuestionRepository;
@@ -10,9 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -99,12 +98,40 @@ public class QuestionService {
         questionDetailRepository.deleteAllByQuestionId(id);
     }
 
+    public List<Question> getQuestion(String type) {
+        if (type.isEmpty()) {
+            type = "%%";
+        } else {
+            type = "%" + type + "%";
+        }
+        return questionRepository.getByTypeLike(type);
+    }
+
     public List<Question> getByTypeAndHard(String type){
         if(type.isEmpty()){
             type = "%%";
         } else {
             type =  "%"+type+"%";
         }
-        return questionRepository.getByTypeLike(type);
+        //Xu ly lay 2 cau rat kho => 4
+        List<Question> question = new ArrayList<>();
+        question.addAll(questionRepository.getQuestion(4,type, 2));
+
+        //3 Cau Kho
+        int des =5;
+        des = des - question.size();
+        question.addAll(questionRepository.getQuestion(3,type, des));
+
+        //10 Cau trung binh
+        des =15;
+        des = des - question.size();
+        question.addAll(questionRepository.getQuestion(2,type, des));
+
+        //5 Cau de
+        des =20;
+        des = des - question.size();
+        question.addAll(questionRepository.getQuestion(1,type, des));
+         Collections.reverse(question);
+         return question;
     }
 }

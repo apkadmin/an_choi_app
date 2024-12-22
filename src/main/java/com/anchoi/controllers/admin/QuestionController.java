@@ -27,7 +27,7 @@ public class QuestionController {
     }
     @GetMapping("/get-question")
     public ResponseEntity<List<Question>> getQuestionByType(@RequestParam()  String type) {
-        return ResponseEntity.ok().body(questionService.getByTypeAndHard(type));
+        return ResponseEntity.ok().body(questionService.getQuestion(type));
     }
 
     @GetMapping("/{id}")

@@ -1,14 +1,34 @@
 package com.anchoi.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Data
 @Entity
 @Table(name = "item")
-public class Item extends BaseEntity {
+public class Item {
+    @Id
+    @Column(name = "id", nullable = false, length = 36)
+    private String id;
+
+    @Column(name = "created_date")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createdDate;
+
+    @Column(name = "created_by")
+    private String createdBy;
+
+    @Column(name = "updated_date")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date updatedDate;
+
+    @Column(name = "updated_by")
+    private String updatedBy;
+
     @Basic
     @Column(name = "category_id")
     private String categoryId;
