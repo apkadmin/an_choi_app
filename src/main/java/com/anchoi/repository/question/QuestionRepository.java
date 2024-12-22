@@ -11,6 +11,6 @@ import java.util.List;
 public interface QuestionRepository extends JpaRepository<Question, String> {
     List<Question> getByTypeLike(String type);
 
-    @Query(value = "SELECT * FROM QUESTION WHERE HARD=:hard AND TYPE LIKE :type ORDER BY RAND() LIMIT :limit",nativeQuery = true)
+    @Query(value = "SELECT * FROM question WHERE HARD=:hard AND TYPE LIKE :type ORDER BY RAND() LIMIT :limit",nativeQuery = true)
     List<Question> getQuestion(Integer hard,String type,Integer limit);
 }
