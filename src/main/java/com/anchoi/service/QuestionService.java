@@ -67,6 +67,9 @@ public class QuestionService {
             request.getQuestionDetails().forEach(x -> {
                 x.setQuestionId(request.getId());
                 x.setId(UUID.randomUUID().toString());
+                if(CommonUtils.isEmpty(x.getResult())){
+                    x.setResult(false);
+                }
             });
             questionDetailRepository.saveAll(request.getQuestionDetails());
         }
@@ -88,6 +91,9 @@ public class QuestionService {
         request.getQuestionDetails().forEach(item -> {
             item.setQuestionId(newd.getId());
             item.setId(UUID.randomUUID().toString());
+            if(CommonUtils.isEmpty(item.getResult())){
+                item.setResult(false);
+            }
         });
         questionDetailRepository.saveAll(request.getQuestionDetails());
        return request;

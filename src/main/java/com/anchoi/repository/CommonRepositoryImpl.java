@@ -19,7 +19,7 @@ public class CommonRepositoryImpl implements CommonRepository{
     private final JdbcTemplate jdbcTemplate;
     @Override
     public List<MediaResponse> findAllByIdReferOrderByIndex(String id, String lang) {
-        String sql = "SELECT m.url,m.type_Media, m.type, m.id_Refer, m.file_Name, m.index,i18n.description,m.id from media m left join (select description,media_Id from media_i18n where language_id =?) i18n on m.id = i18n.media_Id where m.id_Refer=? order by index";
+        String sql = "SELECT m.url,m.type_Media, m.type, m.id_Refer, m.file_Name, m.index,i18n.description,m.id from media m left join (select description,media_Id from media_i18n where language_id =?) i18n on m.id = i18n.media_Id where m.id_Refer=? ORDER BY m.index";
 
         return jdbcTemplate.query(sql, new Object[]{lang,id}, (rs, rowNum) -> {
             MediaResponse mediaResponse = new MediaResponse();
