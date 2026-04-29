@@ -49,4 +49,16 @@ public class GameUserService {
     public List<GameUser> getTop3ByUserIdAndGameId(String gameId, String userId) {
         return repository.findTop3ByUserIdAndGameIdOrderByTimeCountAsc(gameId, userId);
     }
+
+    public GameUser updateUsername(String userId, String username) {
+        Optional<GameUser> gameUserOptional = repository.findById(userId);
+        if (gameUserOptional.isPresent()) {
+            GameUser gameUser = gameUserOptional.get();
+            gameUser.setUsername(username);
+            gameUser.setUpdatedDate(new Date());
+            return repository.save(gameUser);
+        } else {
+            throw new RuntimeException("GameUser not found with id: " + userId);
+        }
+    }
 }

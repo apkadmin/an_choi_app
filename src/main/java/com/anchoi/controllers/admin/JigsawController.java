@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/admin/game")
+@RequestMapping("/api/admin/game_old")
 @RequiredArgsConstructor()
 public class JigsawController {
     private final JigsawService jigsawService;
