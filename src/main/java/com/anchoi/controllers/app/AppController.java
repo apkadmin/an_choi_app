@@ -135,6 +135,7 @@ public class AppController {
     @GetMapping("/game/detail/{id}")
     public ResponseEntity<?> getGameDetail(@PathVariable("id") String id) throws BusinessException {
         GameResponse gameResponse = gameService.getGameById(id);
+//        gameResponse.setDataDetails(null);
         return ResponseEntity.ok(ResponseData.ok(gameResponse));
     }
 

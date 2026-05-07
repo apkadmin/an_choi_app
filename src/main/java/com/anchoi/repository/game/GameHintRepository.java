@@ -1,6 +1,8 @@
 package com.anchoi.repository.game;
 
 import com.anchoi.entity.GameHint;
+
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.List;

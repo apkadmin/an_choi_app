@@ -1,6 +1,8 @@
 package com.anchoi.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -43,6 +45,7 @@ public class GameHint extends BaseEntity {
     @Column(name = "point_deduction")
     private Integer pointDeduction;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_detail_id", insertable = false, updatable = false)
     private GameDetail gameDetail;
