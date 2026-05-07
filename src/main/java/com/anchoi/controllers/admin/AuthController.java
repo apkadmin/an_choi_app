@@ -17,6 +17,7 @@ import com.anchoi.repository.manage.RoleUserRepository;
 import com.anchoi.repository.manage.UserRepository;
 import com.anchoi.response.JwtResponse;
 import com.anchoi.response.MessageResponse;
+import com.anchoi.response.ResponseData;
 import com.anchoi.security.jwt.JwtUtils;
 import com.anchoi.security.services.UserDetailsImpl;
 import com.anchoi.service.UserService;
@@ -176,5 +177,47 @@ public class AuthController {
     ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
         .body(new MessageResponse("You've been signed out!"));
+  }
+
+  @PostMapping("/verify")
+  public ResponseEntity<?> verifyToken(@RequestHeader(value = "Authorization", required = false) String authHeader) {
+    try {
+      if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        return ResponseEntity.status(401).body(new MessageResponse("Unauthorized: Missing or invalid token"));
+      }
+
+      String token = authHeader.substring(7);
+      
+      if (!jwtUtils.validateJwtToken(token)) {
+        return ResponseEntity.status(401).body(new MessageResponse("Unauthorized: Invalid or expired token"));
+      }
+
+      String username = jwtUtils.getUserNameFromJwtToken(token);
+      Optional<User> user = userRepository.findByUsername(username);
+      
+      if (!user.isPresent()) {
+        return ResponseEntity.status(401).body(new MessageResponse("Unauthorized: User not found"));
+      }
+
+      RoleUser roleUser = roleRepository.findFirstByUserId(username);
+      if (username.toLowerCase().equals("admin")) {
+        roleUser = new RoleUser();
+        roleUser.setUserId(username);
+        roleUser.setObjectList("ADMIN");
+        roleUser.setRoleList("ADMIN");
+      }
+
+      List<String> roles = new java.util.ArrayList<>();
+      if (roleUser != null && roleUser.getRoleList() != null) {
+        roles.add(roleUser.getRoleList());
+      } else {
+        roles.add("ROLE_USER");
+      }
+
+      return ResponseEntity.ok(ResponseData.ok(new JwtResponse(token, user.get().getId(), username, user.get().getEmail(), roles)));
+      
+    } catch (Exception e) {
+      return ResponseEntity.status(401).body(new MessageResponse("Unauthorized: " + e.getMessage()));
+    }
   }
 }
