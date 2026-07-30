@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+
 import java.util.Date;
 
 @Entity
@@ -18,12 +20,11 @@ import java.util.Date;
 public class GameUser {
     @Id
     private String id;
-    
+    @NotBlank
     private String userId;
-    
-    private String username;
-    
-    private Long timeCount;
+
+    private Long duration;
+    private Long point;
     
     private String gameId;
     

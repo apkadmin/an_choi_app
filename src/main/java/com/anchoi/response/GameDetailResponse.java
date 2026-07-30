@@ -21,7 +21,9 @@ public class GameDetailResponse {
     private String color;
     private Integer maxDiamonds;
     private List<HintResponse> hints;
-    
+    private String transform;
+    private String type;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdDate;
     

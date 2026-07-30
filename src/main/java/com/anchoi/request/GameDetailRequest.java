@@ -21,6 +21,8 @@ public class GameDetailRequest {
     private String d;
     private String color;
     private Integer maxDiamonds;
+    private String transform;
+    private String type;
     private List<HintRequest> hints;
     
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

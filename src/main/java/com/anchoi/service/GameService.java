@@ -121,6 +121,8 @@ public class GameService {
             detail.setD(detailRequest.getD());
             detail.setColor(detailRequest.getColor());
             detail.setMaxDiamonds(detailRequest.getMaxDiamonds());
+            detail.setType(detailRequest.getType());
+            detail.setTransform(detailRequest.getTransform());
             
             GameDetail savedDetail = gameDetailRepository.save(detail);
             log.info("✅ Saved GameDetail with ID: {} for Game: {}", savedDetail.getId(), gameId);

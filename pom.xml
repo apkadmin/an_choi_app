@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.anchoi</groupId>
     <artifactId>an-choi-api</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>an-choi-api</name>
     <description>An choi API</description>
     <properties>

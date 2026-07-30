@@ -56,4 +56,11 @@ public class GameDetail extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_id", insertable = false, updatable = false)
     private Game game;
+    @Basic
+    @Column(name = "transform")
+    private String transform;
+
+    @Basic
+    @Column(name = "type")
+    private String type;
 }

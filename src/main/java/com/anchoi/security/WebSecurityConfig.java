@@ -91,6 +91,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
         .antMatchers("/api/test/**").permitAll()
             .antMatchers("/upload/**").permitAll()
             .antMatchers(HttpMethod.GET).permitAll()
+            .antMatchers("/api/app/**").permitAll()
         .anyRequest().authenticated();
     
     http.authenticationProvider(authenticationProvider());

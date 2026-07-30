@@ -1,7 +1,10 @@
 package com.anchoi.service;
 
 import com.anchoi.entity.GameUser;
+import com.anchoi.entity.UserClient;
 import com.anchoi.repository.game.GameUserRepository;
+import com.anchoi.repository.game.UserClientRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +13,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class GameUserService {
-    @Autowired
-    private GameUserRepository repository;
+    private final GameUserRepository repository;
+    private  final UserClientRepository userClientRepository;
 
     public List<GameUser> getAllGameUsers() {
         return repository.findAll();
@@ -29,10 +35,24 @@ public class GameUserService {
         return repository.save(gameUser);
     }
 
-    public GameUser updateGameUser(String id, GameUser gameUser) {
-        if (repository.existsById(id)) {
-            gameUser.setId(id);
-            return repository.save(gameUser);
+    public UserClient createUser(UserClient userClient) {
+        Optional<UserClient> exist = userClientRepository.findById(userClient.getUserId());
+        if(exist.isEmpty()) {
+            userClient.setCreatedDate(new Date());
+            userClient.setUpdatedDate(new Date());
+            return userClientRepository.save(userClient);
+
+        }
+        return exist.get();
+    }
+
+
+    public UserClient updateUserName(String userId, String userName) {
+        Optional<UserClient> client =  userClientRepository.findById(userId);
+        if (client.isPresent()) {
+            client.get().setUsername(userName);
+             userClientRepository.save(client.get());
+             return  client.get();
         } else {
             throw new RuntimeException("GameUser not found");
         }
@@ -48,17 +68,5 @@ public class GameUserService {
 
     public List<GameUser> getTop3ByUserIdAndGameId(String gameId, String userId) {
         return repository.findTop3ByUserIdAndGameIdOrderByTimeCountAsc(gameId, userId);
-    }
-
-    public GameUser updateUsername(String userId, String username) {
-        Optional<GameUser> gameUserOptional = repository.findById(userId);
-        if (gameUserOptional.isPresent()) {
-            GameUser gameUser = gameUserOptional.get();
-            gameUser.setUsername(username);
-            gameUser.setUpdatedDate(new Date());
-            return repository.save(gameUser);
-        } else {
-            throw new RuntimeException("GameUser not found with id: " + userId);
-        }
     }
 }

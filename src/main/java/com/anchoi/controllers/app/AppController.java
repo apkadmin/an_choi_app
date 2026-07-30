@@ -5,6 +5,7 @@ import com.anchoi.entity.GameUser;
 import com.anchoi.entity.GameHint;
 import com.anchoi.entity.JigsawDataEntity;
 import com.anchoi.entity.Question;
+import com.anchoi.entity.UserClient;
 import com.anchoi.response.*;
 import com.anchoi.service.*;
 import com.anchoi.repository.game.GameHintRepository;
@@ -166,9 +167,8 @@ public class AppController {
      * POST /api/app/game/user/create
      */
     @PostMapping("/game/user/create")
-    public ResponseEntity<?> createGameUser(@RequestBody GameUser gameUser) {
-        GameUser savedUser = gameUserService.createGameUser(gameUser);
-        return ResponseEntity.ok(ResponseData.ok(savedUser));
+    public ResponseEntity<?> createGameUser(@RequestBody UserClient userClient) {
+        return ResponseEntity.ok(ResponseData.ok(gameUserService.createUser(userClient)));
 
     }
 
@@ -179,9 +179,9 @@ public class AppController {
     @PutMapping("/game/user/update-username")
     public ResponseEntity<?> updateGameUserUsername(@RequestBody Map<String, String> request) {
         String userId = request.get("userId");
-        String username = request.get("username");
+        String username = request.get("userName");
 
-        GameUser gameUser = gameUserService.updateUsername(userId, username);
+        UserClient gameUser = gameUserService.updateUserName(userId, username);
         return ResponseEntity.ok(ResponseData.ok(gameUser));
 
     }
@@ -191,14 +191,6 @@ public class AppController {
         return ResponseEntity.ok().body(ResponseData.ok(questionService.getByTypeAndHard(type)));
     }
 
-    /**
-     * Legacy endpoint - create game user
-     * POST /api/app/game/game_users
-     */
-    @PostMapping("/game/game_users")
-    public GameUser createGameUserLegacy(@RequestBody GameUser gameUser) {
-        return gameUserService.createGameUser(gameUser);
-    }
 
     @GetMapping("/game/top3/{gameId}")
     public ResponseEntity<List<GameUser>> getTop3ByGameId(@PathVariable String gameId) {

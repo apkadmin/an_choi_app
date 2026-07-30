@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  mysql-server:
+    image: mysql:8.0
+    container_name: mysql_anchoi
+    restart: always
+    environment:
+      MYSQL_USER: "anchoi12$$1"
+      MYSQL_PASSWORD: "3K4xMdb@59ul"
+      MYSQL_DATABASE: "anchoi_2"
+      MYSQL_ROOT_PASSWORD: "root_password_mac"
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql_data2:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
